@@ -1,26 +1,48 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app-container" ref="app" :class="appClassNames">
+    <router-view />
+
+    <template>
+      <global-error />
+    </template>
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script lang="ts" setup>
+import { computed, onBeforeMount, ref, watch } from 'vue';
+// import { useResizeObserver } from '@vueuse/core';
+import { useRoute, useRouter } from 'vue-router';
+import GlobalError from '@/views/errors/Error.vue';
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+const app = ref(null);
+
+const appClassNames = computed(() => {
+  return [];
+});
+const router = useRouter();
+
+function updateHeightSize() {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
 }
+
+// useResizeObserver(app, (entries) => {
+//   const entry = entries[0];
+//   const { width, height } = entry.contentRect;
+
+//   updateHeightSize();
+
+// });
+
+onBeforeMount(() => {
+  updateHeightSize();
+
+  document.title = 'EduBill';
+});
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+#app-container {
+  width: 100%;
 }
 </style>

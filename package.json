@@ -3,40 +3,40 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "serve": "vite --host",
+    "build": "vite build",
+    "lint": "vue-cli-service lint",
+    "start": "yarn serve"
   },
   "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
+    "@vueuse/core": "^10.7.2",
+    "axios": "^1.6.5",
     "core-js": "^3.8.3",
-    "vue": "^3.2.13"
+    "rollup-plugin-node-polyfills": "^0.2.1",
+    "vue": "^3.4.15",
+    "vue-router": "^4.2.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
     "@babel/eslint-parser": "^7.12.16",
+    "@types/jest": "^29.5.11",
     "@typescript-eslint/eslint-plugin": "^6.19.0",
     "@typescript-eslint/parser": "^6.19.0",
+    "@vitejs/plugin-vue": "^5.0.3",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-eslint": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-vue": "^9.20.1",
-    "prettier": "^3.2.4"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "@babel/eslint-parser"
-    },
-    "rules": {}
+    "prettier": "^3.2.4",
+    "sass": "^1.70.0",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11",
+    "vite-plugin-pwa": "^0.17.4",
+    "vite-plugin-require": "^1.1.14",
+    "vite-plugin-require-transform": "^1.0.21"
   },
   "browserslist": [
     "> 1%",
