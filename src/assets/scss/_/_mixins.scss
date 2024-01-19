@@ -1,1 +1,8 @@
 @charset "utf-8";
+/* safari :: overflow:hidden + border-radius 버그 픽스 */
+@mixin overflow-hidden {
+  overflow: hidden;
+  isolation: isolate;
+  /* transform: translateZ(0);
+  will-change: transform; */
+}

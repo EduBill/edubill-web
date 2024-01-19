@@ -6,9 +6,8 @@ module.exports = {
     node: true,
   },
   extends: [
-    'plugin:vue/essential',
-    'airbnb-base',
-    'plugin:prettier/recommended',
+    'plugin:import/recommended',
+    'plugin:vue/vue3-recommended',
     'prettier',
   ],
   parserOptions: {
@@ -16,7 +15,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     sourceType: 'module',
   },
-  plugins: ['vue', '@typescript-eslint'],
+  plugins: ['import', 'vue', '@typescript-eslint', 'prettier'],
   rules: {
     'global-require': 0,
     'no-unused-vars': 0,
@@ -129,15 +128,12 @@ module.exports = {
         ],
       },
     ],
-
+    'vue/multi-word-component-names': 'off',
     'vue/html-self-closing': ['off'],
     'class-methods-use-this': 0,
     'no-underscore-dangle': 'off',
     camelcase: 'off',
-    'comma-dangle': 2,
 
-    // https://eslint.vuejs.org/rules/attributes-order.html
-    // TODO: 팀 내 기준으로 재조정 필요
     'vue/attributes-order': [
       'error',
       {
@@ -156,12 +152,6 @@ module.exports = {
         ],
       },
     ],
+    'prettier/prettier': 'error',
   },
-  'prettier/prettier': [
-    'error',
-    {},
-    {
-      usePrettierrc: false,
-    },
-  ],
 };

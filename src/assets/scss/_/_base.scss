@@ -7,10 +7,7 @@
   resize: none;
   outline: 0;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  // 뷰표트 변환시 폰트크기 자동확대 방지
-  // -webkit-overflow-scrolling: touch;
   -webkit-touch-callout: none;
-  word-break: var(--word-break) !important;
 }
 
 html,
@@ -27,19 +24,9 @@ body {
   height: 100%;
   color: var(--color-text);
   font-size: 16px;
-  // background-color: var(--color-bg);
-  // background-color: transparent;
-  -webkit-overflow-scrolling: touch;
-  // word-break: break-all;
-
-  user-select: none;
+  background-color: var(--color-bg);
   -webkit-text-size-adjust: none;
   overscroll-behavior-x: none;
-}
-
-::placeholder {
-  color: #b4b4b4;
-  font-weight: 400;
 }
 
 strong {
@@ -81,6 +68,7 @@ input:autofill:active {
   box-shadow: 0 0 0px 1000px #fff inset;
   transition: background-color 5000s ease-in-out 0s;
 }
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -102,10 +90,4 @@ button {
 
 a {
   color: inherit;
-}
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }

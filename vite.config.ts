@@ -47,6 +47,10 @@ export default mode =>
       preprocessorOptions: {
         scss: {
           additionalData: `
+          @import "@/assets/scss/_/_variables.scss";
+          @import "@/assets/scss/_/_animations.scss";
+          @import "@/assets/scss/_/_mixins.scss";
+          @import "@/assets/scss/_/_typography.scss";
         `,
         },
       },

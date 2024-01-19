@@ -9,7 +9,20 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     component: Layout,
+    redirect: '/login',
     children: [
+      {
+        path: '/login',
+        component: () => import('@/views/pages/login/PageLogin.vue'),
+        name: 'Login',
+        meta: { title: '로그인' },
+      },
+      {
+        path: '/home',
+        component: () => import('@/views/pages/home/PageHome.vue'),
+        name: 'Home',
+        meta: { title: '홈', auth: true },
+      },
       {
         path: '/:catchAll(.*)',
         component: Blank,

@@ -1,1 +1,49 @@
 @charset "utf-8";
+
+$unit: 0.0625rem;
+
+@function unit($size) {
+  @return $size * $unit;
+}
+
+// Colors
+$color-black: #000;
+$color-gray-16: #101010;
+$color-gray-64: #404040;
+$color-gray-120: #787878;
+$color-gray-160: #a0a0a0;
+$color-gray-200: #c8c8c8;
+$color-gray-224: #e0e0e0;
+$color-gray-244: #f4f4f4;
+$color-gray-248: #f8f8f8;
+$color-gray-254: #fefefe;
+$color-white: #fff;
+
+// Border Radius
+$border-radius-small: unit(8);
+$border-radius-medium: unit(12);
+$border-radius-large: unit(16);
+$border-radius-full: 50%;
+$border-radius-side: unit(888);
+
+// Size
+$device-height: calc(var(--vh, 1vh) * 100);
+$max-content-width: 568px;
+$page-content-width: min(100vw, $max-content-width);
+$page-side-margin: unit(20);
+$page-nav-height: unit(71);
+$page-header-height: unit(56);
+// $page-header-height: unit(58);
+$safe-area-top: env(safe-area-inset-top);
+$safe-area-bottom: env(safe-area-inset-bottom);
+
+// $device-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+$device-height: calc(var(--vh, 1vh) * 100);
+
+// Index
+$page-actions-index: 9;
+$header-index: 10;
+$navigation-index: 11;
+$floating-layer-index: 12;
+$modal-index: 13;
+$ui-present-layer-index: 14;

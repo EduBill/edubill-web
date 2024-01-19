@@ -1,10 +1,11 @@
 <template>
-  <div id="app-container" ref="app" :class="appClassNames">
-    <svg-icon name="home" />
-    <!-- <router-view /> -->
+  <div ref="refApp" class="app-container">
+    <template v-if="canUseRouter">
+      <router-view />
+    </template>
 
-    <template>
-      <global-error />
+    <template v-if="!canUseRouter">
+      <page-launch :state="state.appStatus" />
     </template>
   </div>
 </template>
@@ -15,19 +16,26 @@ import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import GlobalError from '@/views/errors/Error.vue';
+import PageLaunch from '@/views/pages/launch/PageLaunch.vue';
 import { useWNInterface } from '@/plugins/vue-wni';
 import { NativeInterceptor } from '@/plugins/native-interceptor';
 import { useLayoutStore } from '@/stores/modules/layout';
+import { useSessionStore } from '@/stores/modules/session';
 
 const app = ref(null);
 const wni = useWNInterface();
 const layoutStore = useLayoutStore();
 const route = useRoute();
+const session = useSessionStore();
 const nativeInterceptor = new NativeInterceptor();
 
 const state = reactive({
-  isReady: false,
-  error: null,
+  appStatus: 'LAUNCHED',
+  error: null as any,
+});
+
+const canUseRouter = computed(() => {
+  return state.appStatus === 'LAUNCHED' || state.appStatus === 'EXTERNAL';
 });
 
 const androidExit = reactive({
@@ -52,6 +60,11 @@ function updateHeightSize() {
 //   updateHeightSize();
 
 // });
+
+async function initApp() {
+  await session.init();
+}
+
 function initWNInterface() {
   return new Promise((resolve, reject) => {
     wni.onReady(e => {
@@ -120,17 +133,16 @@ function onSetBadgeNumber(number = 0) {
 
 onBeforeMount(() => {
   updateHeightSize();
+  initApp();
   initWNInterface();
   document.title = 'EduBill';
 });
 </script>
 
 <style lang="scss">
-#app-container {
-  width: 100%;
-  .svg-icon {
-    width: 100%;
-    height: 100%;
-  }
+.app-container {
+  width: 100vw;
+  max-width: 100vw;
+  height: 100vh;
 }
 </style>
