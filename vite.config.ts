@@ -52,7 +52,7 @@ export default mode =>
       },
     },
     server: {
-      port: 8301,
+      port: 8203,
     },
     plugins: [
       VitePWA({ registerType: 'autoUpdate' }),

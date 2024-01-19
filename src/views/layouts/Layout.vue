@@ -1,5 +1,6 @@
 <template>
   <div id="wrapper" ref="wrapper">
+    <h1>Layout</h1>
     <router-view />
   </div>
 </template>
