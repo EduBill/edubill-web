@@ -1,7 +1,7 @@
 <template>
   <div id="app-container" ref="app" :class="appClassNames">
-    <!-- <svg-icon name="home" /> -->
-    <router-view />
+    <svg-icon name="home" />
+    <!-- <router-view /> -->
 
     <template>
       <global-error />
@@ -16,12 +16,14 @@ import { useRoute, useRouter } from 'vue-router';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import GlobalError from '@/views/errors/Error.vue';
 import { useWNInterface } from '@/plugins/vue-wni';
+import { NativeInterceptor } from '@/plugins/native-interceptor';
 import { useLayoutStore } from '@/stores/modules/layout';
 
 const app = ref(null);
 const wni = useWNInterface();
 const layoutStore = useLayoutStore();
 const route = useRoute();
+const nativeInterceptor = new NativeInterceptor();
 
 const state = reactive({
   isReady: false,
@@ -53,11 +55,19 @@ function updateHeightSize() {
 function initWNInterface() {
   return new Promise((resolve, reject) => {
     wni.onReady(e => {
+      wni.onAppear(e => {
+        onDarkMode();
+        onSetBadgeNumber();
+      });
       wni.onBack(() => {
         if (wni.isAndroid) {
           if (!history.state.back && route.name !== 'Home') {
             router.replace({ name: 'Home' });
             return;
+          }
+
+          if (nativeInterceptor.isShowNativeComponents) {
+            nativeInterceptor.closeNativeComponents();
           }
 
           if (!history.state.back && route.name === 'Home') {
@@ -77,7 +87,7 @@ function initWNInterface() {
         }
       });
 
-      resolve(e);
+      resolve(wni);
     });
   });
 }
@@ -95,9 +105,22 @@ function tryToExit() {
     androidExit.is_exit = false;
   }, 2000);
 }
-onBeforeMount(async () => {
+
+function onDarkMode() {}
+
+function onResize(e) {
   updateHeightSize();
-  await initWNInterface();
+}
+
+function onSetBadgeNumber(number = 0) {
+  wni.execute('wnPushBadgeNumber', {
+    number,
+  });
+}
+
+onBeforeMount(() => {
+  updateHeightSize();
+  initWNInterface();
   document.title = 'EduBill';
 });
 </script>
@@ -105,5 +128,9 @@ onBeforeMount(async () => {
 <style lang="scss">
 #app-container {
   width: 100%;
+  .svg-icon {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
