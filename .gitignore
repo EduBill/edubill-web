@@ -25,7 +25,6 @@ pnpm-debug.log*
 
 package-lock.json*
 yarn.lock
-vue-wni
 /scripts/~$import.xlsx
 /scripts/import.csv
 /scripts/import.xls
