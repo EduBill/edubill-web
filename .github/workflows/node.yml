@@ -22,12 +22,11 @@ jobs:
       - name: Install modules
         run: yarn install
       - name: Build project
-        run: |
-          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
-            CI='' yarn build:prod
-          elif [[ $GITHUB_REF == 'refs/heads/release/staging' ]]; then
-            CI='' yarn build:staging
-          fi
+        if: github.ref == 'refs/heads/release/staging'
+        run: yarn build:staging
+      - name: Build Production project
+        if: github.ref == 'refs/heads/master'
+        run: yarn build
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -35,16 +34,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Deploy to S3
-        run: |
-          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
-            aws s3 sync dist/ s3://prod-edubill-web
-          elif [[ $GITHUB_REF == 'refs/heads/release/staging' ]]; then
-            aws s3 sync dist/ s3://staging-edubill-web
-          fi
+        if: github.ref == 'refs/heads/master'
+        run: aws s3 sync dist/ s3://prod-edubill-web
+      - name: Deploy to Staging S3
+        if: github.ref == 'refs/heads/release/staging'
+        run: aws s3 sync dist/ s3://staging-edubill-web
+
       - name: Invalidate CloudFront Cache
-        run: |
-          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
-            aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
-          elif [[ $GITHUB_REF == 'refs/heads/release/staging' ]]; then
-            aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_DEV_ID }} --paths "/*"
-          fi
+        if: github.ref == 'refs/heads/master'
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
+      - name: Invalidate Staging CloudFront Cache
+        if: github.ref == 'refs/heads/release/staging'
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.CLOUDFRONT_STAGING_DISTRIBUTION_ID }} --paths "/*"
