@@ -15,7 +15,7 @@ body,
 input,
 textarea,
 button {
-  // font-family: $font-family-base;
+  font-family: $font-family-base;
 }
 
 html,
@@ -39,7 +39,7 @@ textarea {
   touch-action: manipulation;
 
   ::placeholder {
-    // color: $color-text-placeholder;
+    color: $color-text-placeholder;
   }
 }
 
