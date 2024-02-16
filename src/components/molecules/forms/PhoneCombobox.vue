@@ -264,11 +264,11 @@ export default {
 
   &.focus {
     .label {
-      color: $color-primary;
+      /* color: $color-primary; */
     }
     input,
     select {
-      border-bottom: solid 1px $color-primary;
+      /* border-bottom: solid 1px $color-primary; */
     }
   }
   &.disabled {

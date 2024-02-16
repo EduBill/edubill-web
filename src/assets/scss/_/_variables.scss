@@ -18,6 +18,9 @@ $color-gray-244: #f4f4f4;
 $color-gray-248: #f8f8f8;
 $color-gray-254: #fefefe;
 $color-white: #fff;
+$color-gray-200: #f2f4f7;
+$color-gray-500: #9f9f9f;
+$color-gray-300: #d1d3d9;
 
 // Border Radius
 $border-radius-small: unit(8);
@@ -47,3 +50,22 @@ $navigation-index: 11;
 $floating-layer-index: 12;
 $modal-index: 13;
 $ui-present-layer-index: 14;
+
+// Alias Colors
+$color-text-disabled: $color-gray-224;
+$color-text-placeholder: $color-gray-160;
+$color-button-disabled: $color-gray-244;
+
+$color-divider-line: $color-gray-224;
+$color-divider-solid: $color-gray-244;
+
+$color-background-page: $color-gray-254;
+$color-background-main: $color-gray-248;
+$color-background-sub: $color-gray-254;
+
+$color-disabled: #e0e0e0;
+
+$color-primary: #7535ff;
+
+// Shadow
+$shadow-button: 0px 4px 8px rgba(0, 0, 0, 0.08);
