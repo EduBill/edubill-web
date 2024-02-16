@@ -1,5 +1,5 @@
 <template>
-  <page-header :title="state.mode === 'register' ? '회원가입' : '로그인'" />
+  <page-header :title="'로그인'" />
 
   <div class="page-content has-bottom-tabbar">
     <h2 class="content-title" v-html="title"></h2>
@@ -59,21 +59,6 @@
             {{ '인증이 완료되었어요!' }}
           </p>
         </li>
-
-        <li v-if="state.mode === 'register'" class="text-field">
-          <label for="display-name">{{ '이름' }}</label>
-          <div class="input-box">
-            <ui-text-input
-              id="display-name"
-              maxlength="20"
-              v-model:value="state.displayName"
-              type="text"
-              @keyup="checkDisplayName"
-            />
-            <!-- @focus="onFocus"
-              ref="textareaRef" -->
-          </div>
-        </li>
       </ul>
     </ui-form>
     <div class="button-area">
@@ -96,8 +81,7 @@
         :disabled="state.certifiedNumber.length !== 6 ? true : false"
         @click="onClickSubmit"
       >
-        <span v-if="state.mode === 'register'">{{ '회원 등록' }}</span>
-        <span v-else>{{ '인증 완료' }}</span>
+        <span>{{ '인증 완료' }}</span>
       </button>
     </div>
   </div>
@@ -115,12 +99,12 @@ import {
   ref,
   watch,
 } from 'vue';
+import router from '@/router';
 
 const refForm = ref(null);
 const state = reactive({
   mode: 'login',
   requestId: '',
-  displayName: '',
   phoneNumber: '',
   certifiedNumber: '',
   selectedPhoneDialCode: '+82/KR',
@@ -190,17 +174,6 @@ watch(remainingTime, newValue => {
   }
 });
 
-function checkDisplayName(e) {
-  const value = e.target.value;
-  const minLength = 2;
-
-  if (value.length >= minLength && state.isSuccessCertified) {
-    state.isPassportValidation = true;
-  } else {
-    state.isPassportValidation = false;
-  }
-}
-
 function checkPhoneLength(e) {
   const value = e.target.value;
   const minLength = 11;
@@ -251,7 +224,11 @@ function onSubmit(e) {
   return false;
 }
 
-function onClickSubmit() {}
+function onClickSubmit() {
+  router.push({
+    name: 'Signup',
+  });
+}
 
 const formatTime = seconds => {
   const minutes = Math.floor(seconds / 60);
