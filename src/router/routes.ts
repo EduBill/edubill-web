@@ -25,7 +25,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: '/signup',
-        component: () => import('@/views/pages/login/PageSignup.vue'),
+        component: () => import('@/views/pages/login/PageSignUp.vue'),
         name: 'Signup',
         meta: { title: '회원가입' },
       },
