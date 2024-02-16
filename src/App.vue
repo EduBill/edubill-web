@@ -7,6 +7,9 @@
     <template v-if="!canUseRouter">
       <page-launch :state="state.appStatus" />
     </template>
+
+    <ui-toast />
+    <ui-drawer />
   </div>
 </template>
 
@@ -21,6 +24,8 @@ import { useWNInterface } from '@/plugins/vue-wni';
 import { NativeInterceptor } from '@/plugins/native-interceptor';
 import { useLayoutStore } from '@/stores/modules/layout';
 import { useSessionStore } from '@/stores/modules/session';
+import UiDrawer from './components/modules/drawer/components/Drawer.vue';
+import UiToast from './components/modules/toast/components/Toast.vue';
 
 const app = ref(null);
 const wni = useWNInterface();

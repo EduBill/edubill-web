@@ -69,3 +69,17 @@ $color-primary: #7535ff;
 
 // Shadow
 $shadow-button: 0px 4px 8px rgba(0, 0, 0, 0.08);
+
+$color-alpha-black-05: rgba(0, 0, 0, 0.05);
+$color-alpha-black-10: rgba(0, 0, 0, 0.1);
+$color-alpha-black-15: rgba(0, 0, 0, 0.15);
+$color-alpha-black-20: rgba(0, 0, 0, 0.2);
+$color-alpha-black-25: rgba(0, 0, 0, 0.25);
+$color-alpha-black-40: rgba(0, 0, 0, 0.4);
+$color-alpha-black-60: rgba(0, 0, 0, 0.6);
+
+$color-red: #fb5b5b;
+$color-green: #00c64f;
+$color-orange: #ffaa5b;
+$color-state-success: $color-green;
+$color-state-error: $color-red;
