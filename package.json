@@ -5,6 +5,8 @@
   "scripts": {
     "serve": "vite --host",
     "build": "vite build",
+    "build:prod": "cross-env VUE_APP_MODE=production yarn build",
+    "build:staging": "cross-env VUE_APP_MODE=staging yarn build",
     "lint": "vue-cli-service lint",
     "start": "yarn serve"
   },
