@@ -1,7 +1,8 @@
 <template>
   <page-header title="회원가입" />
-  <h2 class="content-title" v-html="title"></h2>
   <div class="page-content has-bottom-tabbar">
+    <h2 class="content-title" v-html="title"></h2>
+
     <ui-form ref="refForm" class="form-passport" @submit="">
       <div class="text-field">
         <label for="display-name">{{ '이름' }}</label>
@@ -48,7 +49,7 @@ const state = reactive({
 });
 
 const title = computed(() => {
-  return '이름을 입력해 주세요';
+  return '회원가입을 위해\n이름을 입력해 주세요';
 });
 
 function checkDisplayName(e) {
