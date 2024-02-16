@@ -9,133 +9,129 @@ button {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    width: 120%;
-    height: 120%;
-    max-width: unit(80);
-    max-height: unit(80);
-    min-width: unit(40);
-    min-height: unit(40);
+    width: unit(40);
+    height: unit(40);
     border-radius: unit(16);
   }
 }
 
-.visually-hidden {
-  position: absolute !important;
-  width: 1px !important;
-  height: 1px !important;
-  padding: 0 !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  clip: rect(0, 0, 0, 0) !important;
-  white-space: nowrap !important;
-  border: 0 !important;
-}
-
-.bottom-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  // background-color: $color-custom-tint;
-  height: unit(60);
-  width: 100%;
-  text-align: center;
-  // box-shadow: $shadow-button;
-  border-radius: unit(8);
-  // @include text-variant(button2, $color-white);
-  // color: $color-white;
-  transition:
-    color 0.1s ease-in-out,
-    background 0.1s ease-in-out;
-
-  &:active {
-    background-color: #9292ff;
-    color: #fefefe;
-  }
-
-  &:disabled {
-    // background-color: $color-divider-line;
-  }
-}
-
-.bottom-text-button {
-  display: block;
-  margin: 0 auto;
-  padding-top: unit(16);
-  text-align: center;
-  // @include text-variant(button2, $color-custom-tint);
-
-  &:active {
-    color: #9292ff;
-  }
-}
-
-.check-box {
-  position: relative;
-
-  input[type='checkbox'] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    border: 0;
-  }
-
-  input[type='checkbox'] + label {
-    display: flex;
-    align-items: center;
-    gap: unit(12);
-    position: relative;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-    .svg-icon {
-      display: block;
-      position: absolute;
-      width: unit(32);
-      height: unit(32);
-      // color: $color-divider-line;
-    }
-  }
-
-  input[type='checkbox'] + label:active:before,
-  input[type='checkbox']:checked + label:active:before {
-    opacity: 0.7;
-  }
-
-  input[type='checkbox'] + label:before {
-    content: '';
-    display: block;
-    width: unit(32);
-    height: unit(32);
-    border-radius: 50%;
-    // border: unit(1) solid $color-divider-line;
-  }
-
-  input[type='checkbox']:checked + label:before {
-    // background-color: $color-custom-tint;
-    // border-color: $color-custom-tint;
-  }
-
-  input[type='checkbox']:checked + label .svg-icon {
-    // color: $color-white;
-  }
-}
-
+// swiper custom
 .swiper-container {
   width: 100%;
 }
 
-.a11y-hidden {
-  position: absolute;
-  margin: -1px;
-  width: 1px;
+.pre-line {
+  white-space: pre-line;
+}
+
+// Button System
+%btn-base {
+  @include inline-flexbox;
+  padding: unit(13) unit(20);
+  border-radius: $border-radius-medium;
+  transition: background-color 200ms ease-in-out;
+
+  .svg-icon {
+    font-size: unit(24);
+
+    &:first-child {
+      margin-right: unit(8);
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: $color-gray-200;
+    border: 0;
+    color: $color-gray-500;
+  }
+}
+
+// Button Variants
+.btn-filled {
+  @extend %btn-base;
+  color: $color-gray-254;
+  background-color: $color-primary;
+}
+
+.btn-outlined {
+  @extend %btn-base;
+  color: $color-primary;
+  background-color: $color-white;
+  border: 1px solid $color-primary;
+}
+
+.btn-outlined-base {
+  @extend %btn-base;
+  background-color: $color-white;
+  border: 1px solid $color-gray-200;
+  color: $color-gray-16;
+}
+
+// Button Size
+.btn-small {
+  @include text-variant('button3');
+  border-radius: $border-radius-small;
+}
+
+.btn-medium {
+  @include text-variant('button1');
+  min-width: unit(162);
+}
+
+.btn-large {
+  // @include text-variant('button1');
+  display: flex;
+  padding: unit(14.5) unit(20);
+  width: 100%;
+  font-size: unit(16);
+  font-weight: 600;
+
+  // .svg-icon {
+  //   font-size: unit(16);
+  // }
+}
+
+// // text CTA
+// .btn-text {
+//   @extend %btn-base;
+//   @include text-variant('button2', $color-primary);
+
+//   &.large {
+//     padding: unit(8) unit(12);
+//     width: 100%;
+//   }
+// }
+
+// Icon Button
+.icon-btn {
+  @include inline-flexbox;
+  position: relative;
+  font-size: unit(40);
+
+  &.primary {
+    color: $color-primary;
+  }
+}
+
+// divider
+.divider-solid {
+  height: unit(8);
+  border: 0;
+  background-color: $color-divider-solid;
+  visibility: visible;
+}
+
+.divider-line {
+  margin-top: unit(32);
+  margin-bottom: 0;
   height: 1px;
-  overflow: hidden;
-  clip-path: polygon(0 0, 0 0, 0 0);
+  border: 0;
+  background-color: $color-divider-line;
+  visibility: visible;
+}
+
+hr {
+  visibility: hidden;
+  margin: 0;
 }

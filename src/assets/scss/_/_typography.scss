@@ -1,1 +1,193 @@
 @charset "utf-8";
+
+// Font
+$font-family-base:
+  Pretendard,
+  -apple-system,
+  BlinkMacSystemFont,
+  system-ui,
+  Roboto,
+  'Helvetica Neue',
+  'Segoe UI',
+  'Apple SD Gothic Neo',
+  'Noto Sans KR',
+  'Malgun Gothic',
+  'Apple Color Emoji',
+  'Segoe UI Emoji',
+  'Segoe UI Symbol',
+  sans-serif;
+
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 600;
+
+$font-size-32: unit(32);
+$letter-spacing-32: -0.8px;
+$line-height-32: 1.56;
+
+$font-size-24: unit(24);
+$letter-spacing-24: -0.6px;
+$line-height-24: 1.5;
+
+$font-size-20: unit(20);
+$letter-spacing-20: -0.6px;
+$line-height-20: 1.6;
+
+$font-size-18: unit(18);
+$letter-spacing-18: -0.5px;
+$line-height-18: 1.44;
+
+$font-size-17: unit(17);
+$letter-spacing-17: -0.5px;
+$line-height-17: 1.41;
+
+$font-size-16: unit(16);
+$letter-spacing-16: -0.4px;
+$line-height-16: 1.5;
+
+$font-size-15: unit(15);
+$letter-spacing-15: -0.5px;
+$line-height-15: 1.57;
+
+$font-size-14: unit(14);
+$letter-spacing-14: -0.25px;
+$line-height-14: 1.33;
+
+$font-size-12: unit(12);
+$letter-spacing-12: -0.2px;
+$line-height-12: 1.5;
+
+$font-size-10: unit(10);
+$letter-spacing-10: -0.1px;
+$line-height-10: 1.6;
+
+// DesignLibrary
+@mixin text-scale-32 {
+  font-size: $font-size-32;
+  line-height: $line-height-32;
+  letter-spacing: $letter-spacing-32;
+}
+@mixin text-scale-24 {
+  font-size: $font-size-24;
+  line-height: $line-height-24;
+  letter-spacing: $letter-spacing-24;
+}
+@mixin text-scale-20 {
+  font-size: $font-size-20;
+  line-height: $line-height-20;
+  letter-spacing: $letter-spacing-20;
+}
+@mixin text-scale-18 {
+  font-size: $font-size-18;
+  line-height: $line-height-18;
+  letter-spacing: $letter-spacing-18;
+}
+@mixin text-scale-17 {
+  font-size: $font-size-17;
+  line-height: $line-height-17;
+  letter-spacing: $letter-spacing-17;
+}
+@mixin text-scale-16 {
+  font-size: $font-size-16;
+  line-height: $line-height-16;
+  letter-spacing: $letter-spacing-16;
+}
+@mixin text-scale-15 {
+  font-size: $font-size-15;
+  line-height: $line-height-15;
+  letter-spacing: $letter-spacing-15;
+}
+@mixin text-scale-14 {
+  font-size: $font-size-14;
+  line-height: $line-height-14;
+  letter-spacing: $letter-spacing-14;
+}
+@mixin text-scale-12 {
+  font-size: $font-size-12;
+  line-height: $line-height-12;
+  letter-spacing: $letter-spacing-12;
+}
+@mixin text-scale-10 {
+  font-size: $font-size-10;
+  line-height: $line-height-10;
+  letter-spacing: $letter-spacing-10;
+}
+
+@mixin text-variant($name, $color: false) {
+  @if ($name == 'title') {
+    @include text-scale-32;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'headline1') {
+    @include text-scale-24;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'headline2') {
+    @include text-scale-20;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'headline3') {
+    @include text-scale-18;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'subhead1') {
+    @include text-scale-18;
+    font-weight: $font-weight-medium;
+  }
+  @if ($name == 'subhead2') {
+    @include text-scale-16;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'subhead3') {
+    @include text-scale-14;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'subhead4') {
+    @include text-scale-12;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'subhead5') {
+    @include text-scale-10;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'body1') {
+    @include text-scale-16;
+    font-weight: $font-weight-medium;
+  }
+  @if ($name == 'body2') {
+    @include text-scale-16;
+    font-weight: $font-weight-regular;
+  }
+  @if ($name == 'body3') {
+    @include text-scale-14;
+    font-weight: $font-weight-medium;
+  }
+  @if ($name == 'body4') {
+    @include text-scale-14;
+    font-weight: $font-weight-regular;
+  }
+  @if ($name == 'caption') {
+    @include text-scale-12;
+    font-weight: $font-weight-regular;
+  }
+  @if ($name == 'button1') {
+    @include text-scale-17;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'button2') {
+    @include text-scale-17;
+    font-weight: $font-weight-regular;
+  }
+  @if ($name == 'button3') {
+    @include text-scale-15;
+    font-weight: $font-weight-bold;
+  }
+  @if ($name == 'button4') {
+    @include text-scale-15;
+    font-weight: $font-weight-regular;
+  }
+
+  @if (type-of($color) == color) {
+    color: $color;
+  }
+}

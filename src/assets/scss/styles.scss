@@ -5,7 +5,8 @@
 @import '@/assets/scss/_/_variables.scss';
 @import '@/assets/scss/_/_typography.scss';
 
-@import '_/reset';
+// Default
+@import '@/assets/scss/_/_reset.scss';
 
 // Base
 @import '_/base';
@@ -19,9 +20,6 @@
 
 // RTL Support
 @import '_/rtl';
-
-// Device Support
-@import '_/devices';
 
 // Custom
 @import '_/custom';

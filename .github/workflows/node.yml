@@ -1,0 +1,50 @@
+name: React S3 Cloudfront CI
+
+on:
+  pull_request:
+    branches:
+      - master
+      - release/staging
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'yarn'
+      - name: Install modules
+        run: yarn install
+      - name: Build project
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
+            CI='' yarn build:prod
+          elif [[ $GITHUB_REF == 'refs/heads/release/staging' ]]; then
+            CI='' yarn build:staging
+          fi
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Deploy to S3
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
+            aws s3 sync dist/ s3://prod-edubill-web
+          elif [[ $GITHUB_REF == 'refs/heads/release/staging' ]]; then
+            aws s3 sync dist/ s3://staging-edubill-web
+          fi
+      - name: Invalidate CloudFront Cache
+        run: |
+          if [[ $GITHUB_REF == 'refs/heads/master' ]]; then
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
+          elif [[ $GITHUB_REF == 'refs/heads/release/staging' ]]; then
+            aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_DEV_ID }} --paths "/*"
+          fi

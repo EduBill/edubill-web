@@ -19,15 +19,8 @@
               :placeholder="'휴대폰 번호 입력'"
               @keyup="checkPhoneLength"
             />
-            <button
-              class="btn-text"
-              type="button"
-              :disabled="!state.isPhoneNumber"
-              @click=""
-            >
-              {{ phoneCertifiedButtonLabel }}
-            </button>
           </div>
+
           <p v-if="state.phoneNumberError" class="helper-message error">
             {{ '휴대폰번호를 확인해주세요.' }}
           </p>
@@ -54,7 +47,6 @@
               @click="onClickCertified"
             >
               <span class="timer">{{ formatTime(remainingTime) }}</span>
-              {{ '인증하기' }}
             </button>
           </div>
           <p v-if="state.isTimeout" class="helper-message error">
@@ -84,6 +76,16 @@
         </li>
       </ul>
     </ui-form>
+    <div class="button-area">
+      <button
+        class="btn-text"
+        type="button"
+        :disabled="!state.isPhoneNumber"
+        @click="onClickRequestCertified(state.phoneNumber)"
+      >
+        {{ phoneCertifiedButtonLabel }}
+      </button>
+    </div>
   </div>
 
   <div class="page-footer">
@@ -91,7 +93,7 @@
       <button
         type="submit"
         class="submit-button btn-large btn-filled"
-        :disabled="!state.isPassportValidation"
+        :disabled="state.certifiedNumber.length !== 6 ? true : false"
         @click="onClickSubmit"
       >
         <span v-if="state.mode === 'register'">{{ '회원 등록' }}</span>
@@ -103,7 +105,7 @@
 
 <script lang="ts" setup>
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
-import { UiTextInput } from '@/plugins/vue-ui-components';
+import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import {
   computed,
@@ -219,6 +221,24 @@ async function onClickCertified() {
     stopTimer();
   }
 }
+function isNumber(value) {
+  const numberPattern = /^\d+$/;
+  return numberPattern.test(value);
+}
+async function onClickRequestCertified(e) {
+  console.log('onClickRequestCertified');
+  if (isNumber(e)) {
+    console.log('is number');
+    state.isRequestCertified = true;
+    startTimer();
+  } else {
+    console.log('is not number');
+    // toastModule.show({ type: ToastType.ERROR, message: $t('휴대폰 번호에 숫자만 입력해주세요') });
+    return;
+  }
+
+  // await doSendVerifyNumber();
+}
 
 function onSubmit(e) {
   console.log('onSubmit');
@@ -264,6 +284,7 @@ const formatTime = seconds => {
         display: block;
         font-weight: 600;
         font-size: unit(18);
+        margin-bottom: unit(16);
       }
 
       .input-box {
@@ -271,9 +292,10 @@ const formatTime = seconds => {
         justify-content: space-between;
         align-items: center;
         padding-top: unit(3);
-        height: unit(55);
-        padding-bottom: unit(1);
-        border-bottom: 1px solid $color-gray-120;
+        height: unit(48);
+        padding: 0 unit(18);
+        border: 1px solid $color-gray-500;
+        border-radius: unit(10);
         overflow: hidden;
 
         .ui-select {
@@ -349,7 +371,7 @@ const formatTime = seconds => {
           input {
             display: block;
             flex-grow: 1;
-            font-size: 18px;
+            font-size: unit(16);
             line-height: 26px;
             font-weight: 400;
             width: 100%;
@@ -367,11 +389,11 @@ const formatTime = seconds => {
 
         .btn-text {
           font-size: unit(16);
-          color: #e4b0e3;
+          color: $color-primary;
           flex-shrink: 0;
 
           .timer {
-            color: #e4b0e3;
+            color: $color-primary;
             text-align: right;
             font-size: unit(14);
             font-style: normal;
@@ -398,7 +420,7 @@ const formatTime = seconds => {
         }
 
         &.success {
-          color: #e4b0e3;
+          color: $color-primary;
         }
       }
     }
@@ -441,7 +463,7 @@ const formatTime = seconds => {
             margin-right: auto;
 
             span {
-              color: #e4b0e3;
+              color: $color-primary;
             }
           }
         }
@@ -453,7 +475,7 @@ const formatTime = seconds => {
         }
 
         input:checked + label .check {
-          background-color: #e4b0e3;
+          background-color: $color-primary;
         }
       }
     }
@@ -477,23 +499,52 @@ const formatTime = seconds => {
   right: 0;
   width: 100%;
   bottom: 0;
-  width: 100%;
 
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-
   .actions {
     width: $page-content-width;
     padding: unit(16);
 
     .submit-button {
       span {
-        color: $color-white;
+        /* color: $color-black; */
         font-size: unit(16);
       }
     }
+  }
+}
+.button-area {
+  width: 100%;
+  height: unit(48);
+  margin-top: unit(16);
+  .btn-text {
+    font-size: unit(16);
+    color: $color-primary;
+    flex-shrink: 0;
+    line-height: unit(48);
+    text-align: center;
+    width: 100%;
+
+    border: 1px solid $color-primary;
+    border-radius: unit(10);
+    .timer {
+      color: $color-primary;
+      text-align: right;
+      font-size: unit(14);
+      font-style: normal;
+      font-weight: 400;
+      line-height: unit(22);
+
+      margin-right: unit(6);
+    }
+  }
+
+  .btn-text:disabled {
+    color: $color-gray-300;
+    border: 1px solid $color-gray-300;
   }
 }
 </style>

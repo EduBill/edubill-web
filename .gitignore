@@ -24,7 +24,6 @@ pnpm-debug.log*
 *.sw?
 
 package-lock.json*
-yarn.lock
 /scripts/~$import.xlsx
 /scripts/import.csv
 /scripts/import.xls

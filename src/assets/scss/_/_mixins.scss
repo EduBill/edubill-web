@@ -1,8 +1,441 @@
 @charset "utf-8";
+
+@mixin backdrop($background-color, $opacity, $blur) {
+  background-color: rgba($background-color, $opacity);
+
+  -webkit-backdrop-filter: blur($blur);
+  backdrop-filter: blur($blur);
+}
+@mixin thumbnail-background() {
+  background-image: url('/imgs/common/logo-w.svg'), $gradient-primary-darken;
+  background-size: 69%, 100%;
+  background-position: center, center;
+  background-repeat: no-repeat;
+}
+
+@mixin fsa {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+@mixin fsf($overflow: auto) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  overflow: $overflow;
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin abs-center() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin fix-center() {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin line-clamp($line: 2) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
+@mixin hide-scroll {
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* safari :: overflow:hidden + border-radius 버그 픽스 */
 @mixin overflow-hidden {
   overflow: hidden;
   isolation: isolate;
   /* transform: translateZ(0);
   will-change: transform; */
+}
+
+@mixin dimmer($opaicity: 0.1) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color-black, $opaicity);
+}
+
+@mixin cl-last {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+// flexbox
+$flex-map: (
+  start: flex-start,
+  end: flex-end,
+  between: space-between,
+  around: space-around,
+  stretch: stretch,
+  center: center,
+);
+
+@function _get-flex-value($key) {
+  @return map-get($flex-map, $key);
+}
+
+@mixin flexbox($jc: center, $ai: center) {
+  display: flex;
+  align-items: _get-flex-value($ai);
+  justify-content: _get-flex-value($jc);
+}
+
+@mixin inline-flexbox($jc: center, $ai: center) {
+  display: inline-flex;
+  align-items: _get-flex-value($ai);
+  justify-content: _get-flex-value($jc);
+}
+
+@mixin column-flexbox($jc: center, $ai: center) {
+  display: flex;
+  flex-direction: column;
+  align-items: _get-flex-value($ai);
+  justify-content: _get-flex-value($jc);
+}
+
+// shadow
+@mixin shadow-level($name, $direction: down) {
+  $offset-y: 4px;
+
+  @if ($direction == up) {
+    $offset-y: -4px;
+  }
+
+  @if ($name == 'shadow1') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-05;
+  }
+  @if ($name == 'shadow2') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-10;
+  }
+  @if ($name == 'shadow3') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-15;
+  }
+  @if ($name == 'shadow4') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-20;
+  }
+  @if ($name == 'shadow5') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-25;
+  }
+}
+
+// 접근성
+@mixin a11y-hidden() {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+// media query
+@mixin media-sm {
+  @media only screen and (max-width: 375px) {
+    @content;
+  }
+}
+
+// flexbox
+$flex-map: (
+  start: flex-start,
+  end: flex-end,
+  between: space-between,
+  around: space-around,
+  stretch: stretch,
+  center: center,
+);
+
+@function _get-flex-value($key) {
+  @return map-get($flex-map, $key);
+}
+
+@mixin flexbox($jc: center, $ai: center) {
+  display: flex;
+  align-items: _get-flex-value($ai);
+  justify-content: _get-flex-value($jc);
+}
+
+@mixin inline-flexbox($jc: center, $ai: center) {
+  display: inline-flex;
+  align-items: _get-flex-value($ai);
+  justify-content: _get-flex-value($jc);
+}
+
+@mixin column-flexbox($jc: center, $ai: center) {
+  display: flex;
+  flex-direction: column;
+  align-items: _get-flex-value($ai);
+  justify-content: _get-flex-value($jc);
+}
+
+// Old
+@mixin fill-viewport-min-height($except: 0px) {
+  min-height: calc(100vh - #{$except});
+  min-height: calc(var(--vh, 1vh) * 100 - #{$except});
+}
+
+@mixin fill-viewport-height($except: 0px) {
+  height: calc(100vh - #{$except});
+  height: calc(var(--vh, 1vh) * 100 - #{$except});
+}
+
+@mixin container($target, $size) {
+  #{$target} {
+    @include cl-last;
+    max-width: $size;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@mixin fsa {
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+@mixin fsf($overflow: auto) {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  overflow: $overflow;
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin vertical-center-container($target, $size) {
+  text-align: center;
+  font-size: 0;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  &:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+  #{$target} {
+    display: inline-block;
+    width: 100%;
+    max-width: $size;
+    vertical-align: middle;
+    text-align: left;
+  }
+}
+
+@mixin abs-center() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin fix-center() {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// utils
+@mixin ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@mixin line-clamp($line: 2) {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
+
+@mixin user-select {
+  user-select: auto;
+}
+
+// animation
+@mixin placeholder-animation {
+  position: relative;
+  animation: placeholderShimmer 2s linear;
+  animation-iteration-count: infinite;
+  background: $color-gray-254;
+  background-color: $color-white;
+  background-image: -webkit-gradient(
+    linear,
+    left top,
+    right top,
+    from(rgba($color-black, 0.08)),
+    color-stop(15%, rgba($color-black, 0.15)),
+    color-stop(30%, rgba($color-black, 0.08))
+  );
+  background-image: -webkit-linear-gradient(
+    left,
+    rgba($color-black, 0.08) 0%,
+    rgba($color-black, 0.15) 15%,
+    rgba($color-black, 0.08) 30%
+  );
+  background-image: linear-gradient(
+    to right,
+    rgba($color-black, 0.08) 0%,
+    rgba($color-black, 0.15) 15%,
+    rgba($color-black, 0.08) 30%
+  );
+  background-size: 1200px 100%;
+  overflow: hidden;
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    height: 100%;
+    background-color: inherit;
+  }
+  &:before {
+    left: 0px;
+  }
+  &:after {
+    right: 0px;
+  }
+}
+
+// layout
+@mixin shadow {
+  // box-shadow: unit(0) unit(0) unit(0.4) unit(0.2) rgba($color-black, 0.06);
+  filter: drop-shadow(unit(0.1) unit(0.1) unit(0.4) rgba($color-black, 0.08));
+}
+
+@mixin shadow-box($color: $color-alpha-black-40) {
+  background-color: $color-white;
+  box-shadow: 0 0 unit(0.4) $color;
+  border-radius: unit(0.3);
+}
+
+@mixin text-shadow {
+  text-shadow: unit(0.1) unit(0.1) unit(0.4) rgba($color-black, 0.2);
+}
+
+@mixin hide-scroll {
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@mixin hide-search-decoration {
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  &::-ms-clear {
+    display: none;
+  }
+}
+
+@mixin gradient-bg {
+  background: linear-gradient(180deg, #eaeaea 0%, #f4f4f4 100%);
+}
+
+/* safari :: overflow:hidden + border-radius 버그 픽스 */
+@mixin overflow-hidden {
+  overflow: hidden;
+  isolation: isolate;
+  /* transform: translateZ(0);
+  will-change: transform; */
+}
+
+@mixin dimmer($opaicity: 0.1) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color-black, $opaicity);
+}
+
+// media query
+@mixin media-sm {
+  @media only screen and (max-width: 375px) {
+    @content;
+  }
+}
+
+@mixin cl-last {
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+
+// shadow
+@mixin shadow-level($name, $direction: down) {
+  $offset-y: 4px;
+
+  @if ($direction == up) {
+    $offset-y: -4px;
+  }
+
+  @if ($name == 'shadow1') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-05;
+  }
+  @if ($name == 'shadow2') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-10;
+  }
+  @if ($name == 'shadow3') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-15;
+  }
+  @if ($name == 'shadow4') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-20;
+  }
+  @if ($name == 'shadow5') {
+    box-shadow: 2px $offset-y 12px $color-alpha-black-25;
+  }
 }

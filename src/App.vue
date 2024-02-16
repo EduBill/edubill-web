@@ -144,5 +144,10 @@ onBeforeMount(() => {
   width: 100vw;
   max-width: 100vw;
   height: 100vh;
+
+  -webkit-user-select: none !important;
+  -moz-user-select: -moz-none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
 }
 </style>

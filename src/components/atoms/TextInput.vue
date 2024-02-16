@@ -261,7 +261,7 @@ function onInput(e) {
     }
 
     .input {
-      border-bottom: 1px solid $color-gray-224;
+      border: 1px solid $color-gray-224;
       background-color: transparent;
 
       input {
