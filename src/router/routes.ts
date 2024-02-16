@@ -24,6 +24,12 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '홈', auth: true },
       },
       {
+        path: '/signup',
+        component: () => import('@/views/pages/login/PageSignup.vue'),
+        name: 'Signup',
+        meta: { title: '회원가입' },
+      },
+      {
         path: '/:catchAll(.*)',
         component: Blank,
         children: [

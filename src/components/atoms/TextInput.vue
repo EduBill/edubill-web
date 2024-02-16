@@ -227,7 +227,7 @@ function onInput(e) {
       display: flex;
       gap: unit(4);
       padding-right: unit(16);
-      border: 1px solid $color-gray-224;
+      /* border: 1px solid $color-gray-224; */
       border-radius: $border-radius-medium;
       background-color: $color-gray-254;
       /* padding-right: unit(16); */
