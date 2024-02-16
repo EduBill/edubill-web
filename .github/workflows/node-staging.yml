@@ -5,7 +5,7 @@ name: React S3 Cloudfront CI
 
 on:
   pull_request:
-    branches: ['master']
+    branches: ['release/staging']
 
 jobs:
   build:
@@ -26,7 +26,7 @@ jobs:
       - name: Install modules
         run: yarn install
       - name: Build project
-        run: CI='' yarn build:prod
+        run: CI='' yarn build:staging
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -36,6 +36,6 @@ jobs:
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
       - name: Deploy to S3
-        run: aws s3 sync dist/ s3://prod-edubill-web
+        run: aws s3 sync dist/ s3://staging-edubill-web
       - name: Invalidate CloudFront Cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_DEV_ID }} --paths "/*"
