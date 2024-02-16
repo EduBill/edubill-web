@@ -47,3 +47,4 @@ jobs:
             aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
           elif [[ $GITHUB_REF == 'refs/heads/release/staging' ]]; then
             aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_DEV_ID }} --paths "/*"
+          fi
