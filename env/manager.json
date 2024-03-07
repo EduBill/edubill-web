@@ -1,0 +1,66 @@
+{
+  "deploy": {
+    "local": {
+      "bucketName": "",
+      "distributionId": "",
+      "env": {
+        "VUE_APP_MODE": "local",
+        "VUE_APP_API_SERVER": "https://api.edu-bill.co.kr/"
+      }
+    },
+    "debug": {
+      "bucketName": "",
+      "distributionId": "",
+      "env": {
+        "VUE_APP_MODE": "debug",
+        "VUE_APP_REMOTE_IP_ADDRESS": "{{REMOTE_IP_ADDRESS}}",
+        "VUE_APP_API_SERVER": "http://{{REMOTE_IP_ADDRESS}}:3101"
+      }
+    },
+    "development": {
+      "bucketName": "",
+      "distributionId": "",
+      "env": {
+        "VUE_APP_MODE": "development",
+        "VUE_APP_API_SERVER": "https://api.edu-bill.co.kr/"
+      }
+    },
+    "staging": {
+      "bucketName": "",
+      "distributionId": "",
+      "env": {
+        "VUE_APP_MODE": "staging",
+        "VUE_APP_API_SERVER": "https://staging.api.edu-bill.co.kr/"
+      }
+    },
+    "production": {
+      "bucketName": "",
+      "distributionId": "",
+      "env": {
+        "VUE_APP_MODE": "production",
+        "VUE_APP_API_SERVER": "https://api.edu-bill.co.kr/"
+      }
+    }
+  },
+  "excludes": [
+    "build",
+    "node_modules",
+    "node_modules.nosync",
+    "sessions",
+    "scripts",
+    "cached",
+    "tmp",
+    "@motif",
+    ".git",
+    ".aws",
+    ".idea",
+    ".DS_Store",
+    "yarn.lock",
+    "yarn-error.log",
+    "package-lock.json",
+    "public/swagger/data",
+    "distribution",
+    "_.nosync",
+    "__pycache__"
+  ]
+}

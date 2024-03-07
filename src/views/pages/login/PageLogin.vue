@@ -88,6 +88,7 @@
 </template>
 
 <script lang="ts" setup>
+import { AuthApi } from '@/api/AuthApi';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
 import UiForm from '@/components/molecules/forms/Form.vue';
@@ -203,6 +204,11 @@ async function onClickRequestCertified(e) {
   if (isNumber(e)) {
     console.log('is number');
     state.isRequestCertified = true;
+    const authApi = new AuthApi();
+    const res = await authApi.authPhoneVerifySend({
+      phoneNumber: e,
+    });
+    console.log(res);
     startTimer();
   } else {
     console.log('is not number');
