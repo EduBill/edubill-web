@@ -1,16 +1,13 @@
 <template>
   <div id="wrapper" :style="state.styles">
     <router-view v-slot="{ Component }" :key="$route.fullPath">
-      <!-- <transition>
-        <component :is="Component" />
-      </transition> -->
       <component :is="Component" />
     </router-view>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, watch } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 import { useLayoutStore } from '@/stores/modules/layout';
 import { useWNInterface } from '@/plugins/vue-wni';
 import { useRoute } from 'vue-router';
