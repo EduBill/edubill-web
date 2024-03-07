@@ -6,9 +6,6 @@ import {
   watchLocation,
 } from './modules/web.location';
 
-// Last Updated: 2023-08-23 00:27
-// Author by: john@u-hoo.com
-
 const wni = useWNInterface();
 
 export function useNativeInterceptor() {

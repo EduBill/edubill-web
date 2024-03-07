@@ -1,7 +1,11 @@
 <template>
   <div ref="refApp" class="app-container">
     <template v-if="canUseRouter">
-      <router-view />
+      <router-view v-slot="{ Component }">
+        <transition :name="transitionName">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </template>
 
     <template v-if="!canUseRouter">
@@ -28,6 +32,7 @@ import UiDrawer from './components/modules/drawer/components/Drawer.vue';
 import UiToast from './components/modules/toast/components/Toast.vue';
 
 const app = ref(null);
+const transitionName = ref('slide-right');
 const wni = useWNInterface();
 const layoutStore = useLayoutStore();
 const route = useRoute();
@@ -142,6 +147,16 @@ onBeforeMount(() => {
   initWNInterface();
   document.title = 'EduBill';
 });
+
+watch(
+  () => route.name,
+  (to, from) => {
+    console.log('watch');
+    // transitionName.value = 'none';
+    transitionName.value = 'slide-right';
+    console.log(transitionName.value);
+  }
+);
 </script>
 
 <style lang="scss">
@@ -154,5 +169,25 @@ onBeforeMount(() => {
   -moz-user-select: -moz-none !important;
   -ms-user-select: none !important;
   user-select: none !important;
+}
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform 0.2s ease;
+}
+.slide-right-enter-from {
+  transform: translateX(100%);
+}
+.slide-right -leave-to {
+  transform: translateX(-100%);
+}
+.none-enter-active,
+.none-leave-active {
+  display: none;
+}
+.none-enter-from {
+  display: none;
+}
+.none-leave-to {
+  display: none;
 }
 </style>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import config from '@/config';
 
-axios.defaults.baseURL = 'localhost:8080';
+axios.defaults.baseURL = 'https://api.edu-bill.co.kr';
 axios.interceptors.request.use(
   function (config) {
     const { pathname = '', search = '' } = window.location;
