@@ -17,7 +17,7 @@ export class AuthApi<
       path: `/v1/auth/phone`,
       method: 'POST',
       body: data,
-      type: ContentType.Json,
+      type: ContentType.TextPlain,
       ...params,
     });
 }
