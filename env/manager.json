@@ -5,7 +5,7 @@
       "distributionId": "",
       "env": {
         "VUE_APP_MODE": "local",
-        "VUE_APP_API_SERVER": "https://api.edu-bill.co.kr/"
+        "VUE_APP_API_SERVER": "http://api.edu-bill.co.kr/"
       }
     },
     "debug": {
@@ -22,7 +22,7 @@
       "distributionId": "",
       "env": {
         "VUE_APP_MODE": "development",
-        "VUE_APP_API_SERVER": "https://api.edu-bill.co.kr/"
+        "VUE_APP_API_SERVER": "http://api.edu-bill.co.kr/"
       }
     },
     "staging": {
@@ -30,7 +30,7 @@
       "distributionId": "",
       "env": {
         "VUE_APP_MODE": "staging",
-        "VUE_APP_API_SERVER": "https://staging.api.edu-bill.co.kr/"
+        "VUE_APP_API_SERVER": "http://staging.api.edu-bill.co.kr/"
       }
     },
     "production": {
@@ -38,7 +38,7 @@
       "distributionId": "",
       "env": {
         "VUE_APP_MODE": "production",
-        "VUE_APP_API_SERVER": "https://api.edu-bill.co.kr/"
+        "VUE_APP_API_SERVER": "http://api.edu-bill.co.kr/"
       }
     }
   },
