@@ -42,6 +42,7 @@ export enum ContentType {
   Json = 'application/json',
   FormData = 'multipart/form-data',
   UrlEncoded = 'application/x-www-form-urlencoded',
+  TextPlain = 'text/plain',
 }
 
 export class HttpClient<SecurityDataType = unknown> {
@@ -170,8 +171,7 @@ export class HttpClient<SecurityDataType = unknown> {
         data: body,
         url: path,
       });
-
-      return result['data'];
+      return result;
     } catch (e: any) {
       if (e['response'] && e['response']['data']) {
         const result: any = e['response']['data'];

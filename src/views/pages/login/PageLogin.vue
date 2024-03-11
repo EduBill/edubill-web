@@ -31,7 +31,7 @@
           <div class="input-box">
             <ui-text-input
               id="certified-number"
-              v-model:value="state.certifiedNumber"
+              v-model:value="state.verificationNumber"
               type="number"
               inputmode="numeric"
               pattern="\d*"
@@ -78,7 +78,7 @@
       <button
         type="submit"
         class="submit-button btn-large btn-filled"
-        :disabled="state.certifiedNumber.length !== 6 ? true : false"
+        :disabled="state.verificationNumber.length !== 6 ? true : false"
         @click="onClickSubmit"
       >
         <span>{{ '인증 완료' }}</span>
@@ -101,13 +101,13 @@ import {
   watch,
 } from 'vue';
 import router from '@/router';
-
+const authApi = new AuthApi();
 const refForm = ref(null);
 const state = reactive({
   mode: 'login',
   requestId: '',
   phoneNumber: '',
-  certifiedNumber: '',
+  verificationNumber: '',
   selectedPhoneDialCode: '+82/KR',
   phoneNumberError: false, // 핸드폰 번호가 올바른지
   isPhoneNumber: false, // 휴대폰 번호가 11자리가 채워졌는지
@@ -204,11 +204,10 @@ async function onClickRequestCertified(e) {
   if (isNumber(e)) {
     console.log('is number');
     state.isRequestCertified = true;
-    const authApi = new AuthApi();
-    const res = await authApi.authPhoneVerifySend({
-      phoneNumber: e,
-    });
-    console.log(res);
+
+    const res = await authApi.authPhoneVerifySend(e);
+    state.requestId = res.data.requestId;
+    state.verificationNumber = res.data.verificationNumber;
     startTimer();
   } else {
     console.log('is not number');
@@ -230,10 +229,34 @@ function onSubmit(e) {
   return false;
 }
 
-function onClickSubmit() {
-  router.push({
-    name: 'Signup',
+async function onClickSubmit() {
+  const res = await authApi.authPhoneVerify({
+    requestId: state.requestId,
+    verificationNumber: state.verificationNumber,
+    phoneNumber: state.phoneNumber,
   });
+  if (res.status === 200 && res.data === state.requestId) {
+    const isUser = await authApi.authCheckUser({
+      phoneNumber: state.phoneNumber,
+      requestId: state.requestId,
+    });
+    if (isUser.data) {
+      router.push({
+        name: 'Home',
+      });
+    } else {
+      router.push({
+        name: 'Signup',
+        query: {
+          phoneNumber: state.phoneNumber,
+          requestId: state.requestId,
+        },
+      });
+    }
+  }
+  // router.push({
+  //   name: 'Signup',
+  // });
 }
 
 const formatTime = seconds => {

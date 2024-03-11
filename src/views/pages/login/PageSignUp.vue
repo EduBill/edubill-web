@@ -41,7 +41,12 @@ import UiForm from '@/components/molecules/forms/Form.vue';
 import { UiTextInput } from '@/plugins/vue-ui-components';
 import { reactive, computed } from 'vue';
 import TermsVue from '@/components/resources/terms/Terms.vue';
+import { AuthApi } from '@/api/AuthApi';
+import { useRoute, useRouter } from 'vue-router';
 
+const authApi = new AuthApi();
+const route = useRoute();
+const router = useRouter();
 const drawer = useDrawerModule();
 
 const state = reactive({
@@ -61,7 +66,20 @@ function onClickCheckTerms() {
   drawer.present({
     component: TermsVue,
     data: {},
-    events: {},
+    events: {
+      onConfirm: async () => {
+        const res = await authApi.authSignUp({
+          userName: state.displayName,
+          requestId: route.query.requestId,
+          phoneNumber: route.query.phoneNumber,
+        });
+        if (res.status === 200) {
+          router.push({
+            name: 'Home',
+          });
+        }
+      },
+    },
   });
 }
 </script>
