@@ -8,7 +8,8 @@
     "build:prod": "cross-env VUE_APP_MODE=production yarn build",
     "build:staging": "cross-env VUE_APP_MODE=staging yarn build",
     "lint": "vue-cli-service lint",
-    "start": "yarn serve"
+    "start": "yarn serve",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
@@ -37,6 +38,7 @@
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-vue": "^9.20.1",
+    "husky": "^9.0.11",
     "prettier": "^3.2.4",
     "sass": "^1.70.0",
     "typescript": "^5.3.3",
