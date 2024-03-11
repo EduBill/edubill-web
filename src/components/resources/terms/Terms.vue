@@ -92,7 +92,7 @@ const allChecked = ref(false);
 const agreeTerms = ref([]);
 
 function checkItem(e) {
-  // console.log('check', agreeTerms.value);
+  console.log('check', agreeTerms.value);
 
   if (agreeTerms.value.length === state.terms.length) {
     allChecked.value = true;
