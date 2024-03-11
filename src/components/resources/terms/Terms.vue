@@ -48,7 +48,11 @@
   </div>
   <div class="page-footer">
     <div class="actions">
-      <button type="submit" class="submit-button btn-large btn-filled">
+      <button
+        @click="onSubmit"
+        type="submit"
+        class="submit-button btn-large btn-filled"
+      >
         <span>{{ '가입완료' }}</span>
       </button>
     </div>
@@ -57,6 +61,9 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+
+const props = defineProps(['events']);
+const emits = defineEmits(['close']);
 
 const state = reactive({
   terms: [
@@ -100,6 +107,11 @@ function checkAll() {
   } else {
     agreeTerms.value = [];
   }
+}
+
+function onSubmit() {
+  emits('close');
+  props.events.onConfirm();
 }
 </script>
 
