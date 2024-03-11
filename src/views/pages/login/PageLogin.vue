@@ -241,9 +241,18 @@ async function onClickSubmit() {
       requestId: state.requestId,
     });
     if (isUser.data) {
-      router.push({
-        name: 'Home',
-      });
+      await authApi
+        .authLogin({
+          requestId: state.requestId,
+          phoneNumber: state.phoneNumber,
+        })
+        .then(res => {
+          if (res.status === 200) {
+            router.push({
+              name: 'Home',
+            });
+          }
+        });
     } else {
       router.push({
         name: 'Signup',
