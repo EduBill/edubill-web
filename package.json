@@ -7,14 +7,17 @@
     "build": "vite build",
     "build:prod": "cross-env VUE_APP_MODE=production yarn build",
     "build:staging": "cross-env VUE_APP_MODE=staging yarn build",
-    "lint": "vue-cli-service lint",
-    "start": "yarn serve"
+    "format": "prettier --check \"src/**/*.vue\"",
+    "lint": "eslint \"**/*.{ts,tsx,vue}\" --fix",
+    "start": "yarn serve",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@vueuse/core": "^10.7.2",
     "axios": "^1.6.5",
     "core-js": "^3.8.3",
+    "eslint-plugin-import": "^2.29.1",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "rollup-plugin-node-polyfills": "^0.2.1",
@@ -36,7 +39,12 @@
     "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-vue": "^9.20.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "prettier": "^3.2.4",
     "sass": "^1.70.0",
     "typescript": "^5.3.3",
@@ -50,5 +58,11 @@
     "last 2 versions",
     "not dead",
     "not ie 11"
-  ]
+  ],
+  "lint-staged": {
+    "*.{html,css,scss,js,ts,json,vue}": "prettier --write",
+    "*.{js,jsx,ts,tsx,vue}": [
+      "eslint --fix"
+    ]
+  }
 }
