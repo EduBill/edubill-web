@@ -69,20 +69,19 @@ onMounted(() => {
 <style lang="scss" scoped>
 .page-content {
   padding: unit(20);
-  // padding-top: unit(20);
   white-space: pre-wrap;
   min-height: -webkit-fill-available;
 
   > div {
-    margin: 1rem 0rem;
+    margin: unit(16) unit(0);
   }
 
   .title {
-    padding-top: 1rem;
+    padding-top: unit(16);
     color: #000;
 
     /* Title/Title Strong */
-    font-size: 1.625rem;
+    font-size: unit(26);
     font-style: normal;
     font-weight: 400;
     line-height: 140%; /* 2.275rem */
@@ -91,16 +90,16 @@ onMounted(() => {
   .grid {
     display: grid;
     grid-template-columns: 0.8fr 0.8fr;
-    grid-gap: 0.94rem;
+    grid-gap: unit(15.04);
   }
 
   .blank {
     color: var(--Gray40, #BCBCBC);
     text-align: center;
-    margin-top: 2rem;
+    margin-top: unit(32);
 
     font-family: Pretendard;
-    font-size: 0.875rem;
+    font-size: unit(14);
     font-style: normal;
     font-weight: 500;
     line-height: 130%; /* 1.1375rem */

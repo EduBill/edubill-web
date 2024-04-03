@@ -1,37 +1,37 @@
 <template>
     <div id="homenav" class="homenav">
-        <img src="@/assets/icons/svg/homeLogo.svg" />
+        <svg-icon class="logo" name="homeLogo" />
         <div>
-            <img src="@/assets/icons/svg/alarm.svg" />
-            <img src="@/assets/icons/svg/menu.svg" />
+            <svg-icon class="icon" name="alarm" />
+            <svg-icon class="icon" name="menu" />
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-
+import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 </script>
 
 <style lang="scss" scoped>
 #homenav {
     width: 100%;
-    height: 2.75rem;
-    padding: 0rem 1.25rem;
+    height: unit(44);
+    padding: unit(0) unit(20);
 
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    img {
-        width: 5.3125rem;
-        height: 1.46931rem;
+    .logo {
+        width: unit(85);
+        height: unit(23.5);
         flex-shrink: 0;
     }
     div {
         display: flex;
         align-items: flex-end;
-        img {
-            width: 2rem;
-            height: 2rem;
+        .icon {
+            width: unit(32);
+            height: unit(32);
             flex-shrink: 0;
         }
     }
