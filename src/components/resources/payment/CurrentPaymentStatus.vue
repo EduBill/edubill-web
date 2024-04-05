@@ -32,35 +32,35 @@ console.log(props.title);
 .currentPay {
   flex: 1;
   background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.1);
-  padding: 21px 16px;
+  border-radius: unit(10);
+  box-shadow: 0 0 unit(16) 0 rgba(0, 0, 0, 0.1);
+  padding: unit(21) unit(16);
   &_header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-top: 2px;
-    margin-bottom: 8px;
+    margin-top: unit(2);
+    margin-bottom: unit(8);
   }
   &_title {
     color: #19171a;
-    font-size: 18px;
+    font-size: unit(18);
     font-style: normal;
     font-weight: 600;
     line-height: 140%;
   }
   &_img {
-    height: 25px;
+    height: unit(25);
   }
   &_content {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 9px;
+    margin-top: unit(9);
     p {
       color: #9f9f9f;
-      font-size: 12px;
+      font-size: unit(12);
       font-style: normal;
       font-weight: 500;
       line-height: 120%;

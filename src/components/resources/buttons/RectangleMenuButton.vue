@@ -39,21 +39,21 @@ const iconImgSrc = computed(() => {
 
 <style lang="scss">
 .rectangleMenu {
-  border-radius: 10px;
-  padding: 20px !important;
+  border-radius: unit(10);
+  padding: unit(20) !important;
 
   &_title {
     color: #1a1a1a;
-    padding: 5px 0;
-    font-size: 18px;
+    padding: unit(5) 0;
+    font-size: unit(18);
     font-style: normal;
     font-weight: 700;
     line-height: normal;
   }
   &_content {
     color: #929292;
-    margin-bottom: 22px;
-    font-size: 12px;
+    margin-bottom: unit(22);
+    font-size: unit(12);
     font-style: normal;
     font-weight: 500;
     line-height: normal;
@@ -61,7 +61,7 @@ const iconImgSrc = computed(() => {
   &_img {
     display: flex;
     justify-content: right;
-    margin-bottom: -5px;
+    margin-bottom: unit(-5);
     img {
       height: 59px;
     }

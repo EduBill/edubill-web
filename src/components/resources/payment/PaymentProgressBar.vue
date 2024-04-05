@@ -51,27 +51,27 @@ const paymentRate = computed(() => {
 <style lang="scss">
 .progressBar_container {
   width: 100%;
-  height: 24px;
+  height: unit(24);
   background-color: #f4f4f7;
-  border-radius: 5px;
+  border-radius: unit(5);
   padding: 0 !important;
 }
 .progress {
-  height: 24px;
+  height: unit(24);
   padding: 0;
   display: flex;
   justify-content: right;
   align-items: center;
   background: linear-gradient(90deg, #4600dd 0%, #7535ff 100%);
-  border-radius: 5px;
+  border-radius: unit(5);
   color: #ffffff;
   transition: width 0.5s ease;
   p {
-    font-size: 12px;
+    font-size: unit(12);
     font-style: normal;
     font-weight: 700;
     line-height: 140%;
-    margin-right: 10px;
+    margin-right: unit(10);
     white-space: nowrap;
   }
 }
