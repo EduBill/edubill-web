@@ -1,8 +1,8 @@
 <template>
-  <div class="container_rectangleMenu" :style="{ backgroundColor: backColor }">
-    <p class="title_rectangleMenu">{{ title }}</p>
-    <p class="content_rectangleMenu">{{ content }}</p>
-    <div class="img_rectangleMenu">
+  <div class="rectangleMenu" :style="{ backgroundColor: backColor }">
+    <p class="rectangleMenu_title">{{ title }}</p>
+    <p class="rectangleMenu_content">{{ content }}</p>
+    <div class="rectangleMenu_img">
       <img v-if="iconImg != null" :src="iconImgSrc" />
     </div>
   </div>
@@ -38,32 +38,33 @@ const iconImgSrc = computed(() => {
 </script>
 
 <style lang="scss">
-.container_rectangleMenu {
+.rectangleMenu {
   border-radius: 10px;
   padding: 20px !important;
-}
-.title_rectangleMenu {
-  color: #1a1a1a;
-  padding: 5px 0;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-}
-.content_rectangleMenu {
-  color: #929292;
-  margin-bottom: 22px;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-.img_rectangleMenu {
-  display: flex;
-  justify-content: right;
-  margin-bottom: -5px;
-}
-.img_rectangleMenu img {
-  height: 59px;
+
+  &_title {
+    color: #1a1a1a;
+    padding: 5px 0;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+  }
+  &_content {
+    color: #929292;
+    margin-bottom: 22px;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+  }
+  &_img {
+    display: flex;
+    justify-content: right;
+    margin-bottom: -5px;
+    img {
+      height: 59px;
+    }
+  }
 }
 </style>

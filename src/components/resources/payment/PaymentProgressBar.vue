@@ -1,5 +1,5 @@
 <template>
-  <div class="container_progressBar">
+  <div class="progressBar_container">
     <div class="progress" :style="{ width: percent + '%' }">
       <p>{{ paymentRate }}</p>
     </div>
@@ -49,7 +49,7 @@ const paymentRate = computed(() => {
 </script>
 
 <style lang="scss">
-.container_progressBar {
+.progressBar_container {
   width: 100%;
   height: 24px;
   background-color: #f4f4f7;
@@ -66,13 +66,13 @@ const paymentRate = computed(() => {
   border-radius: 5px;
   color: #ffffff;
   transition: width 0.5s ease;
-}
-.progress p {
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 140%;
-  margin-right: 10px;
-  white-space: nowrap;
+  p {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 140%;
+    margin-right: 10px;
+    white-space: nowrap;
+  }
 }
 </style>
