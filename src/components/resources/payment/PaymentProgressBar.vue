@@ -1,13 +1,13 @@
 <template>
   <div class="container_progressBar">
     <div class="progress" :style="{ width: percent + '%' }">
-      <p>{{ percent }}% 납입</p>
+      <p>{{ paymentRate }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, onMounted } from 'vue';
+import { defineProps, ref, onMounted, computed } from 'vue';
 
 interface Props {
   percent: number;
@@ -42,6 +42,10 @@ const animateProgressBar = () => {
 
   requestAnimationFrame(animate);
 };
+
+const paymentRate = computed(() => {
+  return `${props.percent}% 납입`;
+});
 </script>
 
 <style lang="scss">
