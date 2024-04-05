@@ -27,7 +27,7 @@ const iconImgSrc = computed(() => {
   if (props.iconImg != null) {
     // 이미지가 존재하는 경우에만 이미지 경로를 생성하여 반환
     return new URL(
-      `/src/assets/icons/png/${props.iconImg}.png`,
+      `/src/assets/icons/svg/${props.iconImg}.svg`,
       import.meta.url
     ).href;
   } else {

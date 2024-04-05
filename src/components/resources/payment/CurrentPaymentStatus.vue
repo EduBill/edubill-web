@@ -2,7 +2,7 @@
   <div class="currentPay">
     <div class="currentPay_header">
       <p class="currentPay_title">{{ title }}</p>
-      <img class="currentPay_img" src="@/assets/icons/png/payment.png" />
+      <img class="currentPay_img" src="@/assets/icons/svg/payment.svg" />
     </div>
     <PaymentProgressBar :percent="progressPercent" />
     <div class="currentPay_content">
