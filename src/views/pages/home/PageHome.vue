@@ -1,8 +1,8 @@
 <template>
   <HomeNav />
 
-  <div class="page-content">
-    <div class="title">
+  <div class="home">
+    <div class="home_title">
       <strong>{{ userName }}</strong
       >님,<br />반갑습니다.
     </div>
@@ -15,7 +15,7 @@
         iconImg="payment"
       />
     </div>
-    <div class="grid">
+    <div class="home_grid">
       <RectangleMenuButton
         title="납부 관리"
         content="시간별 납부 내역 확인"
@@ -29,7 +29,7 @@
         backColor="#F3F3FF"
       />
     </div>
-    <div class="grid">
+    <div class="home_grid">
       <RectangleMenuButton
         title="서비스 안내"
         content="에듀빌만의 서비스"
@@ -41,7 +41,7 @@
         backColor="#F4F4F7"
       />
     </div>
-    <div class="blank">
+    <div class="home_blank">
       더 많은 서비스를 기대해주세요!
     </div>
   </div>
@@ -67,7 +67,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.page-content {
+.home {
   padding: unit(20);
   white-space: pre-wrap;
   min-height: -webkit-fill-available;
@@ -76,7 +76,7 @@ onMounted(() => {
     margin: unit(16) unit(0);
   }
 
-  .title {
+  &_title {
     padding-top: unit(16);
     color: #000;
 
@@ -87,13 +87,13 @@ onMounted(() => {
     line-height: 140%; /* 2.275rem */
   }
 
-  .grid {
+  &_grid {
     display: grid;
     grid-template-columns: 0.8fr 0.8fr;
     grid-gap: unit(15.04);
   }
 
-  .blank {
+  &_blank {
     color: var(--Gray40, #BCBCBC);
     text-align: center;
     margin-top: unit(32);
