@@ -6,7 +6,7 @@
       <strong>{{ userName }}</strong
       >님,<br />반갑습니다.
     </div>
-    <SendBillToast v-if="isPaymentDay"/>
+    <SendBillToast v-if="isPaymentDay" />
     <div>
       <CurrentPaymentStatus
         title="xx년 xx월 납부 현황"
@@ -19,13 +19,13 @@
       <RectangleMenuButton
         title="납부 관리"
         content="시간별 납부 내역 확인"
-        iconImg="wallet"
+        iconName="wallet"
         backColor="#EEF5FF"
       />
       <RectangleMenuButton
         title="원생 관리"
         content="시간별 납부 내역 확인"
-        iconImg="chart"
+        iconName="chart"
         backColor="#F3F3FF"
       />
     </div>
@@ -41,9 +41,7 @@
         backColor="#F4F4F7"
       />
     </div>
-    <div class="home_blank">
-      더 많은 서비스를 기대해주세요!
-    </div>
+    <div class="home_blank">더 많은 서비스를 기대해주세요!</div>
   </div>
 </template>
 
@@ -94,7 +92,7 @@ onMounted(() => {
   }
 
   &_blank {
-    color: var(--Gray40, #BCBCBC);
+    color: var(--Gray40, #bcbcbc);
     text-align: center;
     margin-top: unit(32);
 

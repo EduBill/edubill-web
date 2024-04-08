@@ -3,31 +3,32 @@
     <p class="rectangleMenu_title">{{ title }}</p>
     <p class="rectangleMenu_content">{{ content }}</p>
     <div class="rectangleMenu_img">
-      <img v-if="iconImg != null" :src="iconImgSrc" />
+      <svg-icon class="icon" v-if="iconName" :name="iconName" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { computed, defineProps } from 'vue';
 
 interface Props {
   title: string;
   content: string;
-  iconImg?: string | null; // iconImg는 optional임.
+  iconName?: string | null; // iconImg는 optional임.
   backColor: string;
 }
 
 const props = defineProps<Props>();
 
 console.log(props.title);
-console.log(props.iconImg);
+console.log(props.iconName);
 
 const iconImgSrc = computed(() => {
-  if (props.iconImg != null) {
+  if (props.iconName != null) {
     // 이미지가 존재하는 경우에만 이미지 경로를 생성하여 반환
     return new URL(
-      `/src/assets/icons/svg/${props.iconImg}.svg`,
+      `/src/assets/icons/svg/${props.iconName}.svg`,
       import.meta.url
     ).href;
   } else {
@@ -62,8 +63,11 @@ const iconImgSrc = computed(() => {
     display: flex;
     justify-content: right;
     margin-bottom: unit(-5);
-    img {
-      height: 59px;
+    .icon {
+      // 피그마에서 납부관리, 원생관리 icon width가 서로 다름
+      // 우선 51로 통일하여 처리
+      width: unit(51);
+      height: unit(59);
     }
   }
 }

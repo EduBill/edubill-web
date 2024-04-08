@@ -2,7 +2,7 @@
   <div class="currentPay">
     <div class="currentPay_header">
       <p class="currentPay_title">{{ title }}</p>
-      <img class="currentPay_img" src="@/assets/icons/svg/payment.svg" />
+      <svg-icon class="icon" name="payment" />
     </div>
     <PaymentProgressBar :percent="progressPercent" />
     <div class="currentPay_content">
@@ -15,6 +15,7 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue';
 import PaymentProgressBar from './PaymentProgressBar.vue';
+import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 
 interface Props {
   title: string;
@@ -42,6 +43,11 @@ console.log(props.title);
     align-items: center;
     margin-top: unit(2);
     margin-bottom: unit(8);
+
+    .icon {
+      width: unit(37);
+      height: unit(25);
+    }
   }
   &_title {
     color: #19171a;
@@ -49,9 +55,6 @@ console.log(props.title);
     font-style: normal;
     font-weight: 600;
     line-height: 140%;
-  }
-  &_img {
-    height: unit(25);
   }
   &_content {
     display: flex;
