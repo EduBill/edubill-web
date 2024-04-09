@@ -3,8 +3,8 @@
 
   <div class="home">
     <div class="home_title">
-      <strong>{{ userName }}</strong
-      >님,<br />반갑습니다.
+      <strong>{{ userProfile?.username + ' (' + userProfile?.userType + ')' }}</strong>님,
+      <br />반갑습니다.
     </div>
     <SendBillToast v-if="isPaymentDay"/>
     <div>
@@ -48,22 +48,37 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue';
 import HomeNav from '@/components/commons/navigation/HomeNav.vue';
 import SendBillToast from '@/components/molecules/SendBillToast.vue';
 import RectangleMenuButton from '@/components/resources/buttons/RectangleMenuButton.vue';
 import CurrentPaymentStatus from '@/components/resources/payment/CurrentPaymentStatus.vue';
-import { ref, onMounted } from 'vue';
+import { AuthApi } from '@/api/AuthApi';
+import { UserProfile } from '@/stores/typings/types.userProfile';
 
-// 사용자 이름
-const userName = ref('이름이름(학원학원학원)');
+const userProfile = ref<UserProfile | null>(null);
+const authApi = new AuthApi();
 
+const fetchUserProfile = async () => {
+  try {
+    const response = await authApi.getUserProfile();
+    userProfile.value = response.data; // AxiosResponse 객체에서 data 속성을 통해 접근
+  } catch (error) {
+    console.error('사용자 프로필 정보를 가져오는 중 오류 발생:', error);
+  }
+};
+onMounted(fetchUserProfile);
+
+// 결제일 확인
 const isPaymentDay = ref(false);
 
-onMounted(() => {
+const checkPaymentDay = () => {
   const today = new Date();
   const day = today.getDate();
-  isPaymentDay.value = day === day; // 결제일
-});
+  isPaymentDay.value = day === day;
+};
+
+onMounted(checkPaymentDay);
 </script>
 
 <style lang="scss" scoped>
