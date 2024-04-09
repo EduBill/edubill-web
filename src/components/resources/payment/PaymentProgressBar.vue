@@ -1,6 +1,6 @@
 <template>
   <div class="progressBar_container">
-    <div class="progress" :style="{ width: percent + '%' }">
+    <div class="progress" :style="{ width: props.percent + '%' }">
       <p>{{ paymentRate }}</p>
     </div>
   </div>
@@ -18,6 +18,7 @@ const props = defineProps<Props>();
 const percent = ref(0);
 
 onMounted(() => {
+  console.log(props.percent);
   animateProgressBar();
 });
 

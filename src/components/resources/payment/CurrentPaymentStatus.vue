@@ -4,29 +4,70 @@
       <p class="currentPay_title">{{ title }}</p>
       <svg-icon class="icon" name="payment" />
     </div>
-    <PaymentProgressBar :percent="progressPercent" />
+    <PaymentProgressBar :percent="paymentPercent" />
     <div class="currentPay_content">
-      <p>총 {{ completeNum }}명이 납부를 완료했습니다.</p>
+      <p>총 {{ paidCount }}명이 납부를 완료했습니다.</p>
       <p>바로가기></p>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue';
+import { computed, defineProps, onMounted, ref } from 'vue';
 import PaymentProgressBar from './PaymentProgressBar.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
+import { PaymentApi } from '@/api/PaymentApi';
 
 interface Props {
-  title: string;
-  progressPercent: number;
-  completeNum: number;
   iconImg: string;
 }
 
 const props = defineProps<Props>();
+const year = ref(0);
+const month = ref(0);
+const paymentApi = new PaymentApi();
+const paidCount = ref(0);
+const unpaidCount = ref(0);
+const paymentPercent = ref(0);
 
-console.log(props.title);
+console.log(props.iconImg);
+
+onMounted(() => {
+  getPaymentStatus();
+});
+
+const title = computed(() => {
+  return `${year.value}년 ${month.value}월 납부 현황`;
+});
+
+async function getPaymentStatus() {
+  // 현재 날짜 가져오기
+  const date = new Date();
+  year.value = date.getFullYear();
+  month.value = date.getMonth() + 1;
+  console.log(year.value);
+  console.log(month.value);
+
+  // 현재 날짜를 YYYY-MM 형태로 만듦
+  let formatDate = '';
+  // month가 한자리 수일 경우 앞에 0 붙이기
+  if (month.value < 10) {
+    formatDate = `${year.value}-0${month.value}`;
+  } else {
+    formatDate = `${year.value}-${month.value}`;
+  }
+  console.log(formatDate);
+
+  // 현재 날짜 전달하여 납부 현황 가져오기
+  const res = await paymentApi.getPaymentStatus(formatDate);
+  paidCount.value = res.data.paidCount;
+  unpaidCount.value = res.data.unpaidCount;
+
+  // 납부 percent 계산
+  let allCount = paidCount.value + unpaidCount.value;
+  paymentPercent.value = Math.floor((paidCount.value / allCount) * 100);
+  console.log(paymentPercent.value);
+}
 </script>
 
 <style lang="scss">
