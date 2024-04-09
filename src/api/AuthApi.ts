@@ -1,4 +1,6 @@
 import { ContentType, HttpClient, RequestParams } from './http-client';
+import axios, { AxiosResponse } from 'axios';
+import { UserProfile } from '@/stores/typings/types.userProfile';
 
 export class AuthApi<
   SecurityDataType = unknown,
@@ -87,4 +89,23 @@ export class AuthApi<
       body: data,
       type: ContentType.Json,
     });
+  
+  /**
+   * No description
+   *
+   * @tags auth-api
+   * @name 
+   * @summary 유저 프로필
+   * @request GET:/v1/user/my-profile
+   * @secure
+   */
+  public async getUserProfile(): Promise<AxiosResponse<UserProfile>> {
+    return this.request({
+      path: `/v1/user/my-profile`,
+      method: 'GET',
+      headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjoiQUNBREVNWSIsInN1YiI6IjAxMDI3ODkyMTY1IiwiaWF0IjoxNzEyMTU2NzIxLCJleHAiOjQ4NjU3NTY3MjF9.p0vjwBv25irPuk0Cbd4iGTRoHbIsN1QJ3W2KC5Dcoaw` },
+    });
+  }
+    
+
 }
