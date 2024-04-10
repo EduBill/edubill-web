@@ -12,6 +12,12 @@
     "start": "yarn serve",
     "prepare": "husky install"
   },
+  "lint-staged": {
+    "*.{html,css,scss,js,ts,json,vue}": "prettier --write",
+    "*.{js,jsx,ts,tsx,vue}": [
+      "eslint --fix"
+    ]
+  },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@vueuse/core": "^10.7.2",
@@ -59,10 +65,5 @@
     "not dead",
     "not ie 11"
   ],
-  "lint-staged": {
-    "*.{html,css,scss,js,ts,json,vue}": "prettier --write",
-    "*.{js,jsx,ts,tsx,vue}": [
-      "eslint --fix"
-    ]
-  }
+  "packageManager": "yarn@1.22.21"
 }

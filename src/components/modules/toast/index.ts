@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { defineStore } from 'pinia';
 import { markRaw } from 'vue';
-import { ToastItem, ToastType, ToastMargin, ToastState } from './types';
+import { ToastItem, ToastType, ToastMargin } from './types';
 
 export * from './types';
 
@@ -31,11 +31,11 @@ export const useToastModule = defineStore({
     },
 
     alert({ message }) {
-      this.show({ type: ToastType.ALERT, message: message });
+      this.show({ type: ToastType.ALERT, message });
     },
 
     success({ message }) {
-      this.show({ type: ToastType.SUCCESS, message: message });
+      this.show({ type: ToastType.SUCCESS, message });
     },
 
     error({ error }) {
