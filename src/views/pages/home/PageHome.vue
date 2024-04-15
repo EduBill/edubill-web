@@ -2,9 +2,15 @@
   <HomeNav />
 
   <div class="home">
-    <div class="home_title">
+    <div class="home_title" v-if="isLoading">
+      <Loader />
+    </div>
+    <div class="home_title" v-else-if="!isLoading">
       <strong>{{ userProfile?.username + ' (' + userProfile?.userType + ')' }}</strong>님,
       <br />반갑습니다.
+    </div>
+    <div class="home_title" v-else>데이터 불러오기에 실패했어요.
+      <br/>페이지를 새로고침해주세요 !
     </div>
     <SendBillToast v-if="isPaymentDay"/>
     <div>
@@ -49,36 +55,46 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
+import { AuthApi } from '@/api/AuthApi';
+import { UserProfile } from '@/stores/typings/types.userProfile';
+import { useToastModule } from '@/components/modules/toast'
+import dayjs from 'dayjs';
 import HomeNav from '@/components/commons/navigation/HomeNav.vue';
 import SendBillToast from '@/components/molecules/SendBillToast.vue';
 import RectangleMenuButton from '@/components/resources/buttons/RectangleMenuButton.vue';
 import CurrentPaymentStatus from '@/components/resources/payment/CurrentPaymentStatus.vue';
-import { AuthApi } from '@/api/AuthApi';
-import { UserProfile } from '@/stores/typings/types.userProfile';
+import Loader from '@/components/atoms/Loader.vue';
 
 const userProfile = ref<UserProfile | null>(null);
 const authApi = new AuthApi();
+const isLoading = ref(false);
+const toast = useToastModule();
 
-const fetchUserProfile = async () => {
+const getUserProfile = async () => {
+  isLoading.value = true;
   try {
     const response = await authApi.getUserProfile();
-    userProfile.value = response.data; // AxiosResponse 객체에서 data 속성을 통해 접근
+    userProfile.value = response.data;
   } catch (error) {
-    console.error('사용자 프로필 정보를 가져오는 중 오류 발생:', error);
+    toast.error({ error: error });
+  } finally {
+    isLoading.value = false;
   }
 };
-onMounted(fetchUserProfile);
 
 // 결제일 확인
 const isPaymentDay = ref(false);
 
 const checkPaymentDay = () => {
-  const today = new Date();
-  const day = today.getDate();
+  const today = dayjs();
+  const day = today.date();
   isPaymentDay.value = day === day;
 };
 
-onMounted(checkPaymentDay);
+onMounted(()=>{
+  getUserProfile();
+  checkPaymentDay();
+})
 </script>
 
 <style lang="scss" scoped>
@@ -92,14 +108,10 @@ onMounted(checkPaymentDay);
   }
 
   &_title {
+    @include text-variant('headline1');
+
     padding-top: unit(16);
     color: #000;
-
-    /* Title/Title Strong */
-    font-size: unit(26);
-    font-style: normal;
-    font-weight: 400;
-    line-height: 140%; /* 2.275rem */
   }
 
   &_grid {
@@ -109,15 +121,11 @@ onMounted(checkPaymentDay);
   }
 
   &_blank {
+    @include text-variant('subhead3');
+
     color: var(--Gray40, #BCBCBC);
     text-align: center;
     margin-top: unit(32);
-
-    font-family: Pretendard;
-    font-size: unit(14);
-    font-style: normal;
-    font-weight: 500;
-    line-height: 130%; /* 1.1375rem */
   }
 }
 </style>
