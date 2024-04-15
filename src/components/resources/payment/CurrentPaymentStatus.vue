@@ -13,16 +13,11 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive } from 'vue';
 import PaymentProgressBar from './PaymentProgressBar.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { PaymentApi } from '@/api/PaymentApi';
 
-interface Props {
-  iconImg: string;
-}
-
-const props = defineProps<Props>();
 const state = reactive({
   year: 0,
   month: 0,
@@ -32,8 +27,6 @@ const state = reactive({
 });
 
 const paymentApi = new PaymentApi();
-
-console.log(props.iconImg);
 
 onMounted(() => {
   getPaymentStatus();

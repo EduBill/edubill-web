@@ -9,11 +9,12 @@
 <script lang="ts" setup>
 import { defineProps, ref, onMounted, computed } from 'vue';
 
-interface Props {
-  percent: number;
-}
-
-const props = defineProps<Props>();
+const props = defineProps({
+  percent: {
+    type: Number,
+    default: 0,
+  },
+});
 
 const percent = ref(0);
 
