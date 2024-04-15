@@ -15,6 +15,7 @@
     "@vueuse/core": "^10.7.2",
     "axios": "^1.6.5",
     "core-js": "^3.8.3",
+    "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "rollup-plugin-node-polyfills": "^0.2.1",
