@@ -4,16 +4,16 @@
       <p class="currentPay_title">{{ title }}</p>
       <svg-icon class="icon" name="payment" />
     </div>
-    <PaymentProgressBar :percent="paymentPercent" />
+    <PaymentProgressBar :percent="state.paymentPercent" />
     <div class="currentPay_content">
-      <p>총 {{ paidCount }}명이 납부를 완료했습니다.</p>
+      <p>총 {{ state.paidCount }}명이 납부를 완료했습니다.</p>
       <p>바로가기></p>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, onMounted, ref } from 'vue';
+import { computed, defineProps, onMounted, reactive, ref } from 'vue';
 import PaymentProgressBar from './PaymentProgressBar.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { PaymentApi } from '@/api/PaymentApi';
@@ -23,12 +23,15 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const year = ref(0);
-const month = ref(0);
+const state = reactive({
+  year: 0,
+  month: 0,
+  paidCount: 0,
+  unpaidCount: 0,
+  paymentPercent: 0,
+});
+
 const paymentApi = new PaymentApi();
-const paidCount = ref(0);
-const unpaidCount = ref(0);
-const paymentPercent = ref(0);
 
 console.log(props.iconImg);
 
@@ -37,36 +40,36 @@ onMounted(() => {
 });
 
 const title = computed(() => {
-  return `${year.value}년 ${month.value}월 납부 현황`;
+  return `${state.year}년 ${state.month}월 납부 현황`;
 });
 
 async function getPaymentStatus() {
   // 현재 날짜 가져오기
   const date = new Date();
-  year.value = date.getFullYear();
-  month.value = date.getMonth() + 1;
-  console.log(year.value);
-  console.log(month.value);
+  state.year = date.getFullYear();
+  state.month = date.getMonth() + 1;
+  console.log(state.year);
+  console.log(state.month);
 
   // 현재 날짜를 YYYY-MM 형태로 만듦
   let formatDate = '';
   // month가 한자리 수일 경우 앞에 0 붙이기
-  if (month.value < 10) {
-    formatDate = `${year.value}-0${month.value}`;
+  if (state.month < 10) {
+    formatDate = `${state.year}-0${state.month}`;
   } else {
-    formatDate = `${year.value}-${month.value}`;
+    formatDate = `${state.year}-${state.month}`;
   }
   console.log(formatDate);
 
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(formatDate);
-  paidCount.value = res.data.paidCount;
-  unpaidCount.value = res.data.unpaidCount;
+  state.paidCount = res.data.paidCount;
+  state.unpaidCount = res.data.unpaidCount;
 
   // 납부 percent 계산
-  let allCount = paidCount.value + unpaidCount.value;
-  paymentPercent.value = Math.floor((paidCount.value / allCount) * 100);
-  console.log(paymentPercent.value);
+  let allCount = state.paidCount + state.unpaidCount;
+  state.paymentPercent = Math.floor((state.paidCount / allCount) * 100);
+  console.log(state.paymentPercent);
 }
 </script>
 
