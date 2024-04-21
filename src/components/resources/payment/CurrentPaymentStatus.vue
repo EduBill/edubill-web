@@ -41,8 +41,6 @@ async function getPaymentStatus() {
   const date = new Date();
   state.year = date.getFullYear();
   state.month = date.getMonth() + 1;
-  console.log(state.year);
-  console.log(state.month);
 
   // 현재 날짜를 YYYY-MM 형태로 만듦
   let formatDate = '';
@@ -52,17 +50,19 @@ async function getPaymentStatus() {
   } else {
     formatDate = `${state.year}-${state.month}`;
   }
-  console.log(formatDate);
+  console.log('현재 날짜' + formatDate);
 
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(formatDate);
   state.paidCount = res.data.paidCount;
   state.unpaidCount = res.data.unpaidCount;
+  console.log('납입완료: ' + state.paidCount);
+  console.log('미납입: ' + state.unpaidCount);
 
   // 납부 percent 계산
   let allCount = state.paidCount + state.unpaidCount;
   state.paymentPercent = Math.floor((state.paidCount / allCount) * 100);
-  console.log(state.paymentPercent);
+  console.log('납입 현황 percent' + state.paymentPercent);
 }
 </script>
 
