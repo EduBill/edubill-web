@@ -1,12 +1,33 @@
 <template>
   <div class="chart">
     <canvas class="chart_canvas" ref="chartCanvas"></canvas>
+    <div class="chart_Label">
+      <PaymentChartLabel
+        ellipseName="purpleEllipse"
+        title="납입완료"
+        :dataNum="22"
+        :amount="1222000"
+      />
+      <PaymentChartLabel
+        ellipseName="yellowEllipse"
+        title="미납입"
+        :dataNum="22"
+        :amount="330000"
+      />
+      <PaymentChartLabel
+        ellipseName="pinkEllipse"
+        title="청구서 미확인"
+        :dataNum="22"
+        :amount="111111"
+      />
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
 import Chart from 'chart.js/auto';
+import PaymentChartLabel from './PaymentChartLabel.vue';
 
 const props = defineProps({
   paidCount: {
