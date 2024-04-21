@@ -1,5 +1,7 @@
 <template>
-  <canvas ref="chartCanvas"></canvas>
+  <div class="chart">
+    <canvas class="chart_canvas" ref="chartCanvas"></canvas>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -45,8 +47,15 @@ const createChart = () => {
         type: 'doughnut',
         data: chartData.value,
         options: {
+          layout: {
+            // canvas에서 chart의 양쪽 여백 지움
+            padding: -10,
+          },
           rotation: -90,
           circumference: 180,
+          responsive: false,
+          maintainAspectRatio: false,
+          aspectRatio: 2,
         },
       });
     }
@@ -54,4 +63,11 @@ const createChart = () => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.chart {
+  &_canvas {
+    width: 100% !important;
+    margin-bottom: unit(16);
+  }
+}
+</style>
