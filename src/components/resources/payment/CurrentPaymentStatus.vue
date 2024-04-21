@@ -66,7 +66,7 @@ async function getPaymentStatus() {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .currentPay {
   flex: 1;
   background-color: #ffffff;
