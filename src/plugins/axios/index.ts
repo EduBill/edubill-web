@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 axios.interceptors.request.use(
   function (config) {
@@ -23,5 +23,7 @@ export function setAccessToken(accessToken: string | null) {
     delete axios.defaults.headers.common['Authorization'];
   }
 }
+
+
 
 export default axios;

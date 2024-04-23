@@ -1,9 +1,16 @@
 <template>
   <div class="page">
-    <slot></slot>
+    <!-- <slot></slot> -->
+    <ToggleMenu/>
+    <PaymentListItem/>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
+import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
+</script>
 
-<style lang="scss"></style>
+<style lang="scss">
+
+</style>
