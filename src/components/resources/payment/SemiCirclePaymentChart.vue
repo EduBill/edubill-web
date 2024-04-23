@@ -5,19 +5,19 @@
       <PaymentChartLabel
         ellipseName="purpleEllipse"
         title="납입완료"
-        :dataNum="22"
-        :amount="1222000"
+        :dataNum="paidCount"
+        :amount="totalPaidAmount"
       />
       <PaymentChartLabel
         ellipseName="yellowEllipse"
         title="미납입"
-        :dataNum="22"
-        :amount="330000"
+        :dataNum="unpaidCount"
+        :amount="totalunPaidAmount"
       />
       <PaymentChartLabel
         ellipseName="pinkEllipse"
         title="청구서 미확인"
-        :dataNum="22"
+        :dataNum="10"
         :amount="111111"
       />
     </div>
@@ -35,6 +35,14 @@ const props = defineProps({
     default: 0,
   },
   unpaidCount: {
+    type: Number,
+    default: 0,
+  },
+  totalPaidAmount: {
+    type: Number,
+    default: 0,
+  },
+  totalunPaidAmount: {
     type: Number,
     default: 0,
   },
