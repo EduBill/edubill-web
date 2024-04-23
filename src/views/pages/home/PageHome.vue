@@ -12,6 +12,7 @@
     </div>
     <div class="home_grid">
       <RectangleMenuButton
+        @click="onClickPayManage"
         title="납부 관리"
         content="시간별 납부 내역 확인"
         iconName="wallet"
@@ -46,6 +47,7 @@ import SendBillToast from '@/components/molecules/SendBillToast.vue';
 import RectangleMenuButton from '@/components/resources/buttons/RectangleMenuButton.vue';
 import CurrentPaymentStatus from '@/components/resources/payment/CurrentPaymentStatus.vue';
 import { ref, onMounted } from 'vue';
+import router from '@/router';
 
 // 사용자 이름
 const userName = ref('이름이름(학원학원학원)');
@@ -57,6 +59,12 @@ onMounted(() => {
   const day = today.getDate();
   isPaymentDay.value = day === day; // 결제일
 });
+
+async function onClickPayManage() {
+  router.push({
+    name: 'PayManage',
+  });
+}
 </script>
 
 <style lang="scss" scoped>

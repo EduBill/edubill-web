@@ -30,6 +30,13 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '회원가입' },
       },
       {
+        path: '/payManage',
+        component: () =>
+          import('@/views/pages/paymentManage/PagePayManagement.vue'),
+        name: 'PayManage',
+        meta: { title: '회원가입' },
+      },
+      {
         path: '/:catchAll(.*)',
         component: Blank,
         children: [
