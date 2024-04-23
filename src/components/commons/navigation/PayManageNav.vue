@@ -1,6 +1,10 @@
 <template>
   <div class="payManageNav">
-    <svg-icon class="chevronLeft" name="largeChevronLeft" />
+    <svg-icon
+      class="chevronLeft"
+      name="largeChevronLeft"
+      @click="router.go(-1)"
+    />
     <p>납부 관리</p>
     <svg-icon class="plus" name="plusOutline" />
   </div>
@@ -8,6 +12,7 @@
 
 <script lang="ts" setup>
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
+import router from '@/router';
 </script>
 
 <style lang="scss" scoped>
@@ -36,10 +41,12 @@ import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 .chevronLeft {
   width: unit(32);
   height: unit(32);
+  z-index: 10;
 }
 
 .plus {
   width: unit(24);
   height: unit(24);
+  z-index: 10;
 }
 </style>
