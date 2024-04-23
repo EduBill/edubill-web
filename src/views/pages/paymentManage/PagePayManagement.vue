@@ -12,7 +12,7 @@
       </div>
       <!-- paidCount, unpaidCount가 초기화된 상태에서 chart 만들지 않도록 if문 추가 -->
       <SemiCirclePaymentChart
-        v-if="state.paidCount + state.unpaidCount > 0"
+        :key="state.key"
         :paidCount="state.paidCount"
         :unpaidCount="state.unpaidCount"
         :totalPaidAmount="state.totalPaidAmount"
@@ -38,6 +38,7 @@ const state = reactive({
   unpaidCount: 0,
   totalPaidAmount: 0,
   totalunPaidAmount: 0,
+  key: 0,
 });
 
 const paymentApi = new PaymentApi();
@@ -71,6 +72,9 @@ async function getPaymentStatus() {
   state.unpaidCount = res.data.unpaidCount;
   state.totalPaidAmount = res.data.totalPaidAmount;
   state.totalunPaidAmount = res.data.totalunPaidAmount;
+
+  // chart 리렌더링
+  state.key += 1;
   console.log('paymentManagement - 납입완료: ' + state.paidCount);
   console.log('paymentManagement - 미납입: ' + state.unpaidCount);
   console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
