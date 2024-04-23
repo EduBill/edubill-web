@@ -1,9 +1,13 @@
 <template>
   <div class="payCalHeader">
     <div class="payCalHeader_dateNav">
-      <svg-icon class="chevron" name="chevronLeft" />
-      <p class="payCalHeader_date">{{ calYear }}.{{ calMonth }}</p>
-      <svg-icon class="chevron" name="chevronRight" />
+      <svg-icon
+        class="chevron"
+        name="chevronLeft"
+        @click="moveToPreviousMonth"
+      />
+      <p class="payCalHeader_date">{{ calYear }}.{{ calMonthStr }}</p>
+      <svg-icon class="chevron" name="chevronRight" @click="moveToNextMonth" />
     </div>
     <svg-icon class="calendarImg" name="calendar" />
   </div>
@@ -25,7 +29,8 @@ const props = defineProps({
 });
 
 const calYear = ref(props.currentYear);
-const calMonth = ref('');
+const calMonth = ref(props.currentMonth);
+const calMonthStr = ref('');
 
 onMounted(() => {
   console.log(
@@ -35,12 +40,34 @@ onMounted(() => {
 });
 
 const setCalendarDate = (year: number, month: number) => {
+  calYear.value = year;
+  calMonth.value = month;
   // month가 한자리 수일 경우 앞에 0 붙이기
   if (month > 0 && month < 10) {
-    calMonth.value = `0${month}`;
+    calMonthStr.value = `0${month}`;
   } else {
-    calMonth.value = `${month}`;
+    calMonthStr.value = `${month}`;
   }
+};
+
+const moveToPreviousMonth = () => {
+  calMonth.value -= 1;
+  if (calMonth.value == 0) {
+    // calMonth가 0이 된 경우 연도 -1, month는 12로 변경
+    calYear.value -= 1;
+    calMonth.value = 12;
+  }
+  setCalendarDate(calYear.value, calMonth.value);
+};
+
+const moveToNextMonth = () => {
+  calMonth.value += 1;
+  if (calMonth.value == 13) {
+    // calMonth가 13이 된 경우 연도 +1, month는 1로 변경
+    calYear.value += 1;
+    calMonth.value = 1;
+  }
+  setCalendarDate(calYear.value, calMonth.value);
 };
 </script>
 
