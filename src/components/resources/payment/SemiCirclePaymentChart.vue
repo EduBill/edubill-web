@@ -77,6 +77,7 @@ const createChart = () => {
           responsive: false,
           maintainAspectRatio: false,
           aspectRatio: 2,
+          cutout: '60%',
         },
       });
     }
