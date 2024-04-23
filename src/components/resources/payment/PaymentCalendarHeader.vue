@@ -17,6 +17,7 @@
 import { onMounted, ref } from 'vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 
+const emit = defineEmits(['update:calendarDate']);
 const props = defineProps({
   currentYear: {
     type: Number,
@@ -58,6 +59,7 @@ const moveToPreviousMonth = () => {
     calMonth.value = 12;
   }
   setCalendarDate(calYear.value, calMonth.value);
+  emit('update:calendarDate', { year: calYear.value, month: calMonth.value });
 };
 
 const moveToNextMonth = () => {
@@ -68,6 +70,7 @@ const moveToNextMonth = () => {
     calMonth.value = 1;
   }
   setCalendarDate(calYear.value, calMonth.value);
+  emit('update:calendarDate', { year: calYear.value, month: calMonth.value });
 };
 </script>
 

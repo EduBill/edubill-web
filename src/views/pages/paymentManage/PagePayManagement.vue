@@ -7,10 +7,12 @@
           v-if="state.year != 0"
           :currentYear="state.year"
           :currentMonth="state.month"
+          @update:calendarDate="changeChart"
         />
       </div>
+      <!-- paidCount, unpaidCount가 초기화된 상태에서 chart 만들지 않도록 if문 추가 -->
       <SemiCirclePaymentChart
-        v-if="state.paidCount > 0"
+        v-if="state.paidCount + state.unpaidCount > 0"
         :paidCount="state.paidCount"
         :unpaidCount="state.unpaidCount"
         :totalPaidAmount="state.totalPaidAmount"
@@ -41,15 +43,18 @@ const state = reactive({
 const paymentApi = new PaymentApi();
 
 onMounted(() => {
+  setCurrentDate();
   getPaymentStatus();
 });
 
-async function getPaymentStatus() {
+const setCurrentDate = () => {
   // 현재 날짜 가져오기
   const date = new Date();
   state.year = date.getFullYear();
   state.month = date.getMonth() + 1;
+};
 
+async function getPaymentStatus() {
   // 현재 날짜를 YYYY-MM 형태로 만듦
   let formatDate = '';
   // month가 한자리 수일 경우 앞에 0 붙이기
@@ -70,6 +75,13 @@ async function getPaymentStatus() {
   console.log('paymentManagement - 미납입: ' + state.unpaidCount);
   console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
   console.log('paymentManagement - 미납입 금액: ' + state.totalunPaidAmount);
+}
+
+function changeChart({ year, month }) {
+  state.year = year;
+  state.month = month;
+  getPaymentStatus();
+  console.log('캘린더 날짜 변경 -> chart change');
 }
 </script>
 
