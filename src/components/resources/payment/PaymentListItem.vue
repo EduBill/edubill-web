@@ -1,48 +1,69 @@
 <template>
     <div class="payment_container">
-        <div class="row_container">
-            <div>최수영 2839</div>
-            <div>+30000</div>
+        <div class="date">{{ dateState.month }}월 {{ dateState.date }}일</div>
+        <div v-if="paymentData.length === 0">데이터가 없습니다.</div>
+        <div class="list_container" v-for="(paymentListData, index) in paymentData " :key="index">
+            <div class="row_container">
+                <div>{{paymentListData.studentName}}</div>
+                <div>+{{ paymentListData.paidAmount }}</div>
+            </div>
+            <div class="timestamp">{{paymentListData.paidDateTime}}</div>
         </div>
-        <div class="timestamp">22:14</div>
     </div>
-    <button @click="click">버튼 클릭시 api 호출</button>
 </template>
 
 <script setup lang="ts">
-// import axios from '../../../modules/axios/index';
-import axios from 'axios';
-
-const click = async () => {
-    console.log('click');
-    await fetchData();
-};
-const fetchData = async()=>{
-    try{
-        const response = await axios.get(`https://api.edu-bill.co.kr/v1/payment/paidHistories/2024-4`,{
-            headers: {
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjoiQUNBREVNWSIsInN1YiI6IjAxMDI3ODkyMTY1IiwiaWF0IjoxNzEyMTU2NzIxLCJleHAiOjQ4NjU3NTY3MjF9.p0vjwBv25irPuk0Cbd4iGTRoHbIsN1QJ3W2KC5Dcoaw'
-            }
-        });
-        console.log(response.data);
-    }catch(error){
-        console.error('fetch error!!!!!!!!!!', error);
-    }
-};
 
 
+import { PaymentListApi } from '@/api/PaymentListApi';
+import { onMounted, ref, reactive } from 'vue';
+import { PaymentData } from '@/api/PaymentListApi';
+const paymentListApi = new PaymentListApi();
+const paymentData = ref<PaymentData[]>([]);
+const dateState = reactive({
+    year:'',
+    month:'',
+    date:'',
+})
+
+
+onMounted(async () => {
+    
+    const date = new Date();
+    dateState.year = date.getFullYear().toString();
+    dateState.month = (date.getMonth() + 1).toString().padStart(2, '0');
+    dateState.date = date.getDate().toString().padStart(2,'0');
+    const formatDate = `${dateState.year}-${dateState.month}`;
+
+    const res = await paymentListApi.getPaymentList(formatDate);
+    console.log(formatDate, '날짜로 조회 결과 : ', res.data.content);
+    
+  // 받은 데이터를 paymentData에 저장
+    paymentData.value = res.data.content;
+});
 
 
 </script>
 
 <style scoped lang="scss">
+.date{
+    font-size: unit(14);
+    font-weight:500;
+}
 .payment_container{
     display:flex;
     flex-direction: column;
     width:100%;
     padding: unit(17);
-    gap: unit(3);
+    gap: unit(4);
     margin: unit(16) 0;
+}
+.list_container{
+    display:flex;
+    flex-direction: column;
+    gap:unit(4);
+    margin: unit(16) 0;
+
 }
 .row_container{
     display:flex;
@@ -54,4 +75,5 @@ const fetchData = async()=>{
     font-size: unit(14);
     font-weight: 500;
 }
+
 </style>

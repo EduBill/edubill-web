@@ -10,7 +10,6 @@
   let showReceipts = ref(true);
   const toggle = () => {
     showReceipts.value = !showReceipts.value;
-    console.log('click', showReceipts);
   };
   </script>
   
