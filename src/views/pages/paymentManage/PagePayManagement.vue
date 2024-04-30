@@ -33,7 +33,7 @@ import { PaymentApi } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 
 const state = reactive({
-  isDataAdded: false,
+  isDataAdded: true,
   year: 0,
   month: 0,
   paidCount: 28,
@@ -42,6 +42,9 @@ const state = reactive({
   totalunPaidAmount: 0,
   key: 0,
 });
+
+// API 호출로 얻은 데이터를 저장할 const
+const savedPaymentStatusData = new Map();
 
 const paymentApi = new PaymentApi();
 
@@ -57,8 +60,7 @@ const setCurrentDate = () => {
   state.month = date.getMonth() + 1;
 };
 
-async function getPaymentStatus() {
-  // 현재 날짜를 YYYY-MM 형태로 만듦
+function formatDate() {
   let formatDate = '';
   // month가 한자리 수일 경우 앞에 0 붙이기
   if (state.month < 10) {
@@ -67,27 +69,74 @@ async function getPaymentStatus() {
     formatDate = `${state.year}-${state.month}`;
   }
   console.log('현재 날짜' + formatDate);
+  return formatDate;
+}
+
+async function getPaymentStatus() {
+  // 현재 날짜를 YYYY-MM 형태로 만듦
+  let date = formatDate();
 
   // 현재 날짜 전달하여 납부 현황 가져오기
-  const res = await paymentApi.getPaymentStatus(formatDate);
+  const res = await paymentApi.getPaymentStatus(date);
   state.paidCount = res.data.paidCount;
   state.unpaidCount = res.data.unpaidCount;
   state.totalPaidAmount = res.data.totalPaidAmount;
   state.totalunPaidAmount = res.data.totalunPaidAmount;
 
   // chart 리렌더링
-  state.key += 1;
-  console.log('paymentManagement - 납입완료: ' + state.paidCount);
-  console.log('paymentManagement - 미납입: ' + state.unpaidCount);
-  console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
-  console.log('paymentManagement - 미납입 금액: ' + state.totalunPaidAmount);
+  rerenderChart();
+
+  // 데이터 저장
+  savePaymentStatusData(date);
 }
 
 function changeChart({ year, month }) {
   state.year = year;
   state.month = month;
-  getPaymentStatus();
+  let date = formatDate();
+  // 저장된 데이터가 있는지 찾기
+  const savedData = findPaymentStatusData(date);
+  if (savedData) {
+    console.log('저장된 데이터 출력');
+    state.paidCount = savedData.paidCount;
+    state.unpaidCount = savedData.unpaidCount;
+    state.totalPaidAmount = savedData.totalPaidAmount;
+    state.totalunPaidAmount = savedData.totalunPaidAmount;
+    rerenderChart();
+  } else {
+    console.log('저장된 데이터 없음');
+    getPaymentStatus();
+  }
   console.log('캘린더 날짜 변경 -> chart change');
+}
+
+function findPaymentStatusData(date: string) {
+  const key = date;
+  return savedPaymentStatusData.get(key);
+}
+
+function savePaymentStatusData(date: string) {
+  const key = date;
+  // date를 key로 하여 payment status 데이터 저장
+  savedPaymentStatusData.set(key, {
+    paidCount: state.paidCount,
+    unpaidCount: state.unpaidCount,
+    totalPaidAmount: state.totalPaidAmount,
+    totalunPaidAmount: state.totalunPaidAmount,
+  });
+  // 저장된 데이터를 순회하여 콘솔에 출력
+  console.log('데이터 저장됨: ');
+  savedPaymentStatusData.forEach((value, key) => {
+    console.log(`Date: ${key}, Payment Status:`, value);
+  });
+}
+
+function rerenderChart() {
+  state.key += 1;
+  console.log('paymentManagement - 납입완료: ' + state.paidCount);
+  console.log('paymentManagement - 미납입: ' + state.unpaidCount);
+  console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
+  console.log('paymentManagement - 미납입 금액: ' + state.totalunPaidAmount);
 }
 </script>
 
