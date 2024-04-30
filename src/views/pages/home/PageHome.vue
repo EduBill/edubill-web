@@ -1,13 +1,9 @@
 <template>
   <div class="page">
-    <!-- <slot></slot> -->
+    <slot></slot>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup></script>
 
-</script>
-
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

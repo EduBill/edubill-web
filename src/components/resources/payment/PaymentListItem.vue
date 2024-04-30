@@ -33,7 +33,6 @@ let hasMoreData = true;
 
 onMounted(async () => {
     fetchData();
-    console.log('다시');
 });
 
 //api 호출 
@@ -44,24 +43,22 @@ const fetchData = async()=>{
         dateState.month = (date.getMonth() + 1).toString().padStart(2, '0');
         dateState.date = date.getDate().toString().padStart(2,'0');
         const formatDate = `${dateState.year}-${dateState.month}`;
-        const res = await paymentListApi.getPaymentList({ yearMonth: formatDate, page: page, size: 5 });
+        const res = await paymentListApi.getPaymentList({ yearMonth: formatDate, page: page, size: 2 });
         
     // 받은 데이터를 paymentData에 저장
     if (Array.isArray(res.data.content)) {
         if(res.data.content.length === 0 ){
             hasMoreData=false;
+            page=0;
         }
         paymentData.value = [...paymentData.value, ...res.data.content];
 
-    } else {
-        paymentData.value = res.data.content;
-    }
+    } 
     }
 
 //무한스크롤 
 const observer = new IntersectionObserver(async (entries) => {
     if (hasMoreData && entries[0].isIntersecting) {
-        console.log('무한 스크롤 실행');
         page++; // 페이지 증가
         fetchData();
     }
