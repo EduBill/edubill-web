@@ -30,13 +30,18 @@ import Chart from 'chart.js/auto';
 import PaymentChartLabel from './PaymentChartLabel.vue';
 
 const props = defineProps({
+  // 은행데이터 첨부 전 도넛차트 default로 보여줘야 하므로 default에 임의의 값을 주었음.
   paidCount: {
     type: Number,
-    default: 0,
+    default: 28,
   },
   unpaidCount: {
     type: Number,
-    default: 0,
+    default: 12,
+  },
+  unConfirmed: {
+    type: Number,
+    default: 10,
   },
   totalPaidAmount: {
     type: Number,
@@ -54,7 +59,7 @@ const chartData = ref({
     {
       label: 'Payment Status',
       // 청구서 미확인 우선 10으로 처리
-      data: [props.paidCount, props.unpaidCount, 10],
+      data: [props.paidCount, props.unpaidCount, props.unConfirmed],
       backgroundColor: ['#7535FF', '#ff7581', '#FFBA33'],
       borderWidth: 1,
     },
