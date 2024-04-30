@@ -60,7 +60,7 @@ const chartData = ref({
       label: 'Payment Status',
       // 청구서 미확인 우선 10으로 처리
       data: [props.paidCount, props.unpaidCount, props.unConfirmed],
-      backgroundColor: ['#7535FF', '#ff7581', '#FFBA33'],
+      backgroundColor: ['#7535FF', '#FFBA33', '#ff7581'],
       borderWidth: 1,
     },
   ],
