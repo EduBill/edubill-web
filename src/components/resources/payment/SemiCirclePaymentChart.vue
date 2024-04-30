@@ -33,15 +33,11 @@ const props = defineProps({
   // 은행데이터 첨부 전 도넛차트 default로 보여줘야 하므로 default에 임의의 값을 주었음.
   paidCount: {
     type: Number,
-    default: 28,
+    default: 0,
   },
   unpaidCount: {
     type: Number,
-    default: 12,
-  },
-  unConfirmed: {
-    type: Number,
-    default: 10,
+    default: 0,
   },
   totalPaidAmount: {
     type: Number,
@@ -50,6 +46,10 @@ const props = defineProps({
   totalunPaidAmount: {
     type: Number,
     default: 0,
+  },
+  unConfirmed: {
+    type: Number,
+    default: 10,
   },
 });
 

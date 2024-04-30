@@ -34,8 +34,8 @@ import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 const state = reactive({
   year: 0,
   month: 0,
-  paidCount: 0,
-  unpaidCount: 0,
+  paidCount: 28,
+  unpaidCount: 12,
   totalPaidAmount: 0,
   totalunPaidAmount: 0,
   key: 0,
