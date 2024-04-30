@@ -15,6 +15,11 @@ interface PaymentListApiResponse {
         content: PaymentData[]; // PaymentData 타입의 배열
     };
 }
+interface PaymentListProps {
+    yearMonth: string;
+    page: number;
+    size: number;
+}
 
 export class PaymentListApi<SecurityDataType = unknown> extends HttpClient<SecurityDataType> {
     /**
@@ -27,9 +32,9 @@ export class PaymentListApi<SecurityDataType = unknown> extends HttpClient<Secur
      * @secure
      */
 
-    getPaymentList = (yearMonth: string): Promise<PaymentListApiResponse> => {
+    getPaymentList = (props: PaymentListProps): Promise<PaymentListApiResponse> => {
         return this.request({
-            path: `/v1/payment/paidHistories/${yearMonth}`,
+            path: `/v1/payment/paidHistories/${props.yearMonth}?page=${props.page}&size=${props.size}`,
             method: 'GET',
             type: ContentType.Json,
         });
