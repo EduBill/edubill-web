@@ -1,7 +1,9 @@
 <template>
   <div class="payManage">
     <PayManageNav />
-    <div class="payManage_calendar">
+    <!-- payManage_calendarChart class를 기본 적용,
+    isDataAdded가 false이면 blur 추가 적용 -->
+    <div :class="{ payManage_calendarChart: true, blur: !state.isDataAdded }">
       <div class="payManage_calendarHeader">
         <PaymentCalendarHeader
           v-if="state.year != 0"
@@ -10,7 +12,6 @@
           @update:calendarDate="changeChart"
         />
       </div>
-      <!-- paidCount, unpaidCount가 초기화된 상태에서 chart 만들지 않도록 if문 추가 -->
       <SemiCirclePaymentChart
         :key="state.key"
         :paidCount="state.paidCount"
@@ -32,6 +33,7 @@ import { PaymentApi } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 
 const state = reactive({
+  isDataAdded: false,
   year: 0,
   month: 0,
   paidCount: 28,
@@ -45,7 +47,7 @@ const paymentApi = new PaymentApi();
 
 onMounted(() => {
   setCurrentDate();
-  getPaymentStatus();
+  if (state.isDataAdded) getPaymentStatus();
 });
 
 const setCurrentDate = () => {
@@ -93,7 +95,7 @@ function changeChart({ year, month }) {
 .payManage {
   margin: unit(20);
 
-  &_calendar {
+  &_calendarChart {
     border-radius: 10px;
     background: var(--White, #fff);
     box-shadow: 0px 0px 16px 0px rgba(0, 0, 0, 0.1);
@@ -107,5 +109,9 @@ function changeChart({ year, month }) {
   &_calendarHeader {
     margin-bottom: unit(13);
   }
+}
+.blur {
+  background: rgba(217, 217, 217, 0.3);
+  filter: blur(5px);
 }
 </style>

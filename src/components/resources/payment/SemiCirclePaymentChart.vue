@@ -75,6 +75,10 @@ onMounted(() => {
 const createChart = () => {
   if (!chartCanvas.value) return;
   else {
+    console.log('chart - paidCount ' + props.paidCount);
+    console.log('chart - unpaidCount ' + props.unpaidCount);
+    console.log('chart - unConfirmed ' + props.unConfirmed);
+
     const ctx = chartCanvas.value.getContext('2d');
     if (ctx) {
       myChart = new Chart(ctx, {
