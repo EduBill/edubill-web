@@ -22,7 +22,8 @@
     </div>
     <!-- 수납내역/미확인내역 들어갈 자리 -->
     <ToggleMenu></ToggleMenu>
-    <PaymentListItem></PaymentListItem>
+    <!-- <PaymentListItem></PaymentListItem> -->
+    <FileUpload></FileUpload>
   </div>
 </template>
 
@@ -35,7 +36,7 @@ import { PaymentApi } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
-
+import FileUpload from '@/components/resources/payment/FileUpload.vue';
 const state = reactive({
   isDataAdded: false,
   year: 0,
