@@ -17,7 +17,7 @@
         :paidCount="state.paidCount"
         :unpaidCount="state.unpaidCount"
         :totalPaidAmount="state.totalPaidAmount"
-        :totalunPaidAmount="state.totalunPaidAmount"
+        :totalUnpaidAmount="state.totalUnpaidAmount"
       />
     </div>
     <!-- 수납내역/미확인내역 들어갈 자리 -->
@@ -39,7 +39,7 @@ const state = reactive({
   paidCount: 28,
   unpaidCount: 12,
   totalPaidAmount: 0,
-  totalunPaidAmount: 0,
+  totalUnpaidAmount: 0,
   key: 0,
 });
 
@@ -81,7 +81,7 @@ async function getPaymentStatus() {
   state.paidCount = res.data.paidCount;
   state.unpaidCount = res.data.unpaidCount;
   state.totalPaidAmount = res.data.totalPaidAmount;
-  state.totalunPaidAmount = res.data.totalunPaidAmount;
+  state.totalUnpaidAmount = res.data.totalUnpaidAmount;
 
   // chart 리렌더링
   rerenderChart();
@@ -101,7 +101,7 @@ function changeChart({ year, month }) {
     state.paidCount = savedData.paidCount;
     state.unpaidCount = savedData.unpaidCount;
     state.totalPaidAmount = savedData.totalPaidAmount;
-    state.totalunPaidAmount = savedData.totalunPaidAmount;
+    state.totalUnpaidAmount = savedData.totalUnpaidAmount;
     rerenderChart();
   } else {
     console.log('저장된 데이터 없음');
@@ -122,7 +122,7 @@ function savePaymentStatusData(date: string) {
     paidCount: state.paidCount,
     unpaidCount: state.unpaidCount,
     totalPaidAmount: state.totalPaidAmount,
-    totalunPaidAmount: state.totalunPaidAmount,
+    totalUnpaidAmount: state.totalUnpaidAmount,
   });
   // 저장된 데이터를 순회하여 콘솔에 출력
   console.log('데이터 저장됨: ');
@@ -136,7 +136,7 @@ function rerenderChart() {
   console.log('paymentManagement - 납입완료: ' + state.paidCount);
   console.log('paymentManagement - 미납입: ' + state.unpaidCount);
   console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
-  console.log('paymentManagement - 미납입 금액: ' + state.totalunPaidAmount);
+  console.log('paymentManagement - 미납입 금액: ' + state.totalUnpaidAmount);
 }
 </script>
 

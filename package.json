@@ -5,12 +5,13 @@
   "scripts": {
     "serve": "vite --host",
     "build": "vite build",
-    "build:prod": "cross-env VUE_APP_MODE=production yarn build",
-    "build:staging": "cross-env VUE_APP_MODE=staging yarn build",
+    "build:prod": "cross-env VUE_APP_MODE=production npm run build",
+    "build:staging": "cross-env VUE_APP_MODE=staging npm run build",
     "format": "prettier --check \"src/**/*.vue\"",
     "lint": "eslint \"**/*.{ts,tsx,vue}\" --fix",
-    "start": "yarn serve",
-    "prepare": "husky install"
+    "start": "npm run serve",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
