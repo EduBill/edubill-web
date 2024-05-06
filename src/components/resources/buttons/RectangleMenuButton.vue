@@ -12,17 +12,15 @@
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { computed, defineProps } from 'vue';
 
-interface Props {
-  title: string;
-  content: string;
-  iconName?: string | null; // iconImg는 optional임.
-  backColor: string;
-}
-
-const props = defineProps<Props>();
-
-console.log(props.title);
-console.log(props.iconName);
+const props = defineProps({
+  title: String,
+  content: String,
+  iconName: {
+    type: String,
+    default: null,
+  }, // iconImg는 optional임.
+  backColor: String,
+});
 
 const iconImgSrc = computed(() => {
   if (props.iconName != null) {

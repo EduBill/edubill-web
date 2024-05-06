@@ -16,12 +16,7 @@
     </div>
     <SendBillToast v-if="isPaymentDay" />
     <div>
-      <CurrentPaymentStatus
-        title="xx년 xx월 납부 현황"
-        :progressPercent="60"
-        :completeNum="22"
-        iconImg="payment"
-      />
+      <CurrentPaymentStatus iconImg="payment" />
     </div>
     <div class="home_grid">
       <RectangleMenuButton
