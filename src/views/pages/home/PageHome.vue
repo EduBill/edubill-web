@@ -2,9 +2,17 @@
   <HomeNav />
 
   <div class="home">
-    <div class="home_title">
-      <strong>{{ userName }}</strong
-      >님,<br />반갑습니다.
+    <div class="home_title" v-if="isLoading">
+      <Loader />
+    </div>
+    <div class="home_title" v-else-if="!isLoading">
+      <strong>{{
+        userProfile?.username + ' (' + userProfile?.userType + ')'
+      }}</strong
+      >님, <br />반갑습니다.
+    </div>
+    <div class="home_title" v-else>
+      데이터 불러오기에 실패했어요. <br />페이지를 새로고침해주세요 !
     </div>
     <SendBillToast v-if="isPaymentDay" />
     <div>
@@ -46,21 +54,46 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted } from 'vue';
+import { AuthApi } from '@/api/AuthApi';
+import { UserProfile } from '@/stores/typings/types.userProfile';
+import { useToastModule } from '@/components/modules/toast';
+import dayjs from 'dayjs';
 import HomeNav from '@/components/commons/navigation/HomeNav.vue';
 import SendBillToast from '@/components/molecules/SendBillToast.vue';
 import RectangleMenuButton from '@/components/resources/buttons/RectangleMenuButton.vue';
 import CurrentPaymentStatus from '@/components/resources/payment/CurrentPaymentStatus.vue';
-import { ref, onMounted } from 'vue';
+import Loader from '@/components/atoms/Loader.vue';
 
-// 사용자 이름
-const userName = ref('이름이름(학원학원학원)');
+const userProfile = ref<UserProfile | null>(null);
+const authApi = new AuthApi();
+const isLoading = ref(false);
+const toast = useToastModule();
 
+const getUserProfile = async () => {
+  isLoading.value = true;
+  try {
+    const response = await authApi.getUserProfile();
+    userProfile.value = response.data;
+  } catch (error) {
+    toast.error({ error: error });
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// 결제일 확인
 const isPaymentDay = ref(false);
 
+const checkPaymentDay = () => {
+  const today = dayjs();
+  const day = today.date();
+  isPaymentDay.value = day === day;
+};
+
 onMounted(() => {
-  const today = new Date();
-  const day = today.getDate();
-  isPaymentDay.value = day === day; // 결제일
+  getUserProfile();
+  checkPaymentDay();
 });
 </script>
 
@@ -75,14 +108,10 @@ onMounted(() => {
   }
 
   &_title {
+    @include text-variant('headline1');
+
     padding-top: unit(16);
     color: #000;
-
-    /* Title/Title Strong */
-    font-size: unit(26);
-    font-style: normal;
-    font-weight: 400;
-    line-height: 140%; /* 2.275rem */
   }
 
   &_grid {
@@ -92,15 +121,11 @@ onMounted(() => {
   }
 
   &_blank {
+    @include text-variant('subhead3');
+
     color: var(--Gray40, #bcbcbc);
     text-align: center;
     margin-top: unit(32);
-
-    font-family: Pretendard;
-    font-size: unit(14);
-    font-style: normal;
-    font-weight: 500;
-    line-height: 130%; /* 1.1375rem */
   }
 }
 </style>

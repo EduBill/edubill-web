@@ -18,6 +18,7 @@
     "axios": "^1.6.5",
     "core-js": "^3.8.3",
     "eslint-plugin-import": "^2.29.1",
+    "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
     "pinia": "^2.1.7",
     "rollup-plugin-node-polyfills": "^0.2.1",
