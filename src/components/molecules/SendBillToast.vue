@@ -34,11 +34,12 @@ async function onClickSendBill() {
     background: var(--Primary-Gradient, linear-gradient(90deg, #4600DD 0%, #7535FF 100%));
 
     div {
+        @include text-variant('subhead2');
         color: #FFF;
-        font-size: unit(16);
-        font-style: normal;
-        font-weight: 600;
-        line-height: unit(28); /* 175% */
+        // font-size: unit(16);
+        // font-style: normal;
+        // font-weight: 600;
+        // line-height: unit(28); /* 175% */
     }
 }
 </style>

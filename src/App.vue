@@ -21,6 +21,8 @@
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 // import { useResizeObserver } from '@vueuse/core';
 import { useRoute, useRouter } from 'vue-router';
+import UiDrawer from './components/modules/drawer/components/Drawer.vue';
+import UiToast from './components/modules/toast/components/Toast.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import GlobalError from '@/views/errors/Error.vue';
 import PageLaunch from '@/views/pages/launch/PageLaunch.vue';
@@ -28,8 +30,6 @@ import { useWNInterface } from '@/plugins/vue-wni';
 import { NativeInterceptor } from '@/plugins/native-interceptor';
 import { useLayoutStore } from '@/stores/modules/layout';
 import { useSessionStore } from '@/stores/modules/session';
-import UiDrawer from './components/modules/drawer/components/Drawer.vue';
-import UiToast from './components/modules/toast/components/Toast.vue';
 
 const app = ref(null);
 const transitionName = ref('slide-right');
@@ -78,6 +78,11 @@ async function initApp() {
 function initWNInterface() {
   return new Promise((resolve, reject) => {
     wni.onReady(e => {
+      wni.execute('wnPushRegister', {
+        callback: (data: object) => {
+          console.log(data);
+        },
+      });
       wni.onAppear(e => {
         onDarkMode();
         onSetBadgeNumber();

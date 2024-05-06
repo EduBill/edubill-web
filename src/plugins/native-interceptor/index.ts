@@ -51,6 +51,7 @@ export class NativeInterceptor {
       wnOpenAppSetting: this.wnOpenAppSetting,
       wnPermission: this.wnPermission,
       wnAnalyticsAmplitudeSendEvent: this.wnAnalyticsAmplitudeSendEvent,
+      wnPushRegister: this.wnPushRegister,
     };
   }
 
@@ -67,19 +68,19 @@ export class NativeInterceptor {
   }
 
   closeNativeComponents() {
-    if (this._nativeComponents['wnQRScanner']) {
+    if (this._nativeComponents.wnQRScanner) {
       this.execute('wnCloseQRScanner', {});
-    } else if (this._nativeComponents['wnPopup']) {
+    } else if (this._nativeComponents.wnPopup) {
       this.execute('wnPopupClose', {});
     }
   }
 
   execute(command, options) {
     if (command === 'wnPopupOpen') {
-      this._nativeComponents['wnPopup'] = true;
+      this._nativeComponents.wnPopup = true;
     } else if (command === 'wnPopupClose') {
-      this._nativeComponents['wnPopup'] = null;
-      delete this._nativeComponents['wnPopup'];
+      this._nativeComponents.wnPopup = null;
+      delete this._nativeComponents.wnPopup;
     }
 
     if (this._bindedCommands[command]) {
@@ -94,7 +95,7 @@ export class NativeInterceptor {
   async wnLocationPermission(options) {
     const status = await getLocationPermission();
     options.callback({
-      status: status,
+      status,
     });
   }
 
@@ -102,8 +103,8 @@ export class NativeInterceptor {
     const { latitude, longitude } = (await getCurrentLocation({})) as any;
     options.callback({
       status: 'SUCCESS',
-      latitude: latitude,
-      longitude: longitude,
+      latitude,
+      longitude,
     });
   }
 
@@ -112,18 +113,18 @@ export class NativeInterceptor {
       handler: ({ watch_id, latitude, longitude }) => {
         options.callback({
           status: 'UPDATING',
-          watch_id: watch_id,
-          latitude: latitude,
-          longitude: longitude,
+          watch_id,
+          latitude,
+          longitude,
         });
       },
     })) as any;
 
     options.callback({
       status: 'SUCCESS',
-      watch_id: watch_id,
-      latitude: latitude,
-      longitude: longitude,
+      watch_id,
+      latitude,
+      longitude,
     });
   }
 
@@ -134,25 +135,25 @@ export class NativeInterceptor {
     });
   }
 
-  async wnOpenURL(options) {
+  wnOpenURL(options) {
     window.open(options.url, '__WN_BLANK__');
   }
 
-  async wnPopupOpen(options) {
+  wnPopupOpen(options) {
     window.open(options.url, '__WN_POPUP__');
   }
 
-  async wnPopupClose(options) {
+  wnPopupClose(options) {
     //  @TODO: __WN_POPUP__ 팝업 닫기 필요
     return true;
   }
 
-  async wnMediaPhotoUpload(options) {
+  wnMediaPhotoUpload(options) {
     // @TODO: 웹용으로 구현 필요
     return true;
   }
 
-  async wnClipboardCopy(options) {
+  wnClipboardCopy(options) {
     navigator.clipboard.writeText(options.text).then(() => {
       console.log('success copy');
     });
@@ -171,11 +172,11 @@ export class NativeInterceptor {
     //   toastModule.show({ type: ToastType.ERROR, message: $t('주소를 입력해 주세요') });
     // }
   }
-  async wnEmailSend(options) {}
+  wnEmailSend(options) {}
 
-  async wnOpenAppSetting() {}
+  wnOpenAppSetting() {}
 
-  async wnPermission(options) {
+  wnPermission(options) {
     const type = {
       camera: 'camera',
       location: 'geolocation',
@@ -204,7 +205,11 @@ export class NativeInterceptor {
     }
   }
 
-  async wnAnalyticsAmplitudeSendEvent() {
+  wnAnalyticsAmplitudeSendEvent() {
+    console.log('####');
+  }
+
+  wnPushRegister(options) {
     console.log('####');
   }
 }
