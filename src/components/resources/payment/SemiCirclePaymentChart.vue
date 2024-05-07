@@ -12,7 +12,7 @@
         ellipseName="yellowEllipse"
         title="미납입"
         :dataNum="unpaidCount"
-        :amount="totalunPaidAmount"
+        :amount="totalUnpaidAmount"
       />
       <PaymentChartLabel
         ellipseName="pinkEllipse"
@@ -43,7 +43,7 @@ const props = defineProps({
     type: Number,
     default: 0,
   },
-  totalunPaidAmount: {
+  totalUnpaidAmount: {
     type: Number,
     default: 0,
   },
