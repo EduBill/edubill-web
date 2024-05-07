@@ -26,7 +26,7 @@
         <ToggleMenu />
       </div>
       <div class="payManage_listContent">
-        <PaymentListItem />
+        <PaymentListItem @update:paymentListDate="showChart" />
       </div>
     </div>
   </div>
@@ -148,6 +148,15 @@ function rerenderChart() {
   console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
   console.log('paymentManagement - 미납입 금액: ' + state.totalUnpaidAmount);
 }
+
+function showChart({ paymentListData }) {
+  if (paymentListData.length == 0) {
+    state.isDataAdded = false;
+  } else {
+    state.isDataAdded = true;
+  }
+  console.log('액셀 데이터 존재 여부: ' + state.isDataAdded);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -176,5 +185,6 @@ function rerenderChart() {
 .blur {
   background: rgba(217, 217, 217, 0.3);
   filter: blur(5px);
+  pointer-events: none;
 }
 </style>
