@@ -1,9 +1,14 @@
 <template>
   <teleport to="#teleport-area">
-    <div v-if="useModal" @click="closeDrawer" class="drawer-bg"></div>
+    <div v-if="useModal" class="drawer-bg" @click="closeDrawer"></div>
     <div class="drawer-container">
       <ul>
-        <drawer-item v-for="(item, i) in items" :ref="item.ref" :key="item.id" :payload="item" />
+        <drawer-item
+          v-for="(item, i) in items"
+          :ref="item.ref"
+          :key="item.id"
+          :payload="item"
+        />
       </ul>
     </div>
   </teleport>
@@ -31,7 +36,7 @@ onMounted(() => {
 const items = computed(() => drawerModule.items);
 
 const useModal = computed(() => {
-  const modalItems = items.value.filter((item) => item.useModal !== false);
+  const modalItems = items.value.filter(item => item.useModal !== false);
   return modalItems.length > 0;
 });
 

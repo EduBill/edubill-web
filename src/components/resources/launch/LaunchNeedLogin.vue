@@ -1,11 +1,8 @@
 <template>
   <div class="resource launch-need-login">
     <div class="resource-content">
-      <div class="logo">
-      </div>
-      <div class="slogan">
-        
-      </div>
+      <div class="logo"></div>
+      <div class="slogan"></div>
       <div class="loader">
         <ui-loader type="cube" :size="0.75" />
       </div>

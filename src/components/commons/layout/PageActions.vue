@@ -30,7 +30,11 @@ export default {
   right: 0;
   width: 100%;
   z-index: $page-actions-index;
-  background-image: linear-gradient(180deg, rgba($color-page-background, 0) 1.56%, $color-page-background 13.28%);
+  background-image: linear-gradient(
+    180deg,
+    rgba($color-page-background, 0) 1.56%,
+    $color-page-background 13.28%
+  );
 
   &.floating {
     position: static;

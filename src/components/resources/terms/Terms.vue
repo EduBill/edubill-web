@@ -4,8 +4,8 @@
       <div class="check-box check-all">
         <input
           :id="`terms-check-all`"
-          name="terms-check"
           v-model="allChecked"
+          name="terms-check"
           type="checkbox"
           @change="checkAll"
         />
@@ -23,8 +23,8 @@
       <div class="check-box check-single">
         <input
           :id="`terms-check-${term.id}`"
-          type="checkbox"
           v-model="agreeTerms"
+          type="checkbox"
           :value="term"
           @change="checkItem(term.id)"
         />
@@ -49,9 +49,9 @@
   <div class="page-footer">
     <div class="actions">
       <button
-        @click="onSubmit"
         type="submit"
         class="submit-button btn-large btn-filled"
+        @click="onSubmit"
       >
         <span>{{ '가입완료' }}</span>
       </button>

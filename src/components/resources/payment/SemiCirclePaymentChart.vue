@@ -1,23 +1,23 @@
 <template>
   <div class="chart">
-    <canvas class="chart_canvas" ref="chartCanvas"></canvas>
+    <canvas ref="chartCanvas" class="chart_canvas"></canvas>
     <div class="chart_Label">
       <PaymentChartLabel
-        ellipseName="purpleEllipse"
+        ellipse-name="purpleEllipse"
         title="납입완료"
-        :dataNum="paidCount"
+        :data-num="paidCount"
         :amount="totalPaidAmount"
       />
       <PaymentChartLabel
-        ellipseName="yellowEllipse"
+        ellipse-name="yellowEllipse"
         title="미납입"
-        :dataNum="unpaidCount"
+        :data-num="unpaidCount"
         :amount="totalunPaidAmount"
       />
       <PaymentChartLabel
-        ellipseName="pinkEllipse"
+        ellipse-name="pinkEllipse"
         title="청구서 미확인"
-        :dataNum="10"
+        :data-num="10"
         :amount="111111"
       />
     </div>
@@ -73,8 +73,9 @@ onMounted(() => {
 });
 
 const createChart = () => {
-  if (!chartCanvas.value) return;
-  else {
+  if (!chartCanvas.value) {
+    return;
+  } else {
     console.log('chart - paidCount ' + props.paidCount);
     console.log('chart - unpaidCount ' + props.unpaidCount);
     console.log('chart - unConfirmed ' + props.unConfirmed);

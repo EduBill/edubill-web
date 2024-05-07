@@ -9,8 +9,8 @@
         <div class="input-box">
           <ui-text-input
             id="display-name"
-            maxlength="20"
             v-model:value="state.displayName"
+            maxlength="20"
             type="text"
             @keyup="checkDisplayName"
           />
@@ -35,14 +35,14 @@
 </template>
 
 <script setup lang="ts">
+import { reactive, computed } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import { useDrawerModule } from '@/components/modules/drawer';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import { UiTextInput } from '@/plugins/vue-ui-components';
-import { reactive, computed } from 'vue';
 import TermsVue from '@/components/resources/terms/Terms.vue';
 import { AuthApi } from '@/api/AuthApi';
-import { useRoute, useRouter } from 'vue-router';
 
 const authApi = new AuthApi();
 const route = useRoute();

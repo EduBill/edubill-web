@@ -5,9 +5,9 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, reactive, watch } from "vue";
+import { computed, reactive, watch } from 'vue';
 
-const props = defineProps(["selectedIndex"]);
+const props = defineProps(['selectedIndex']);
 const data = reactive({
   selectedIndex: props.selectedIndex ?? 0,
 });
@@ -16,9 +16,12 @@ const styles = computed(() => {
     transform: `translate(calc(var(--page-width) * ${data.selectedIndex * -1}), 0)`,
   };
 });
-watch(() => props.selectedIndex, (newValue, oldValue) => {
-  data.selectedIndex = newValue;
-});
+watch(
+  () => props.selectedIndex,
+  (newValue, oldValue) => {
+    data.selectedIndex = newValue;
+  }
+);
 </script>
 
 <style lang="scss">
