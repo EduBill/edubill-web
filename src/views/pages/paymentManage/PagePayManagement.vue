@@ -20,9 +20,15 @@
         :totalUnpaidAmount="state.totalUnpaidAmount"
       />
     </div>
-    <!-- 수납내역/미확인내역 들어갈 자리 -->
-    <ToggleMenu></ToggleMenu>
-    <PaymentListItem></PaymentListItem>
+    <!-- 수납내역/미확인내역 리스트 -->
+    <div class="payManage_list">
+      <div class="payManage_listHeader">
+        <ToggleMenu />
+      </div>
+      <div class="payManage_listContent">
+        <PaymentListItem />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -161,6 +167,10 @@ function rerenderChart() {
 
   &_calendarHeader {
     margin-bottom: unit(13);
+  }
+
+  &_list {
+    margin-top: unit(20);
   }
 }
 .blur {
