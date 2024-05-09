@@ -57,7 +57,8 @@ export const useDrawerModule = defineStore({
         useCloseButton: payload.useCloseButton ?? true,
         canCloseForModal: payload.canCloseForModal ?? true,
 
-        closeButtonPosition: payload.closeButtonPosition ?? DrawerCloseButtonPosition.INNER,
+        closeButtonPosition:
+          payload.closeButtonPosition ?? DrawerCloseButtonPosition.INNER,
         position: payload.position ?? DrawerPosition.BOTTOM,
         size: payload.size ?? DrawerSize.AUTO,
 
@@ -93,7 +94,7 @@ export const useDrawerModule = defineStore({
     dismiss(payload: any) {
       const { id } = payload;
 
-      const drawerItem = this.items.find((item) => item.id === id);
+      const drawerItem = this.items.find(item => item.id === id);
 
       if (drawerItem) {
         if (drawerItem?.events?.onClose) {
@@ -106,7 +107,7 @@ export const useDrawerModule = defineStore({
         component: drawerItem?.componentName,
       });
 
-      this.items = this.items.filter((item) => item.id !== id);
+      this.items = this.items.filter(item => item.id !== id);
 
       this.notifyObservers('did-dismiss', {
         ...drawerItem,

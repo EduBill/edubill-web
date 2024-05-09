@@ -9,7 +9,7 @@ axios.interceptors.request.use(
   },
   function (error) {
     return Promise.reject(error);
-  },
+  }
 );
 
 export function setBaseURL(url: string) {
@@ -18,12 +18,10 @@ export function setBaseURL(url: string) {
 
 export function setAccessToken(accessToken: string | null) {
   if (accessToken) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
-    delete axios.defaults.headers.common['Authorization'];
+    delete axios.defaults.headers.common.Authorization;
   }
 }
-
-
 
 export default axios;

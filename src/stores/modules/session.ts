@@ -1,5 +1,5 @@
-import { setAccessToken } from '@/modules/axios';
 import { defineStore } from 'pinia';
+import { setAccessToken } from '@/modules/axios';
 import { StorageModule } from '@/modules/storage';
 
 const storage = new StorageModule();

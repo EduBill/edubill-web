@@ -1,9 +1,19 @@
 <template>
   <div id="navigation" class="navigation">
     <ul>
-      <li v-for="(item, i) in state.menuItems" :key="i" :class="{ selected: item.name === state.selectedMenuName }">
+      <li
+        v-for="(item, i) in state.menuItems"
+        :key="i"
+        :class="{ selected: item.name === state.selectedMenuName }"
+      >
         <button type="button" @click="onClickItem($event, item)">
-          <svg-icon :name="item.name === state.selectedMenuName ? `${item.icon}-selected` : item.icon" />
+          <svg-icon
+            :name="
+              item.name === state.selectedMenuName
+                ? `${item.icon}-selected`
+                : item.icon
+            "
+          />
           <span>{{ $t(item.label) }}</span>
         </button>
       </li>
@@ -12,10 +22,10 @@
 </template>
 
 <script lang="ts" setup>
-import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import _ from 'lodash';
 import { onBeforeMount, reactive } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { $t } from '@/plugins/locale';
 import { useAnalytics } from '@/plugins/analytics';
 
@@ -50,7 +60,10 @@ const state = reactive({
 });
 
 onBeforeMount(() => {
-  const selectedItem = _.find(state.menuItems, (item) => route.name === item.name);
+  const selectedItem = _.find(
+    state.menuItems,
+    item => route.name === item.name
+  );
   state.selectedMenuName = selectedItem?.name ?? '';
 });
 

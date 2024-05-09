@@ -60,7 +60,7 @@ async function getPaymentStatus() {
   console.log('미납입: ' + state.unpaidCount);
 
   // 납부 percent 계산
-  let allCount = state.paidCount + state.unpaidCount;
+  const allCount = state.paidCount + state.unpaidCount;
   state.paymentPercent = Math.floor((state.paidCount / allCount) * 100);
   console.log('납입 현황 percent' + state.paymentPercent);
 }

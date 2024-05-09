@@ -27,7 +27,9 @@ export function getLocationPermission() {
           permission = LOCATION_PERMISSION.GRANTED;
           break;
         default:
-          permission = (result.state && result.state.toUpperCase()) || LOCATION_PERMISSION.UNKNOWN;
+          permission =
+            (result.state && result.state.toUpperCase()) ||
+            LOCATION_PERMISSION.UNKNOWN;
           break;
       }
       resolve(permission);
@@ -44,7 +46,7 @@ export function getCurrentLocation(options) {
         throw new Error('Not Found Coords(getCurrentLocation)');
       }
 
-      const success = (result) => {
+      const success = result => {
         if (!result?.coords) {
           reject(new Error('Not Found Coords(coords)'));
           return;
@@ -57,7 +59,7 @@ export function getCurrentLocation(options) {
         });
       };
 
-      const error = (e) => {
+      const error = e => {
         reject(e);
       };
 
@@ -86,7 +88,7 @@ export function watchLocation(options: { handler: Function }) {
         __LOCATION_WATCH_ID__ = null;
       }
 
-      const success = (result) => {
+      const success = result => {
         if (!result?.coords) {
           reject(new Error('Not Found Coords(coords)'));
           return;
@@ -113,16 +115,19 @@ export function watchLocation(options: { handler: Function }) {
         }
       };
 
-      const error = (e) => {
+      const error = e => {
         if (!isSent) {
           reject(e);
-        }
-        else {
+        } else {
           console.error(e);
         }
       };
 
-      watchId = navigator.geolocation?.watchPosition(success, error, { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 });
+      watchId = navigator.geolocation?.watchPosition(success, error, {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      });
       __LOCATION_WATCH_ID__ = watchId;
     } catch (e) {
       reject(e);

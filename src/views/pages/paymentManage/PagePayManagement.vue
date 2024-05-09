@@ -7,17 +7,17 @@
       <div class="payManage_calendarHeader">
         <PaymentCalendarHeader
           v-if="state.year != 0"
-          :currentYear="state.year"
-          :currentMonth="state.month"
-          @update:calendarDate="changeChart"
+          :current-year="state.year"
+          :current-month="state.month"
+          @update:calendar-date="changeChart"
         />
       </div>
       <SemiCirclePaymentChart
         :key="state.key"
-        :paidCount="state.paidCount"
-        :unpaidCount="state.unpaidCount"
-        :totalPaidAmount="state.totalPaidAmount"
-        :totalUnpaidAmount="state.totalUnpaidAmount"
+        :paid-count="state.paidCount"
+        :unpaid-count="state.unpaidCount"
+        :total-paid-amount="state.totalPaidAmount"
+        :total-unpaid-amount="state.totalUnpaidAmount"
       />
     </div>
     <!-- 수납내역/미확인내역 리스트 -->
@@ -26,7 +26,7 @@
         <ToggleMenu />
       </div>
       <div class="payManage_listContent">
-        <PaymentListItem @update:paymentListDate="showChart" />
+        <PaymentListItem @update:payment-list-date="showChart" />
       </div>
     </div>
   </div>
@@ -60,7 +60,9 @@ const paymentApi = new PaymentApi();
 
 onMounted(() => {
   setCurrentDate();
-  if (state.isDataAdded) getPaymentStatus();
+  if (state.isDataAdded) {
+    getPaymentStatus();
+  }
 });
 
 const setCurrentDate = () => {
@@ -84,7 +86,7 @@ function formatDate() {
 
 async function getPaymentStatus() {
   // 현재 날짜를 YYYY-MM 형태로 만듦
-  let date = formatDate();
+  const date = formatDate();
 
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(date);
@@ -103,7 +105,7 @@ async function getPaymentStatus() {
 function changeChart({ year, month }) {
   state.year = year;
   state.month = month;
-  let date = formatDate();
+  const date = formatDate();
   // 저장된 데이터가 있는지 찾기
   const savedData = findPaymentStatusData(date);
   if (savedData) {

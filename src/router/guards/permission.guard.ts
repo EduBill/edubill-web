@@ -1,5 +1,5 @@
-import { useSessionStore } from '@/stores/modules/session';
 import { parseQuery as routerParseQuery } from 'vue-router';
+import { useSessionStore } from '@/stores/modules/session';
 
 class PermissionGuard {
   _permissionHandler: Function = () => {};

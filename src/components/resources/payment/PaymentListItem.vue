@@ -3,9 +3,9 @@
     <div class="date">{{ dateState.month }}월 {{ dateState.date }}일</div>
     <div v-if="paymentData.length === 0">데이터가 없습니다.</div>
     <div
-      class="list_container"
       v-for="(paymentListData, index) in paymentData"
       :key="index"
+      class="list_container"
     >
       <div class="row_container">
         <div>{{ paymentListData.studentName }}</div>
@@ -13,14 +13,13 @@
       </div>
       <div class="timestamp">{{ paymentListData.paidDateTime }}</div>
     </div>
-    <div className="targetRef" id="target"></div>
+    <div id="target" className="targetRef"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { PaymentListApi } from '@/api/PaymentListApi';
 import { onMounted, ref, reactive } from 'vue';
-import { PaymentData } from '@/api/PaymentListApi';
+import { PaymentListApi, PaymentData } from '@/api/PaymentListApi';
 
 const emit = defineEmits(['update:paymentListDate']);
 const paymentListApi = new PaymentListApi();
@@ -48,7 +47,7 @@ const fetchData = async () => {
   const formatDate = `${dateState.year}-${dateState.month}`;
   const res = await paymentListApi.getPaymentList({
     yearMonth: formatDate,
-    page: page,
+    page,
     size: 2,
   });
 

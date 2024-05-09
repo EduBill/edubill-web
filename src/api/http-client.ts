@@ -173,17 +173,17 @@ export class HttpClient<SecurityDataType = unknown> {
       });
       return result;
     } catch (e: any) {
-      if (e['response'] && e['response']['data']) {
-        const result: any = e['response']['data'];
+      if (e.response && e.response.data) {
+        const result: any = e.response.data;
 
         const { data, message, status_code, status } = result;
         const error = new Error(
-          (data && data['message']) || message || status_code || 'Unknown Error'
+          (data && data.message) || message || status_code || 'Unknown Error'
         );
-        error['result'] = result || {};
-        error['data'] = data || {};
+        error.result = result || {};
+        error.data = data || {};
 
-        error['response'] = e['response'];
+        error.response = e.response;
         throw error;
       } else {
         throw e;

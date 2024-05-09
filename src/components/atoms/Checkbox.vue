@@ -1,12 +1,12 @@
 <template>
   <div class="ui-checkbox">
     <input
-      type="checkbox"
-      ref="refCheckbox"
       :id="props.id"
+      ref="refCheckbox"
+      type="checkbox"
       :value="props.value"
       :checked="checked"
-      v-on:input="onInput"
+      @input="onInput"
     />
     <label :for="props.id">
       {{ props.label }}
@@ -41,13 +41,19 @@ const checked = computed(() => {
 });
 
 function isSameValues(a, b) {
-  if (a === b) return true;
-  if (a == null || b == null) return false;
-  if (a.length !== b.length) return false;
+  if (a === b) {
+    return true;
+  }
+  if (a == null || b == null) {
+    return false;
+  }
+  if (a.length !== b.length) {
+    return false;
+  }
 
   let sameCounting = 0;
 
-  for (var i = 0; i < a.length; ++i) {
+  for (let i = 0; i < a.length; ++i) {
     if (b.includes(a[i])) {
       sameCounting = sameCounting + 1;
     }
@@ -70,12 +76,10 @@ function updateModelValue() {
         }
       });
     }
-  } else {
-    if (!props.modelValue?.includes(props.value)) {
-      props.modelValue?.push(props.value);
-    } else if (!isChecked) {
-      _.remove(props.modelValue, props.value);
-    }
+  } else if (!props.modelValue?.includes(props.value)) {
+    props.modelValue?.push(props.value);
+  } else if (!isChecked) {
+    _.remove(props.modelValue, props.value);
   }
 
   emit('update:modelValue', props.modelValue);

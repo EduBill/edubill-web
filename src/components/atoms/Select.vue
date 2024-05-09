@@ -119,7 +119,6 @@ function onChangeSelect(e) {
     opacity: 0.5;
     cursor: not-allowed;
     > .label {
-
     }
 
     > .body {

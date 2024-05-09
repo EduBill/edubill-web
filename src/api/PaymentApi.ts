@@ -1,5 +1,5 @@
-import { PaymentStatus } from '@/stores/typings/types.paymentStatus';
 import { ContentType, HttpClient, RequestParams } from './http-client';
+import { PaymentStatus } from '@/stores/typings/types.paymentStatus';
 import { setAccessToken } from '@/modules/axios/index';
 
 setAccessToken(

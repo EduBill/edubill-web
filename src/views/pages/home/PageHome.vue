@@ -2,47 +2,47 @@
   <HomeNav />
 
   <div class="home">
-    <div class="home_title" v-if="isLoading">
+    <div v-if="isLoading" class="home_title">
       <Loader />
     </div>
-    <div class="home_title" v-else-if="!isLoading">
+    <div v-else-if="!isLoading" class="home_title">
       <strong>{{
         userProfile?.username + ' (' + userProfile?.userType + ')'
       }}</strong
       >님, <br />반갑습니다.
     </div>
-    <div class="home_title" v-else>
+    <div v-else class="home_title">
       데이터 불러오기에 실패했어요. <br />페이지를 새로고침해주세요 !
     </div>
     <SendBillToast v-if="isPaymentDay" />
     <div>
-      <CurrentPaymentStatus iconImg="payment" />
+      <CurrentPaymentStatus icon-img="payment" />
     </div>
     <div class="home_grid">
       <RectangleMenuButton
-        @click="onClickPayManage"
         title="납부 관리"
         content="시간별 납부 내역 확인"
-        iconName="wallet"
-        backColor="#EEF5FF"
+        icon-name="wallet"
+        back-color="#EEF5FF"
+        @click="onClickPayManage"
       />
       <RectangleMenuButton
         title="원생 관리"
         content="시간별 납부 내역 확인"
-        iconName="chart"
-        backColor="#F3F3FF"
+        icon-name="chart"
+        back-color="#F3F3FF"
       />
     </div>
     <div class="home_grid">
       <RectangleMenuButton
         title="서비스 안내"
         content="에듀빌만의 서비스"
-        backColor="#F4F4F7"
+        back-color="#F4F4F7"
       />
       <RectangleMenuButton
         title="고객센터"
         content="고객센터 안내"
-        backColor="#F4F4F7"
+        back-color="#F4F4F7"
       />
     </div>
     <div class="home_blank">더 많은 서비스를 기대해주세요!</div>
@@ -51,10 +51,10 @@
 
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue';
+import dayjs from 'dayjs';
 import { AuthApi } from '@/api/AuthApi';
 import { UserProfile } from '@/stores/typings/types.userProfile';
 import { useToastModule } from '@/components/modules/toast';
-import dayjs from 'dayjs';
 import HomeNav from '@/components/commons/navigation/HomeNav.vue';
 import SendBillToast from '@/components/molecules/SendBillToast.vue';
 import RectangleMenuButton from '@/components/resources/buttons/RectangleMenuButton.vue';
@@ -73,7 +73,7 @@ const getUserProfile = async () => {
     const response = await authApi.getUserProfile();
     userProfile.value = response.data;
   } catch (error) {
-    toast.error({ error: error });
+    toast.error({ error });
   } finally {
     isLoading.value = false;
   }

@@ -2,14 +2,14 @@
   <div class="toggle_container">
     <button
       class="toggle_button"
-      v-bind:class="[showReceipts ? 'active' : '']"
+      :class="[showReceipts ? 'active' : '']"
       @click="toggle"
     >
       수납내역
     </button>
     <button
       class="toggle_button"
-      v-bind:class="[showReceipts ? '' : 'active']"
+      :class="[showReceipts ? '' : 'active']"
       @click="toggle"
     >
       미확인내역
@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-let showReceipts = ref(true);
+const showReceipts = ref(true);
 const toggle = () => {
   showReceipts.value = !showReceipts.value;
 };

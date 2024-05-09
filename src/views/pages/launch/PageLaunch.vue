@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts" setup>
+import { reactive } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import LaunchError from '@/components/resources/launch/LaunchError.vue';
 import LaunchLoading from '@/components/resources/launch/LaunchLoading.vue';
 import { useSessionStore } from '@/stores/modules/session';
-import { reactive } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 
 const props = defineProps(['state']);
 const emit = defineEmits(['initialize']);

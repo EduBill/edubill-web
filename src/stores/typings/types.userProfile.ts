@@ -1,4 +1,4 @@
 export interface UserProfile {
-    username: string;
-    userType: string;
-  }
+  username: string;
+  userType: string;
+}

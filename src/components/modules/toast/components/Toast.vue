@@ -2,7 +2,10 @@
   <teleport to="#teleport-area">
     <div
       class="toast-container"
-      :class="{ 'has-actions': toastModule.hasActions, 'has-action-box': toastModule.hasActionBox }"
+      :class="{
+        'has-actions': toastModule.hasActions,
+        'has-action-box': toastModule.hasActionBox,
+      }"
     >
       <transition-group tag="ul" name="toast">
         <toast-item v-for="(item, i) in items" :key="item.id" :data="item" />

@@ -31,11 +31,11 @@ export const useToastModule = defineStore({
     },
 
     alert({ message }) {
-      this.show({ type: ToastType.ALERT, message: message });
+      this.show({ type: ToastType.ALERT, message });
     },
 
     success({ message }) {
-      this.show({ type: ToastType.SUCCESS, message: message });
+      this.show({ type: ToastType.SUCCESS, message });
     },
 
     error({ error }) {

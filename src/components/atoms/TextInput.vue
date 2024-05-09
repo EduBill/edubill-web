@@ -8,8 +8,8 @@
       <slot name="input-before" />
       <input
         v-if="mask"
-        v-bind="inputProps"
         v-mask="props.mask"
+        v-bind="inputProps"
         @focus="onFocus"
         @blur="onBlur"
         @keyup="onKeyUp"

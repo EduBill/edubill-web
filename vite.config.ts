@@ -3,8 +3,8 @@ import vue from '@vitejs/plugin-vue';
 
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
-import { svgBuilder } from './src/assets/icons';
 import { VitePWA } from 'vite-plugin-pwa';
+import { svgBuilder } from './src/assets/icons';
 
 const path = require('path');
 
