@@ -3,7 +3,9 @@
     <PayManageNav />
     <!-- payManage_calendarChart class를 기본 적용,
     isDataAdded가 false이면 blur 추가 적용 -->
-    <div :class="{ payManage_calendarChart: true, blur: !state.isDataAdded }">
+    <div
+      :class="{ payManage_calendarChart: true, blur: !state.isExcelUploaded }"
+    >
       <div class="payManage_calendarHeader">
         <PaymentCalendarHeader
           v-if="state.year != 0"
@@ -38,12 +40,13 @@ import PaymentCalendarHeader from '@/components/resources/payment/PaymentCalenda
 import SemiCirclePaymentChart from '@/components/resources/payment/SemiCirclePaymentChart.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { PaymentApi } from '@/api/PaymentApi';
+import { ExcelApi } from '@/api/ExcelApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
 
 const state = reactive({
-  isDataAdded: true,
+  isExcelUploaded: false,
   year: 0,
   month: 0,
   paidCount: 28,
@@ -56,13 +59,12 @@ const state = reactive({
 // API 호출로 얻은 데이터를 저장할 const
 const savedPaymentStatusData = new Map();
 
+const excelApi = new ExcelApi();
 const paymentApi = new PaymentApi();
 
 onMounted(() => {
   setCurrentDate();
-  if (state.isDataAdded) {
-    getPaymentStatus();
-  }
+  getPaymentStatus();
 });
 
 const setCurrentDate = () => {
@@ -90,14 +92,17 @@ async function getPaymentStatus() {
 
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(date);
-  state.paidCount = res.data.paidCount;
-  state.unpaidCount = res.data.unpaidCount;
-  state.totalPaidAmount = res.data.totalPaidAmount;
-  state.totalUnpaidAmount = res.data.totalUnpaidAmount;
+  state.isExcelUploaded = res.data.isExcelUploaded;
 
-  // chart 리렌더링
-  rerenderChart();
+  if (state.isExcelUploaded) {
+    state.paidCount = res.data.paidCount;
+    state.unpaidCount = res.data.unpaidCount;
+    state.totalPaidAmount = res.data.totalPaidAmount;
+    state.totalUnpaidAmount = res.data.totalUnpaidAmount;
 
+    // chart 리렌더링
+    rerenderChart();
+  }
   // 데이터 저장
   savePaymentStatusData(date);
 }
@@ -114,6 +119,7 @@ function changeChart({ year, month }) {
     state.unpaidCount = savedData.unpaidCount;
     state.totalPaidAmount = savedData.totalPaidAmount;
     state.totalUnpaidAmount = savedData.totalUnpaidAmount;
+    state.isExcelUploaded = savedData.isExcelUploaded;
     rerenderChart();
   } else {
     console.log('저장된 데이터 없음');
@@ -135,6 +141,7 @@ function savePaymentStatusData(date: string) {
     unpaidCount: state.unpaidCount,
     totalPaidAmount: state.totalPaidAmount,
     totalUnpaidAmount: state.totalUnpaidAmount,
+    isExcelUploaded: state.isExcelUploaded,
   });
   // 저장된 데이터를 순회하여 콘솔에 출력
   console.log('데이터 저장됨: ');
@@ -153,11 +160,11 @@ function rerenderChart() {
 
 function showChart({ paymentListData }) {
   if (paymentListData.length == 0) {
-    state.isDataAdded = false;
+    state.isExcelUploaded = false;
   } else {
-    state.isDataAdded = true;
+    state.isExcelUploaded = true;
   }
-  console.log('액셀 데이터 존재 여부: ' + state.isDataAdded);
+  console.log('액셀 데이터 존재 여부: ' + state.isExcelUploaded);
 }
 </script>
 
@@ -187,6 +194,6 @@ function showChart({ paymentListData }) {
 .blur {
   background: rgba(217, 217, 217, 0.3);
   filter: blur(5px);
-  pointer-events: none;
+  // pointer-events: none;
 }
 </style>

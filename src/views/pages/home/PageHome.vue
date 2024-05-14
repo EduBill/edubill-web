@@ -93,7 +93,7 @@ onMounted(() => {
   checkPaymentDay();
 });
 
-async function onClickPayManage() {
+function onClickPayManage() {
   router.push({
     name: 'PayManage',
   });
