@@ -52,22 +52,22 @@ const handleFileUpload = (event: any) => {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .upload_full_container {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 53px;
+  //padding: 60px 53px;
 }
 .upload_container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: unit(159);
-  gap: 10px;
+  width: 100%;
+  gap: unit(15);
 }
 .text {
   text-align: center;
@@ -76,10 +76,9 @@ const handleFileUpload = (event: any) => {
   display: none;
 }
 .label_file {
-  width: 100%;
   background-color: #7535ff;
   color: white;
-  padding: 8px 40px;
-  border-radius: 6px;
+  padding: unit(8) unit(30);
+  border-radius: unit(6);
 }
 </style>

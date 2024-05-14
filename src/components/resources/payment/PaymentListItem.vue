@@ -1,7 +1,11 @@
 <template>
   <div class="payment_container">
-    <div class="date">{{ dateState.month }}월 {{ dateState.date }}일</div>
-    <div v-if="paymentData.length === 0">데이터가 없습니다.</div>
+    <div v-if="paymentData.length === 0">
+      <FileUpload></FileUpload>
+    </div>
+    <div v-else class="date">
+      {{ dateState.month }}월 {{ dateState.date }}일
+    </div>
     <div
       v-for="(paymentListData, index) in paymentData"
       :key="index"
@@ -24,6 +28,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, reactive } from 'vue';
+import FileUpload from './FileUpload.vue';
 import { PaymentListApi, PaymentData } from '@/api/PaymentListApi';
 
 import router from '@/router';
@@ -52,7 +57,7 @@ const fetchData = async () => {
   dateState.date = date.getDate().toString().padStart(2, '0');
   const formatDate = `${dateState.year}-${dateState.month}`;
   const res = await paymentListApi.getPaymentList({
-    yearMonth: '2024-04',
+    yearMonth: formatDate,
     page,
     size: 10,
   });
@@ -122,6 +127,6 @@ function handleListClick(id: number) {
   font-weight: 500;
 }
 .targetRef {
-  height: 100px;
+  height: 10px;
 }
 </style>
