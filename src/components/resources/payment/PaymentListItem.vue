@@ -59,7 +59,7 @@ const fetchData = async () => {
   const res = await paymentListApi.getPaymentList({
     yearMonth: formatDate,
     page,
-    size: 10,
+    size: 12,
   });
 
   // 받은 데이터를 paymentData에 저장

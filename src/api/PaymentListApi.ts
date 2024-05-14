@@ -21,11 +21,7 @@ interface PaymentListProps {
   page: number;
   size: number;
 }
-interface PaymentDataApiResponse {
-  data: {
-    content: PaymentDetail; // PaymentData 타입의 배열
-  };
-}
+
 export interface PaymentDetail {
   depositorName: string;
   paidAmount: number;
@@ -71,9 +67,7 @@ export class PaymentListDetailApi<
    * @secure
    */
 
-  getPaymentDetail = (
-    paymentHistoryId: string
-  ): Promise<PaymentDataApiResponse> => {
+  getPaymentDetail = (paymentHistoryId: string) => {
     return this.request({
       path: `/v1/payment/paidHistoryDetails/${paymentHistoryId}`,
       method: 'GET',

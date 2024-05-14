@@ -2,18 +2,18 @@
   <div class="container">
     <PayManageNav />
     <div class="payment_detail_container">
-      <div class="amount">+300,000원</div>
+      <div class="amount">+{{ paymentDetailData?.paidAmount }}원</div>
       <div class="row_container">
         <div>거래유형</div>
-        <div>계좌이체</div>
+        <div>{{ paymentDetailData?.paymentTypeDescription }}</div>
       </div>
       <div class="row_container">
         <div>메모</div>
-        <div>메모 남기기</div>
+        <div>{{ paymentDetailData?.memo }}</div>
       </div>
       <div class="row_container">
         <div>일시</div>
-        <div>2024년 04월 13일 22:14</div>
+        <div>{{ paymentDetailData?.depositDate }}</div>
       </div>
     </div>
     <div class="button">
@@ -33,9 +33,21 @@ const id = router.currentRoute.value.query.id as string;
 const paymentListApi = new PaymentListDetailApi();
 const paymentDetailData = ref<PaymentDetail>();
 
+const formatDate = originalDate => {
+  const year = originalDate?.getFullYear();
+  const month = ('0' + (originalDate.getMonth() + 1)).slice(-2);
+  const day = ('0' + originalDate.getDate()).slice(-2);
+  const hours = ('0' + originalDate.getHours()).slice(-2);
+  const minutes = ('0' + originalDate.getMinutes()).slice(-2);
+
+  return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
+};
 const getPaymentDetail = async () => {
-  const res = await paymentListApi.getPaymentDetail('12');
+  const res = await paymentListApi.getPaymentDetail(id);
   console.log('응답데이터 출력', res.data);
+  res.data.depositDate = formatDate(new Date(res.data.depositDate));
+  paymentDetailData.value = { ...res.data };
+  // console.log(paymentDetailData.value?.depositDate);
 };
 onMounted(async () => {
   await getPaymentDetail();
