@@ -40,7 +40,7 @@ let page = 0;
 let hasMoreData = true;
 
 onMounted(async () => {
-  fetchData();
+  await fetchData();
 });
 
 //api 호출
@@ -54,7 +54,7 @@ const fetchData = async () => {
   const res = await paymentListApi.getPaymentList({
     yearMonth: '2024-04',
     page,
-    size: 3,
+    size: 10,
   });
 
   // 받은 데이터를 paymentData에 저장
@@ -72,10 +72,10 @@ const observer = new IntersectionObserver(
   async entries => {
     if (hasMoreData && entries[0].isIntersecting) {
       page++; // 페이지 증가
-      fetchData();
+      await fetchData();
     }
   },
-  { root: null, rootMargin: '0px', threshold: 1.0 }
+  { root: null, rootMargin: '0px', threshold: 0.5 }
 );
 
 onMounted(() => {
@@ -120,5 +120,8 @@ function handleListClick(id: number) {
 .timestamp {
   font-size: unit(14);
   font-weight: 500;
+}
+.targetRef {
+  height: 100px;
 }
 </style>

@@ -24,11 +24,22 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
-
+import { PaymentDetail, PaymentListDetailApi } from '@/api/PaymentListApi';
 const router = useRouter();
 const id = router.currentRoute.value.query.id as string;
+const paymentListApi = new PaymentListDetailApi();
+const paymentDetailData = ref<PaymentDetail>();
+
+const getPaymentDetail = async () => {
+  const res = await paymentListApi.getPaymentDetail('12');
+  console.log('응답데이터 출력', res.data);
+};
+onMounted(async () => {
+  await getPaymentDetail();
+});
 </script>
 
 <style lang="scss" scoped>

@@ -36,17 +36,19 @@ import { ExcelUploadApi } from '@/api/ExcelUploadApi';
 const excelUploadApi = new ExcelUploadApi();
 
 const handleFileUpload = (event: any) => {
-  console.log('함수 실행');
   const file = event.target.files[0];
   if (!file) {
     return;
   }
-  console.log(file);
   const ExcelUploadFormData = new FormData();
   ExcelUploadFormData.append('file', file);
   ExcelUploadFormData.append('bankCode', '004');
   console.log('파일업로드합니다');
-  excelUploadApi.postExcelData(ExcelUploadFormData);
+  try {
+    excelUploadApi.postExcelData(ExcelUploadFormData);
+  } catch (error) {
+    console.log(error);
+  }
 };
 </script>
 

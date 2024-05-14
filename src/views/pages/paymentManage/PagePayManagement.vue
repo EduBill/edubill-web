@@ -22,8 +22,8 @@
     </div> -->
     <!-- 수납내역/미확인내역 들어갈 자리 -->
     <ToggleMenu> </ToggleMenu>
-    <!-- <PaymentListItem></PaymentListItem> -->
-    <FileUpload></FileUpload>
+    <PaymentListItem></PaymentListItem>
+    <!-- <FileUpload></FileUpload> -->
   </div>
 </template>
 

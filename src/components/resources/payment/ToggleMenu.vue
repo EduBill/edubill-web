@@ -2,15 +2,15 @@
   <div class="toggle_container">
     <button
       class="toggle_button"
-      :class="[showReceipts ? 'active' : '']"
-      @click="toggle"
+      :class="[isClickLeft ? 'active' : '']"
+      @click="toggle('left')"
     >
       수납내역
     </button>
     <button
       class="toggle_button"
-      :class="[showReceipts ? '' : 'active']"
-      @click="toggle"
+      :class="[isClickLeft ? '' : 'active']"
+      @click="toggle('right')"
     >
       미확인내역
     </button>
@@ -19,9 +19,15 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-const showReceipts = ref(true);
-const toggle = () => {
-  showReceipts.value = !showReceipts.value;
+
+type ClickDirection = 'left' | 'right';
+const isClickLeft = ref(true);
+const toggle = (key: ClickDirection): void => {
+  if (key === 'left') {
+    isClickLeft.value = true;
+  } else if (key === 'right') {
+    isClickLeft.value = false;
+  }
 };
 </script>
 
