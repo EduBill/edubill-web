@@ -1,11 +1,9 @@
 <template>
   <div class="payment_container">
-    <div v-if="paymentData.length === 0">
-      <FileUpload></FileUpload>
+    <div v-if="!isExcelUploaded">
+      <FileUpload @update:excel-uploaded="excelUploaded" />
     </div>
-    <div v-else class="date">
-      {{ dateState.month }}월 {{ dateState.date }}일
-    </div>
+    <div v-else class="date">{{ props.year }}월 {{ props.month }}일</div>
     <div
       v-for="(paymentListData, index) in paymentData"
       :key="index"
@@ -36,10 +34,19 @@ import router from '@/router';
 const emit = defineEmits(['update:paymentListDate']);
 const paymentListApi = new PaymentListApi();
 const paymentData = ref<PaymentData[]>([]);
-const dateState = reactive({
-  year: '',
-  month: '',
-  date: '',
+const props = defineProps({
+  year: {
+    type: Number,
+    default: 0,
+  },
+  month: {
+    type: Number,
+    default: 0,
+  },
+  isExcelUploaded: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 let page = 0;
@@ -49,16 +56,25 @@ onMounted(async () => {
   await fetchData();
 });
 
+function formatDate() {
+  let formatDate = '';
+  // month가 한자리 수일 경우 앞에 0 붙이기
+  if (props.month < 10) {
+    formatDate = `${props.year}-0${props.month}`;
+  } else {
+    formatDate = `${props.year}-${props.month}`;
+  }
+  console.log('현재 날짜' + formatDate);
+  return formatDate;
+}
+
 //api 호출
 const fetchData = async () => {
-  //날짜 조회
-  const date = new Date();
-  dateState.year = date.getFullYear().toString();
-  dateState.month = (date.getMonth() + 1).toString().padStart(2, '0');
-  dateState.date = date.getDate().toString().padStart(2, '0');
-  const formatDate = `${dateState.year}-${dateState.month}`;
+  // 전달받은 날짜를 YYYY-MM 형태로 만듦
+  const date = formatDate();
+
   const res = await paymentListApi.getPaymentList({
-    yearMonth: formatDate,
+    yearMonth: date,
     page,
     size: 12,
   });
