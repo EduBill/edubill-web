@@ -44,7 +44,7 @@ import { ExcelApi } from '@/api/ExcelApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
-
+import FileUpload from '@/components/resources/payment/FileUpload.vue';
 const state = reactive({
   isExcelUploaded: false,
   year: 0,

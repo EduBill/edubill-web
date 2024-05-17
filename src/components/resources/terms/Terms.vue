@@ -51,7 +51,7 @@
       <button
         type="submit"
         class="submit-button btn-large btn-filled"
-        @click.prevent="onSubmit"
+        @click="onSubmit"
       >
         <span>{{ '가입완료' }}</span>
       </button>

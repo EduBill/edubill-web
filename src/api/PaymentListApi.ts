@@ -6,9 +6,10 @@ setAccessToken(
 );
 // PaymentData 인터페이스 정의
 export interface PaymentData {
+  paymentHistoryId: number;
+  studentName: string;
   paidAmount: number;
   paidDateTime: string;
-  studentName: string;
 }
 interface PaymentListApiResponse {
   data: {
@@ -19,6 +20,14 @@ interface PaymentListProps {
   yearMonth: string;
   page: number;
   size: number;
+}
+
+export interface PaymentDetail {
+  depositorName: string;
+  paidAmount: number;
+  paymentTypeDescription: string;
+  memo: string;
+  depositDate: string;
 }
 
 export class PaymentListApi<
@@ -39,6 +48,28 @@ export class PaymentListApi<
   ): Promise<PaymentListApiResponse> => {
     return this.request({
       path: `/v1/payment/paidHistories/${props.yearMonth}?page=${props.page}&size=${props.size}`,
+      method: 'GET',
+      type: ContentType.Json,
+    });
+  };
+}
+
+export class PaymentListDetailApi<
+  SecurityDataType = unknown,
+> extends HttpClient<SecurityDataType> {
+  /**
+   * No description
+   *
+   * @tags payment-list-detail-api
+   * @name
+   * @summary 수납내역
+   * @request GET:/v1/payment/paidHistoryDetails/{paymentHistoryId}
+   * @secure
+   */
+
+  getPaymentDetail = (paymentHistoryId: string) => {
+    return this.request({
+      path: `/v1/payment/paidHistoryDetails/${paymentHistoryId}`,
       method: 'GET',
       type: ContentType.Json,
     });

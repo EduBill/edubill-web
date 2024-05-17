@@ -34,12 +34,11 @@ async function onClickSendBill() {
   );
 
   div {
-    @include text-variant('subhead2');
     color: #fff;
-    // font-size: unit(16);
-    // font-style: normal;
-    // font-weight: 600;
-    // line-height: unit(28); /* 175% */
+    font-size: unit(16);
+    font-style: normal;
+    font-weight: 600;
+    line-height: unit(28); /* 175% */
   }
 }
 </style>

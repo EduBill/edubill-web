@@ -1,17 +1,26 @@
 <template>
   <div class="payment_container">
-    <div class="date">{{ dateState.month }}월 {{ dateState.date }}일</div>
-    <div v-if="paymentData.length === 0">데이터가 없습니다.</div>
+    <div v-if="paymentData.length === 0">
+      <FileUpload></FileUpload>
+    </div>
+    <div v-else class="date">
+      {{ dateState.month }}월 {{ dateState.date }}일
+    </div>
     <div
       v-for="(paymentListData, index) in paymentData"
       :key="index"
       class="list_container"
     >
-      <div class="row_container">
-        <div>{{ paymentListData.studentName }}</div>
-        <div>+{{ paymentListData.paidAmount }}</div>
+      <div
+        class="list"
+        @click="() => handleListClick(paymentListData.paymentHistoryId)"
+      >
+        <div class="row_container">
+          <div>{{ paymentListData.studentName }}</div>
+          <div>+{{ paymentListData.paidAmount }}</div>
+        </div>
+        <div class="timestamp">{{ paymentListData.paidDateTime }}</div>
       </div>
-      <div class="timestamp">{{ paymentListData.paidDateTime }}</div>
     </div>
     <div id="target" className="targetRef"></div>
   </div>
@@ -19,7 +28,10 @@
 
 <script setup lang="ts">
 import { onMounted, ref, reactive } from 'vue';
+import FileUpload from './FileUpload.vue';
 import { PaymentListApi, PaymentData } from '@/api/PaymentListApi';
+
+import router from '@/router';
 
 const emit = defineEmits(['update:paymentListDate']);
 const paymentListApi = new PaymentListApi();
@@ -34,7 +46,7 @@ let page = 0;
 let hasMoreData = true;
 
 onMounted(async () => {
-  fetchData();
+  await fetchData();
 });
 
 //api 호출
@@ -48,7 +60,7 @@ const fetchData = async () => {
   const res = await paymentListApi.getPaymentList({
     yearMonth: formatDate,
     page,
-    size: 2,
+    size: 12,
   });
 
   // 받은 데이터를 paymentData에 저장
@@ -59,8 +71,6 @@ const fetchData = async () => {
     }
     paymentData.value = [...paymentData.value, ...res.data.content];
   }
-  emit('update:paymentListDate', { paymentListData: paymentData.value });
-  console.log('액셀데이터 불러옴');
 };
 
 //무한스크롤
@@ -68,10 +78,10 @@ const observer = new IntersectionObserver(
   async entries => {
     if (hasMoreData && entries[0].isIntersecting) {
       page++; // 페이지 증가
-      fetchData();
+      await fetchData();
     }
   },
-  { root: null, rootMargin: '0px', threshold: 1.0 }
+  { root: null, rootMargin: '0px', threshold: 0.5 }
 );
 
 onMounted(() => {
@@ -80,6 +90,10 @@ onMounted(() => {
     observer.observe(targetElement);
   }
 });
+
+function handleListClick(id: number) {
+  router.push(`/payManage/payDetail?id=${id}`);
+}
 </script>
 
 <style scoped lang="scss">
@@ -99,7 +113,9 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: unit(4);
-  margin: unit(16) 0;
+}
+.list {
+  padding: unit(16) 0;
 }
 .row_container {
   display: flex;
@@ -110,5 +126,8 @@ onMounted(() => {
 .timestamp {
   font-size: unit(14);
   font-weight: 500;
+}
+.targetRef {
+  height: 10px;
 }
 </style>
