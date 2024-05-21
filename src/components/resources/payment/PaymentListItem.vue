@@ -3,21 +3,23 @@
     <div v-if="!isExcelUploaded">
       <FileUpload @update:excel-uploaded="excelUploaded" />
     </div>
-    <div v-else class="date">{{ props.year }}월 {{ props.month }}일</div>
-    <div
-      v-for="(paymentListData, index) in paymentData"
-      :key="index"
-      class="list_container"
-    >
+    <div v-else>
+      <div class="date">{{ props.year }}월 {{ props.month }}일</div>
       <div
-        class="list"
-        @click="() => handleListClick(paymentListData.paymentHistoryId)"
+        v-for="(paymentListData, index) in paymentData"
+        :key="index"
+        class="list_container"
       >
-        <div class="row_container">
-          <div>{{ paymentListData.studentName }}</div>
-          <div>+{{ paymentListData.paidAmount }}</div>
+        <div
+          class="list"
+          @click="() => handleListClick(paymentListData.paymentHistoryId)"
+        >
+          <div class="row_container">
+            <div>{{ paymentListData.studentName }}</div>
+            <div>+{{ paymentListData.paidAmount }}</div>
+          </div>
+          <div class="timestamp">{{ paymentListData.paidDateTime }}</div>
         </div>
-        <div class="timestamp">{{ paymentListData.paidDateTime }}</div>
       </div>
     </div>
     <div id="target" className="targetRef"></div>
