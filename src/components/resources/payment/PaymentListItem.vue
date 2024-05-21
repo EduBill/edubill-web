@@ -29,12 +29,12 @@
 <script setup lang="ts">
 import { onMounted, ref, reactive } from 'vue';
 import FileUpload from './FileUpload.vue';
-import { PaymentListApi, PaymentData } from '@/api/PaymentListApi';
+import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 
 import router from '@/router';
 
 const emit = defineEmits(['update:excelUploaded']);
-const paymentListApi = new PaymentListApi();
+const paymentListApi = new PaymentApi();
 const paymentData = ref<PaymentData[]>([]);
 const props = defineProps({
   year: {
