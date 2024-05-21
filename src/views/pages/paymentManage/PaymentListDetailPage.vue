@@ -27,10 +27,10 @@ import { useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
-import { PaymentDetail, PaymentListDetailApi } from '@/api/PaymentListApi';
+import { PaymentDetail, PaymentApi } from '@/api/PaymentApi';
 const router = useRouter();
 const id = router.currentRoute.value.query.id as string;
-const paymentListApi = new PaymentListDetailApi();
+const paymentListApi = new PaymentApi();
 const paymentDetailData = ref<PaymentDetail>();
 
 const formatDate = originalDate => {
@@ -58,8 +58,8 @@ onMounted(async () => {
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   position: relative;
   //justify-content: space-between;
 }
