@@ -46,16 +46,17 @@ const toggle = (key: ClickDirection): void => {
     border-radius: unit(6);
     background-color: #f1f1f1;
     width: 100%;
+    height: unit(40);
     padding: unit(4) unit(4);
     display: flex;
-    font-size: unit(14);
+    font-size: unit(15);
     font-style: normal;
-    font-weight: 500;
+    font-weight: 400;
     color: #9f9f9f;
   }
   &_button {
     width: 50%;
-    padding: unit(6) unit(59);
+    padding: unit(6) 0;
     border-radius: unit(6);
     text-align: center;
     cursor: pointer;
@@ -64,5 +65,6 @@ const toggle = (key: ClickDirection): void => {
 .active {
   background-color: #fff;
   color: #19171a;
+  font-weight: 600;
 }
 </style>
