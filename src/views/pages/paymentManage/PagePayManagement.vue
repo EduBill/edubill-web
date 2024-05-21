@@ -36,7 +36,6 @@
           :year="state.year"
           :month="state.month"
           :is-excel-uploaded="state.isExcelUploaded"
-          @update:payment-list-date="rerenderList"
           @update:excel-uploaded="excelUploaded"
         />
       </div>
@@ -110,7 +109,6 @@ async function getPaymentStatus() {
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(date);
   state.isExcelUploaded = res.data.isExcelUploaded;
-
   if (state.isExcelUploaded) {
     state.paidCount = res.data.paidCount;
     state.unpaidCount = res.data.unpaidCount;
@@ -128,13 +126,15 @@ async function getPaymentStatus() {
 }
 
 function changeChart({ year, month }) {
+  console.log('chart change 시작');
+
   state.year = year;
   state.month = month;
   const date = formatDate();
   // 저장된 데이터가 있는지 찾기
   const savedData = findPaymentStatusData(date);
   if (savedData) {
-    console.log('저장된 데이터 출력');
+    console.log('저장된 차트 데이터 출력');
     state.paidCount = savedData.paidCount;
     state.unpaidCount = savedData.unpaidCount;
     state.totalPaidAmount = savedData.totalPaidAmount;
@@ -143,10 +143,9 @@ function changeChart({ year, month }) {
     rerenderChart();
     rerenderList(savedData.paymentListData);
   } else {
-    console.log('저장된 데이터 없음');
+    console.log('저장된 차트 데이터 없음');
     getPaymentStatus();
   }
-  console.log('캘린더 날짜 변경 -> chart change');
 }
 
 function findPaymentStatusData(date: string) {
@@ -168,7 +167,7 @@ function savePaymentStatusData(date: string) {
   // 저장된 데이터를 순회하여 콘솔에 출력
   console.log('데이터 저장됨: ');
   savedPaymentStatusData.forEach((value, key) => {
-    console.log(`Date: ${key}, Payment Status:`, value);
+    console.log(`Date: ${key}, 저장된 차트, 수납리스트 데이터:`, value);
   });
 }
 
@@ -183,26 +182,20 @@ function rerenderChart() {
 function rerenderList({ paymentListData }) {
   if (state.isExcelUploaded === false) {
     state.isExcelUploaded = true;
-    console.log('액셀 데이터 삽입됨: ' + state.isExcelUploaded);
+    console.log(
+      '------------------액셀 데이터 삽입됨: ' + state.isExcelUploaded
+    );
   }
-  // state.paymentListData = paymentListData;
-  // state.listKey++;
   console.log('paymentManagement - 수납내역: ' + paymentListData);
 }
 
-function showChart({ paymentListData }) {
-  state.isExcelUploaded = true;
-  state.listKey++;
-  console.log('액셀 데이터 삽입됨: ' + state.isExcelUploaded);
-}
-
-function excelUploaded() {
+async function excelUploaded() {
   console.log('pagePayManagement에 반영 - 엑셀 업로드되었습니다.');
-  excelApi.updateIsExcelUploaded(formatDate());
+  await excelApi.updateIsExcelUploaded(formatDate());
   state.isExcelUploaded = true;
   state.firstExcelUploaded = true;
   state.navKey++;
-  state.listKey++;
+  getPaymentStatus();
 }
 </script>
 
