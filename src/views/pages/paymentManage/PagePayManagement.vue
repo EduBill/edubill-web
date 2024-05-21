@@ -47,7 +47,6 @@
 import { onMounted, reactive } from 'vue';
 import PaymentCalendarHeader from '@/components/resources/payment/PaymentCalendarHeader.vue';
 import SemiCirclePaymentChart from '@/components/resources/payment/SemiCirclePaymentChart.vue';
-import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { PaymentApi } from '@/api/PaymentApi';
 import { ExcelApi } from '@/api/ExcelApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
@@ -116,7 +115,7 @@ async function getPaymentStatus() {
     state.totalUnpaidAmount = res.data.totalUnpaidAmount;
 
     // chart 리렌더링
-    rerenderChart();
+    state.chartKey += 1;
 
     // 데이터 저장
     savePaymentStatusData(date);
@@ -132,7 +131,7 @@ function changeChart({ year, month }) {
   state.month = month;
   const date = formatDate();
   // 저장된 데이터가 있는지 찾기
-  const savedData = findPaymentStatusData(date);
+  const savedData = savedPaymentStatusData.get(date);
   if (savedData) {
     console.log('저장된 차트 데이터 출력');
     state.paidCount = savedData.paidCount;
@@ -140,17 +139,14 @@ function changeChart({ year, month }) {
     state.totalPaidAmount = savedData.totalPaidAmount;
     state.totalUnpaidAmount = savedData.totalUnpaidAmount;
     state.isExcelUploaded = savedData.isExcelUploaded;
-    rerenderChart();
+
+    // chart 리렌더링
+    state.chartKey += 1;
     rerenderList(savedData.paymentListData);
   } else {
     console.log('저장된 차트 데이터 없음');
     getPaymentStatus();
   }
-}
-
-function findPaymentStatusData(date: string) {
-  const key = date;
-  return savedPaymentStatusData.get(key);
 }
 
 function savePaymentStatusData(date: string) {
@@ -171,14 +167,6 @@ function savePaymentStatusData(date: string) {
   });
 }
 
-function rerenderChart() {
-  state.chartKey += 1;
-  console.log('paymentManagement - 납입완료: ' + state.paidCount);
-  console.log('paymentManagement - 미납입: ' + state.unpaidCount);
-  console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
-  console.log('paymentManagement - 미납입 금액: ' + state.totalUnpaidAmount);
-}
-
 function rerenderList({ paymentListData }) {
   if (state.isExcelUploaded === false) {
     state.isExcelUploaded = true;
@@ -192,10 +180,10 @@ function rerenderList({ paymentListData }) {
 async function excelUploaded() {
   console.log('pagePayManagement에 반영 - 엑셀 업로드되었습니다.');
   await excelApi.updateIsExcelUploaded(formatDate());
-  state.isExcelUploaded = true;
+  // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
   state.firstExcelUploaded = true;
   state.navKey++;
-  getPaymentStatus();
+  getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
 }
 </script>
 
