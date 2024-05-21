@@ -13,14 +13,14 @@ export class ExcelApi<
    * @tags excel-api
    * @name
    * @summary 엑셀 업로드 상태 수정
-   * @request GET:/v1/excel/status-change/{yearMonth}
+   * @request PUT:/v1/excel/status-change/{yearMonth}
    * @secure
    */
 
   updateIsExcelUploaded = (date: any, params: RequestParams = {}) => {
     return this.request({
       path: `/v1/excel/status-change/${date}`,
-      method: 'GET',
+      method: 'PUT',
       type: ContentType.Json,
     });
   };

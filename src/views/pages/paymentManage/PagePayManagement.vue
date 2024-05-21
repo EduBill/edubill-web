@@ -198,6 +198,8 @@ function showChart({ paymentListData }) {
 
 function excelUploaded() {
   console.log('pagePayManagement에 반영 - 엑셀 업로드되었습니다.');
+  excelApi.updateIsExcelUploaded(formatDate());
+  state.isExcelUploaded = true;
   state.firstExcelUploaded = true;
   state.navKey++;
   state.listKey++;
