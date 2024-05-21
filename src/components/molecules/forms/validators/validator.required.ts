@@ -9,5 +9,5 @@ export function validate(result, key) {
 }
 
 export default {
-  validate: validate,
+  validate,
 };

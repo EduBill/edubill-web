@@ -1,8 +1,8 @@
-
-
 export function scrollToError(error) {
   setTimeout(() => {
-    const errorList: NodeListOf<HTMLElement> = document.querySelectorAll(".ui-form .ui-list-item div.error, .required");
+    const errorList: NodeListOf<HTMLElement> = document.querySelectorAll(
+      '.ui-form .ui-list-item div.error, .required'
+    );
     if (errorList.length >= 0) {
       const elOffset = errorList[0]?.offsetTop;
       const elHeight = errorList[0]?.offsetHeight;
@@ -19,4 +19,4 @@ export function scrollToError(error) {
       window.scrollTo(0, offset);
     }
   }, 0);
-};
+}

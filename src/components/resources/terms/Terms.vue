@@ -4,8 +4,8 @@
       <div class="check-box check-all">
         <input
           :id="`terms-check-all`"
-          name="terms-check"
           v-model="allChecked"
+          name="terms-check"
           type="checkbox"
           @change="checkAll"
         />
@@ -23,8 +23,8 @@
       <div class="check-box check-single">
         <input
           :id="`terms-check-${term.id}`"
-          type="checkbox"
           v-model="agreeTerms"
+          type="checkbox"
           :value="term"
           @change="checkItem(term.id)"
         />
@@ -40,7 +40,7 @@
                 <svg-icon name="arrow" />
               </span> -->
         </label>
-        <span class="arrow" @click="">
+        <span class="arrow">
           <svg-icon name="arrow" />
         </span>
       </div>
@@ -49,9 +49,9 @@
   <div class="page-footer">
     <div class="actions">
       <button
-        @click="onSubmit"
         type="submit"
         class="submit-button btn-large btn-filled"
+        @click="onSubmit"
       >
         <span>{{ '가입완료' }}</span>
       </button>
@@ -62,7 +62,12 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 
-const props = defineProps(['events']);
+const props = defineProps({
+  events: {
+    type: Object,
+    required: true,
+  },
+});
 const emits = defineEmits(['close']);
 
 const state = reactive({

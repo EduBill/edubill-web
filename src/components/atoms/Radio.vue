@@ -1,11 +1,11 @@
 <template>
   <div class="ui-radio" @click="onClick">
     <input
-      type="radio"
       :id="props.id"
+      type="radio"
       :value="props.value"
       :checked="checked"
-      v-on:input="onInput"
+      @input="onInput"
     />
     <label :for="props.id">
       {{ props.label }}

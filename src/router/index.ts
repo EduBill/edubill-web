@@ -26,6 +26,6 @@ router.beforeEach(async (to, from, next) => {
   next();
 });
 
-router.afterEach(async (to) => {});
+router.afterEach(async to => {});
 
 export default router;

@@ -1,14 +1,14 @@
 <template>
   <transition :name="transitionName">
     <li
-      class="drawer-item"
-      ref="background"
       v-if="state.mounted"
+      ref="background"
+      class="drawer-item"
       :class="classNames"
       @mousedown="onMouseDown"
       @touchdown="onMouseDown"
     >
-      <div class="container" ref="drawerRef" :style="styles" @click.stop="">
+      <div ref="drawerRef" class="container" :style="styles" @click.stop="">
         <component
           :is="payload.component"
           :id="payload.id"
@@ -17,7 +17,7 @@
           @close="onClose"
         />
 
-        <div class="drawer-backward-header" v-if="useCloseButton">
+        <div v-if="useCloseButton" class="drawer-backward-header">
           <div class="drawer-backward-header__container">
             <button
               class="drawer-backward-header__button"
@@ -125,11 +125,11 @@ const classNames = computed(() => {
   }
 
   if (props.payload?.size === DrawerSize.FULL) {
-    classes['full'] = true;
+    classes.full = true;
   }
 
   if (props.payload?.useModal === true) {
-    classes['modal'] = true;
+    classes.modal = true;
   }
   return classes;
 });

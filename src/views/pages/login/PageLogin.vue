@@ -88,10 +88,6 @@
 </template>
 
 <script lang="ts" setup>
-import { AuthApi } from '@/api/AuthApi';
-import PageHeader from '@/components/commons/headers/PageHeader.vue';
-import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
-import UiForm from '@/components/molecules/forms/Form.vue';
 import {
   computed,
   onBeforeUnmount,
@@ -100,6 +96,10 @@ import {
   ref,
   watch,
 } from 'vue';
+import { AuthApi } from '@/api/AuthApi';
+import PageHeader from '@/components/commons/headers/PageHeader.vue';
+import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
+import UiForm from '@/components/molecules/forms/Form.vue';
 import router from '@/router';
 const authApi = new AuthApi();
 const refForm = ref(null);
@@ -241,9 +241,18 @@ async function onClickSubmit() {
       requestId: state.requestId,
     });
     if (isUser.data) {
-      router.push({
-        name: 'Home',
-      });
+      await authApi
+        .authLogin({
+          requestId: state.requestId,
+          phoneNumber: state.phoneNumber,
+        })
+        .then(res => {
+          if (res.status === 200) {
+            router.push({
+              name: 'Home',
+            });
+          }
+        });
     } else {
       router.push({
         name: 'Signup',
