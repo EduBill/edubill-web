@@ -52,7 +52,6 @@ import { ExcelApi } from '@/api/ExcelApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
-import { PaymentData } from '@/api/PaymentListApi';
 
 const state = reactive({
   isExcelUploaded: false,
@@ -64,7 +63,6 @@ const state = reactive({
   totalUnpaidAmount: 0,
   chartKey: 0,
   listKey: 0,
-  paymentListData: [] as PaymentData[],
   // 처음으로 엑셀 Upload시 PayManageNav의 + 아이콘에
   // 툴팁을 띄울 수 있도록 하는 navKey, firstExcelUploaded
   navKey: 0,
@@ -140,9 +138,9 @@ function changeChart({ year, month }) {
     state.totalUnpaidAmount = savedData.totalUnpaidAmount;
     state.isExcelUploaded = savedData.isExcelUploaded;
 
-    // chart 리렌더링
+    // chart, list 리렌더링
     state.chartKey += 1;
-    rerenderList(savedData.paymentListData);
+    state.listKey++;
   } else {
     console.log('저장된 차트 데이터 없음');
     getPaymentStatus();
@@ -158,23 +156,12 @@ function savePaymentStatusData(date: string) {
     totalPaidAmount: state.totalPaidAmount,
     totalUnpaidAmount: state.totalUnpaidAmount,
     isExcelUploaded: state.isExcelUploaded,
-    paymentListData: state.paymentListData,
   });
   // 저장된 데이터를 순회하여 콘솔에 출력
   console.log('데이터 저장됨: ');
   savedPaymentStatusData.forEach((value, key) => {
     console.log(`Date: ${key}, 저장된 차트, 수납리스트 데이터:`, value);
   });
-}
-
-function rerenderList({ paymentListData }) {
-  if (state.isExcelUploaded === false) {
-    state.isExcelUploaded = true;
-    console.log(
-      '------------------액셀 데이터 삽입됨: ' + state.isExcelUploaded
-    );
-  }
-  console.log('paymentManagement - 수납내역: ' + paymentListData);
 }
 
 async function excelUploaded() {
