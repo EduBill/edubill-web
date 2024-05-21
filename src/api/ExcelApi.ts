@@ -24,4 +24,22 @@ export class ExcelApi<
       type: ContentType.Json,
     });
   };
+
+  /**
+   * No description
+   *
+   * @tags excel-upload-api
+   * @name
+   * @summary 엑셀 업로드
+   * @request POST:/v1/excel/upload
+   * @secure
+   */
+
+  postExcelData = (data: FormData) => {
+    return this.request({
+      path: `/v1/excel/upload`,
+      method: 'post',
+      body: data,
+    });
+  };
 }

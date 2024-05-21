@@ -32,10 +32,10 @@
 </template>
 
 <script setup lang="ts">
-import { ExcelUploadApi } from '@/api/ExcelUploadApi';
+import { ExcelApi } from '@/api/ExcelApi';
 
 const emit = defineEmits(['update:excelUploaded']);
-const excelUploadApi = new ExcelUploadApi();
+const excelUploadApi = new ExcelApi();
 
 const handleFileUpload = (event: any) => {
   const file = event.target.files[0];
