@@ -28,23 +28,31 @@
     <!-- 수납내역/미확인내역 리스트 -->
     <div class="payManage_list">
       <div class="payManage_listHeader">
-        <ToggleMenu />
+        <ToggleMenu
+          :is-click-left="isClickCheckedPaymentList"
+          @update:is-click-left="handleToggle"
+        />
       </div>
       <div class="payManage_listContent">
-        <PaymentListItem
-          :key="state.listKey"
-          :year="state.year"
-          :month="state.month"
-          :is-excel-uploaded="state.isExcelUploaded"
-          @update:excel-uploaded="excelUploaded"
-        />
+        <div v-if="isClickCheckedPaymentList">
+          <PaymentListItem
+            :key="state.listKey"
+            :year="state.year"
+            :month="state.month"
+            :is-excel-uploaded="state.isExcelUploaded"
+            @update:excel-uploaded="excelUploaded"
+          />
+        </div>
+        <div v-else>
+          <UnknownPaymentListItem />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import PaymentCalendarHeader from '@/components/resources/payment/PaymentCalendarHeader.vue';
 import SemiCirclePaymentChart from '@/components/resources/payment/SemiCirclePaymentChart.vue';
 import { PaymentApi } from '@/api/PaymentApi';
@@ -53,6 +61,7 @@ import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
 import FileUpload from '@/components/resources/payment/FileUpload.vue';
+import UnknownPaymentListItem from '@/components/resources/payment/unknownPaymentListItem.vue';
 const state = reactive({
   isExcelUploaded: false,
   year: 0,
@@ -172,6 +181,13 @@ async function excelUploaded() {
   state.navKey++;
   getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
 }
+
+//토글의 상태값 컨트롤
+const isClickCheckedPaymentList = ref(true);
+
+const handleToggle = (value: boolean) => {
+  isClickCheckedPaymentList.value = value;
+};
 </script>
 
 <style lang="scss" scoped>

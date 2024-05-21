@@ -9,7 +9,13 @@
       </div>
       <div class="row_container">
         <div>메모</div>
-        <div>{{ paymentDetailData?.memo }}</div>
+        <div v-if="paymentDetailData?.memo === ''">
+          {{ paymentDetailData?.memo }}
+        </div>
+        <div else class="memo_button" @click="writeMemo">
+          <div>메모 남기기</div>
+          <svg-icon class="chevron" name="chevronRight" />
+        </div>
       </div>
       <div class="row_container">
         <div>일시</div>
@@ -31,7 +37,11 @@ import { PaymentDetail, PaymentApi } from '@/api/PaymentApi';
 const router = useRouter();
 const id = router.currentRoute.value.query.id as string;
 const paymentListApi = new PaymentApi();
+
+//수납 내역 데이터를 저장하는 변수
 const paymentDetailData = ref<PaymentDetail>();
+//메모 클릭 상태
+const isClickMemo = ref(false);
 
 const formatDate = originalDate => {
   const year = originalDate?.getFullYear();
@@ -52,13 +62,18 @@ const getPaymentDetail = async () => {
 onMounted(async () => {
   await getPaymentDetail();
 });
+
+const writeMemo = () => {
+  console.log('메모');
+  isClickMemo.value = !isClickMemo.value;
+};
 </script>
 
 <style lang="scss" scoped>
 .container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   width: 100%;
   position: relative;
   //justify-content: space-between;
@@ -85,5 +100,17 @@ onMounted(async () => {
   padding: 0 unit(20);
   position: absolute;
   bottom: unit(19);
+}
+
+.memo_button {
+  display: flex;
+  justify-content: space-between;
+  gap: unit(3);
+  color: $color-primary;
+  cursor: pointer;
+}
+
+.chevron {
+  color: $color-primary;
 }
 </style>
