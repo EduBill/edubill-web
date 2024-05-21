@@ -31,7 +31,7 @@ import { PaymentListApi, PaymentData } from '@/api/PaymentListApi';
 
 import router from '@/router';
 
-const emit = defineEmits(['update:paymentListDate']);
+const emit = defineEmits(['update:excelUploaded']);
 const paymentListApi = new PaymentListApi();
 const paymentData = ref<PaymentData[]>([]);
 const props = defineProps({
@@ -87,6 +87,8 @@ const fetchData = async () => {
     }
     paymentData.value = [...paymentData.value, ...res.data.content];
   }
+
+  console.log('액셀데이터 불러옴: ' + paymentData.value);
 };
 
 //무한스크롤
@@ -109,6 +111,11 @@ onMounted(() => {
 
 function handleListClick(id: number) {
   router.push(`/payManage/payDetail?id=${id}`);
+}
+
+function excelUploaded() {
+  console.log('paymentList에 반영 - 엑셀 업로드되었습니다.');
+  emit('update:excelUploaded');
 }
 </script>
 

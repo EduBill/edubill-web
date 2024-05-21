@@ -33,6 +33,8 @@
 
 <script setup lang="ts">
 import { ExcelUploadApi } from '@/api/ExcelUploadApi';
+
+const emit = defineEmits(['update:excelUploaded']);
 const excelUploadApi = new ExcelUploadApi();
 
 const handleFileUpload = (event: any) => {
@@ -46,6 +48,7 @@ const handleFileUpload = (event: any) => {
   console.log('파일업로드합니다');
   try {
     excelUploadApi.postExcelData(ExcelUploadFormData);
+    emit('update:excelUploaded');
   } catch (error) {
     console.log(error);
   }

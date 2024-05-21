@@ -1,8 +1,11 @@
 <template>
   <div class="payManage">
-    <PayManageNav />
+    <PayManageNav
+      :key="state.navKey"
+      :first-excel-uploaded="state.firstExcelUploaded"
+    />
     <!-- payManage_calendarChart class를 기본 적용,
-    isDataAdded가 false이면 blur 추가 적용 -->
+    isExcelUploaded false이면 blur 추가 적용 -->
     <div
       :class="{ payManage_calendarChart: true, blur: !state.isExcelUploaded }"
     >
@@ -15,7 +18,7 @@
         />
       </div>
       <SemiCirclePaymentChart
-        :key="state.key"
+        :key="state.chartKey"
         :paid-count="state.paidCount"
         :unpaid-count="state.unpaidCount"
         :total-paid-amount="state.totalPaidAmount"
@@ -28,7 +31,14 @@
         <ToggleMenu />
       </div>
       <div class="payManage_listContent">
-        <PaymentListItem @update:payment-list-date="showChart" />
+        <PaymentListItem
+          :key="state.listKey"
+          :year="state.year"
+          :month="state.month"
+          :is-excel-uploaded="state.isExcelUploaded"
+          @update:payment-list-date="rerenderList"
+          @update:excel-uploaded="excelUploaded"
+        />
       </div>
     </div>
   </div>
@@ -44,7 +54,8 @@ import { ExcelApi } from '@/api/ExcelApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
-import FileUpload from '@/components/resources/payment/FileUpload.vue';
+import { PaymentData } from '@/api/PaymentListApi';
+
 const state = reactive({
   isExcelUploaded: false,
   year: 0,
@@ -53,7 +64,13 @@ const state = reactive({
   unpaidCount: 12,
   totalPaidAmount: 0,
   totalUnpaidAmount: 0,
-  key: 0,
+  chartKey: 0,
+  listKey: 0,
+  paymentListData: [] as PaymentData[],
+  // 처음으로 엑셀 Upload시 PayManageNav의 + 아이콘에
+  // 툴팁을 띄울 수 있도록 하는 navKey, firstExcelUploaded
+  navKey: 0,
+  firstExcelUploaded: false,
 });
 
 // API 호출로 얻은 데이터를 저장할 const
@@ -102,9 +119,12 @@ async function getPaymentStatus() {
 
     // chart 리렌더링
     rerenderChart();
+
+    // 데이터 저장
+    savePaymentStatusData(date);
   }
-  // 데이터 저장
-  savePaymentStatusData(date);
+  // list 리렌더링
+  state.listKey++;
 }
 
 function changeChart({ year, month }) {
@@ -121,6 +141,7 @@ function changeChart({ year, month }) {
     state.totalUnpaidAmount = savedData.totalUnpaidAmount;
     state.isExcelUploaded = savedData.isExcelUploaded;
     rerenderChart();
+    rerenderList(savedData.paymentListData);
   } else {
     console.log('저장된 데이터 없음');
     getPaymentStatus();
@@ -142,6 +163,7 @@ function savePaymentStatusData(date: string) {
     totalPaidAmount: state.totalPaidAmount,
     totalUnpaidAmount: state.totalUnpaidAmount,
     isExcelUploaded: state.isExcelUploaded,
+    paymentListData: state.paymentListData,
   });
   // 저장된 데이터를 순회하여 콘솔에 출력
   console.log('데이터 저장됨: ');
@@ -151,20 +173,34 @@ function savePaymentStatusData(date: string) {
 }
 
 function rerenderChart() {
-  state.key += 1;
+  state.chartKey += 1;
   console.log('paymentManagement - 납입완료: ' + state.paidCount);
   console.log('paymentManagement - 미납입: ' + state.unpaidCount);
   console.log('paymentManagement - 납입완료 금액: ' + state.totalPaidAmount);
   console.log('paymentManagement - 미납입 금액: ' + state.totalUnpaidAmount);
 }
 
-function showChart({ paymentListData }) {
-  if (paymentListData.length == 0) {
-    state.isExcelUploaded = false;
-  } else {
+function rerenderList({ paymentListData }) {
+  if (state.isExcelUploaded === false) {
     state.isExcelUploaded = true;
+    console.log('액셀 데이터 삽입됨: ' + state.isExcelUploaded);
   }
-  console.log('액셀 데이터 존재 여부: ' + state.isExcelUploaded);
+  // state.paymentListData = paymentListData;
+  // state.listKey++;
+  console.log('paymentManagement - 수납내역: ' + paymentListData);
+}
+
+function showChart({ paymentListData }) {
+  state.isExcelUploaded = true;
+  state.listKey++;
+  console.log('액셀 데이터 삽입됨: ' + state.isExcelUploaded);
+}
+
+function excelUploaded() {
+  console.log('pagePayManagement에 반영 - 엑셀 업로드되었습니다.');
+  state.firstExcelUploaded = true;
+  state.navKey++;
+  state.listKey++;
 }
 </script>
 
