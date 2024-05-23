@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PayManageNav />
+    <PayManageNav :title="paymentDetailData?.depositorName" />
     <div class="payment_detail_container">
       <div class="amount">+{{ paymentDetailData?.paidAmount }}원</div>
       <div class="row_container">
@@ -76,6 +76,7 @@ const writeMemo = () => {
   height: 100vh;
   width: 100%;
   position: relative;
+  padding: unit(20);
   //justify-content: space-between;
 }
 .payment_detail_container {

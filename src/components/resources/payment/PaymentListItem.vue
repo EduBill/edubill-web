@@ -4,7 +4,6 @@
       <FileUpload @update:excel-uploaded="excelUploaded" />
     </div>
     <div v-else>
-      <div class="date">{{ props.year }}년 {{ props.month }}월</div>
       <div
         v-for="(paymentListData, index) in paymentData"
         :key="index"
@@ -122,10 +121,6 @@ function excelUploaded() {
 </script>
 
 <style scoped lang="scss">
-.date {
-  font-size: unit(14);
-  font-weight: 500;
-}
 .payment_container {
   display: flex;
   flex-direction: column;
