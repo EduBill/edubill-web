@@ -127,6 +127,10 @@ function tryToExit() {
     return;
   }
 
+  if (androidExit.timeout) {
+    clearTimeout(androidExit.timeout);
+  }
+
   androidExit.is_exit = true;
   androidExit.timeout = setTimeout(() => {
     androidExit.timeout = null;
