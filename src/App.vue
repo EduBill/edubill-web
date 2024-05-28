@@ -80,7 +80,7 @@ function initWNInterface() {
     wni.onReady(e => {
       wni.execute('wnPushRegister', {
         callback: (data: object) => {
-          console.log(data);
+          console.log('wnPushToken', data);
         },
       });
       wni.onAppear(e => {
