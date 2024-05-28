@@ -1,7 +1,7 @@
 <template>
   <div class="payment_container">
-    <div v-if="!isExcelUploaded">
-      <FileUpload @update:excel-uploaded="excelUploaded" />
+    <div v-if="!paymentStatusStore.isExcelUploaded">
+      <FileUpload />
     </div>
     <div v-else>
       <div
@@ -32,7 +32,9 @@ import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import router from '@/router';
 import { useFormatDate } from '@/composable/formatDate';
 
-const emit = defineEmits(['update:excelUploaded']);
+import { usePaymentStatusStore } from '@/stores/modules/payment';
+const paymentStatusStore = usePaymentStatusStore();
+
 const paymentListApi = new PaymentApi();
 const paymentData = ref<PaymentData[]>([]);
 const props = defineProps({
@@ -43,10 +45,6 @@ const props = defineProps({
   month: {
     type: Number,
     default: 0,
-  },
-  isExcelUploaded: {
-    type: Boolean,
-    default: false,
   },
 });
 
@@ -100,11 +98,6 @@ onMounted(() => {
 
 function handleListClick(id: number) {
   router.push(`/payManage/payDetail?id=${id}`);
-}
-
-function excelUploaded() {
-  console.log('paymentList에 반영 - 엑셀 업로드되었습니다.');
-  emit('update:excelUploaded');
 }
 </script>
 

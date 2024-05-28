@@ -8,6 +8,7 @@ export const usePaymentStatusStore = defineStore('paymentStatus', () => {
     totalPaidAmount: 0,
     totalUnpaidAmount: 0,
     isExcelUploaded: false,
+    firstExcelUploaded: false,
   });
 
   return {

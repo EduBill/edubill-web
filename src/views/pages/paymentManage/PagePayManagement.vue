@@ -1,9 +1,6 @@
 <template>
   <div class="payManage">
-    <PayManageNav
-      :key="state.navKey"
-      :first-excel-uploaded="state.firstExcelUploaded"
-    />
+    <PayManageNav :key="state.navKey" />
     <!-- payManage_calendarChart class를 기본 적용,
     isExcelUploaded false이면 blur 추가 적용 -->
     <div
@@ -37,8 +34,6 @@
             :key="state.listKey"
             :year="state.year"
             :month="state.month"
-            :is-excel-uploaded="paymentStatusStore.isExcelUploaded"
-            @update:excel-uploaded="excelUploaded"
           />
         </div>
         <div v-else>
@@ -50,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 import PaymentCalendarHeader from '@/components/resources/payment/PaymentCalendarHeader.vue';
 import SemiCirclePaymentChart from '@/components/resources/payment/SemiCirclePaymentChart.vue';
 import { PaymentApi } from '@/api/PaymentApi';
@@ -70,9 +65,8 @@ const state = reactive({
   chartKey: 0,
   listKey: 0,
   // 처음으로 엑셀 Upload시 PayManageNav의 + 아이콘에
-  // 툴팁을 띄울 수 있도록 하는 navKey, firstExcelUploaded
+  // 툴팁을 띄울 수 있도록 하는 navKey
   navKey: 0,
-  firstExcelUploaded: false,
 });
 
 // API 호출로 얻은 데이터를 저장할 const
@@ -161,11 +155,19 @@ function savePaymentStatusData(date: string) {
 async function excelUploaded() {
   console.log('pagePayManagement에 반영 - 엑셀 업로드되었습니다.');
   await excelApi.updateIsExcelUploaded(useFormatDate(state.year, state.month));
-  // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
-  state.firstExcelUploaded = true;
   state.navKey++;
   getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
 }
+
+// firstExcelUploaded 상태 변화를 감지
+watch(
+  () => paymentStatusStore.firstExcelUploaded,
+  async newValue => {
+    if (newValue) {
+      await excelUploaded();
+    }
+  }
+);
 
 //토글의 상태값 컨트롤
 const isClickCheckedPaymentList = ref(true);

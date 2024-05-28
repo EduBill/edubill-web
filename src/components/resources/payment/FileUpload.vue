@@ -34,8 +34,10 @@
 <script setup lang="ts">
 import { ExcelApi } from '@/api/ExcelApi';
 
-const emit = defineEmits(['update:excelUploaded']);
-const excelUploadApi = new ExcelApi();
+import { usePaymentStatusStore } from '@/stores/modules/payment';
+const paymentStatusStore = usePaymentStatusStore();
+
+const excelApi = new ExcelApi();
 
 const handleFileUpload = (event: any) => {
   const file = event.target.files[0];
@@ -47,8 +49,8 @@ const handleFileUpload = (event: any) => {
   ExcelUploadFormData.append('bankCode', '004');
   console.log('파일업로드합니다');
   try {
-    excelUploadApi.postExcelData(ExcelUploadFormData);
-    emit('update:excelUploaded');
+    excelApi.postExcelData(ExcelUploadFormData);
+    paymentStatusStore.firstExcelUploaded = true;
   } catch (error) {
     console.log(error);
   }
