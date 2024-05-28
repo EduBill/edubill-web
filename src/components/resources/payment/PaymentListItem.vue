@@ -32,21 +32,15 @@ import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import router from '@/router';
 import { useFormatDate } from '@/composable/formatDate';
 
-import { usePaymentStatusStore } from '@/stores/modules/payment';
+import {
+  usePaymentDateStore,
+  usePaymentStatusStore,
+} from '@/stores/modules/payment';
+const paymentDate = usePaymentDateStore();
 const paymentStatusStore = usePaymentStatusStore();
 
 const paymentListApi = new PaymentApi();
 const paymentData = ref<PaymentData[]>([]);
-const props = defineProps({
-  year: {
-    type: Number,
-    default: 0,
-  },
-  month: {
-    type: Number,
-    default: 0,
-  },
-});
 
 let page = 0;
 let hasMoreData = true;
@@ -58,7 +52,7 @@ onMounted(async () => {
 //api 호출
 const fetchData = async () => {
   // 전달받은 날짜를 YYYY-MM 형태로 만듦
-  const date = useFormatDate(props.year, props.month);
+  const date = useFormatDate(paymentDate.year, paymentDate.month);
 
   const res = await paymentListApi.getPaymentList({
     yearMonth: date,

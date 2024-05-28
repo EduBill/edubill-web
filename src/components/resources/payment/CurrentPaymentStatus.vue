@@ -19,9 +19,10 @@ import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { PaymentApi } from '@/api/PaymentApi';
 import { useFormatDate } from '@/composable/formatDate';
 
+import { usePaymentDateStore } from '@/stores/modules/payment';
+const paymentDate = usePaymentDateStore();
+
 const state = reactive({
-  year: 0,
-  month: 0,
   paidCount: 0,
   unpaidCount: 0,
   paymentPercent: 0,
@@ -34,17 +35,17 @@ onMounted(() => {
 });
 
 const title = computed(() => {
-  return `${state.year}년 ${state.month}월 납부 현황`;
+  return `${paymentDate.year}년 ${paymentDate.month}월 납부 현황`;
 });
 
 async function getPaymentStatus() {
   // 현재 날짜 가져오기
   const date = new Date();
-  state.year = date.getFullYear();
-  state.month = date.getMonth() + 1;
+  paymentDate.year = date.getFullYear();
+  paymentDate.month = date.getMonth() + 1;
 
   // 현재 날짜를 YYYY-MM 형태로 만듦
-  const formatDate = useFormatDate(state.year, state.month);
+  const formatDate = useFormatDate(paymentDate.year, paymentDate.month);
 
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(formatDate);
