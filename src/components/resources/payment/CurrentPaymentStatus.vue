@@ -17,6 +17,7 @@ import { computed, onMounted, reactive } from 'vue';
 import PaymentProgressBar from './PaymentProgressBar.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { PaymentApi } from '@/api/PaymentApi';
+import { useFormatDate } from '@/composable/formatDate';
 
 const state = reactive({
   year: 0,
@@ -43,14 +44,7 @@ async function getPaymentStatus() {
   state.month = date.getMonth() + 1;
 
   // 현재 날짜를 YYYY-MM 형태로 만듦
-  let formatDate = '';
-  // month가 한자리 수일 경우 앞에 0 붙이기
-  if (state.month < 10) {
-    formatDate = `${state.year}-0${state.month}`;
-  } else {
-    formatDate = `${state.year}-${state.month}`;
-  }
-  console.log('현재 날짜' + formatDate);
+  const formatDate = useFormatDate(state.year, state.month);
 
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(formatDate);

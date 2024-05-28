@@ -29,8 +29,8 @@
 import { onMounted, ref, reactive } from 'vue';
 import FileUpload from './FileUpload.vue';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
-
 import router from '@/router';
+import { useFormatDate } from '@/composable/formatDate';
 
 const emit = defineEmits(['update:excelUploaded']);
 const paymentListApi = new PaymentApi();
@@ -57,22 +57,10 @@ onMounted(async () => {
   await fetchData();
 });
 
-function formatDate() {
-  let formatDate = '';
-  // month가 한자리 수일 경우 앞에 0 붙이기
-  if (props.month < 10) {
-    formatDate = `${props.year}-0${props.month}`;
-  } else {
-    formatDate = `${props.year}-${props.month}`;
-  }
-  console.log('현재 날짜' + formatDate);
-  return formatDate;
-}
-
 //api 호출
 const fetchData = async () => {
   // 전달받은 날짜를 YYYY-MM 형태로 만듦
-  const date = formatDate();
+  const date = useFormatDate(props.year, props.month);
 
   const res = await paymentListApi.getPaymentList({
     yearMonth: date,
