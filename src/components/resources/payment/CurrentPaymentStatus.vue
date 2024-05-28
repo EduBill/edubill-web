@@ -31,6 +31,9 @@ const state = reactive({
 const paymentApi = new PaymentApi();
 
 onMounted(() => {
+  // 현재 날짜로 세팅
+  paymentDate.year = paymentDate.currentYear;
+  paymentDate.month = paymentDate.currentMonth;
   getPaymentStatus();
 });
 
@@ -39,11 +42,6 @@ const title = computed(() => {
 });
 
 async function getPaymentStatus() {
-  // 현재 날짜 가져오기
-  const date = new Date();
-  paymentDate.year = date.getFullYear();
-  paymentDate.month = date.getMonth() + 1;
-
   // 현재 날짜를 YYYY-MM 형태로 만듦
   const formatDate = useFormatDate(paymentDate.year, paymentDate.month);
 

@@ -74,16 +74,8 @@ const excelApi = new ExcelApi();
 const paymentApi = new PaymentApi();
 
 onMounted(() => {
-  setCurrentDate();
   getPaymentStatus();
 });
-
-const setCurrentDate = () => {
-  // 현재 날짜 가져오기
-  const date = new Date();
-  paymentDate.year = date.getFullYear();
-  paymentDate.month = date.getMonth() + 1;
-};
 
 async function getPaymentStatus() {
   // 현재 날짜를 YYYY-MM 형태로 만듦

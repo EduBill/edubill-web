@@ -1,8 +1,12 @@
 import { defineStore } from 'pinia';
-import { reactive } from 'vue';
+import { computed, reactive } from 'vue';
 
 export const usePaymentDateStore = defineStore('paymentDate', () => {
+  const date = new Date();
+
   const state = reactive({
+    currentYear: computed(() => date.getFullYear()),
+    currentMonth: computed(() => date.getMonth() + 1),
     year: 0,
     month: 0,
   });
