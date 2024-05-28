@@ -20,13 +20,7 @@
           @update:calendar-date="changeChart"
         />
       </div>
-      <SemiCirclePaymentChart
-        :key="state.chartKey"
-        :paid-count="paymentStatusStore.paidCount"
-        :unpaid-count="paymentStatusStore.unpaidCount"
-        :total-paid-amount="paymentStatusStore.totalPaidAmount"
-        :total-unpaid-amount="paymentStatusStore.totalUnpaidAmount"
-      />
+      <SemiCirclePaymentChart :key="state.chartKey" />
     </div>
     <!-- 수납내역/미확인내역 리스트 -->
     <div class="payManage_list">
