@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <PayManageNav :title="paymentDetailData?.depositorName" />
+    <PayManageNav :title="paymentDetailData?.depositorName" :plus-btn="false" />
     <div class="payment_detail_container">
       <div class="amount">+{{ paymentDetailData?.paidAmount }}원</div>
       <div class="row_container">
@@ -82,7 +82,7 @@ const writeMemo = () => {
 .payment_detail_container {
   display: flex;
   flex-direction: column;
-  padding: unit(38) unit(42);
+  padding: 0 unit(42);
   font-size: unit(15);
   font-weight: 600;
   gap: unit(18);
@@ -99,8 +99,10 @@ const writeMemo = () => {
 .button {
   width: 100%;
   padding: 0 unit(20);
+  box-sizing: border-box;
   position: absolute;
   bottom: unit(19);
+  left: 0;
 }
 
 .memo_button {

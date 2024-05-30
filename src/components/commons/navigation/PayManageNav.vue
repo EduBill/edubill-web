@@ -6,7 +6,7 @@
       @click="router.go(-1)"
     />
     <p>{{ title }}</p>
-    <div class="tooltip_container">
+    <div v-if="plusBtn" class="tooltip_container">
       <svg-icon class="plus" name="plusOutline" />
       <BottomTooltip
         v-if="showTooltip"
@@ -31,6 +31,10 @@ const props = defineProps({
   title: {
     type: String,
     default: '납부관리',
+  },
+  plusBtn: {
+    type: Boolean,
+    default: true,
   },
 });
 
