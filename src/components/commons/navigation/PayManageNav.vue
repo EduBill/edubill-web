@@ -5,8 +5,8 @@
       name="largeChevronLeft"
       @click="router.go(-1)"
     />
-    <p>납부 관리</p>
-    <div class="tooltip_container">
+    <p>{{ title }}</p>
+    <div v-if="plusBtn" class="tooltip_container">
       <svg-icon class="plus" name="plusOutline" />
       <BottomTooltip
         v-if="showTooltip"
@@ -27,6 +27,14 @@ const props = defineProps({
   firstExcelUploaded: {
     type: Boolean,
     default: false,
+  },
+  title: {
+    type: String,
+    default: '납부관리',
+  },
+  plusBtn: {
+    type: Boolean,
+    default: true,
   },
 });
 

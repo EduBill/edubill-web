@@ -34,6 +34,7 @@
         />
       </div>
       <div class="payManage_listContent">
+        <div class="date">{{ state.year }}년 {{ state.month }}월</div>
         <div v-if="isClickCheckedPaymentList">
           <PaymentListItem
             :key="state.listKey"
@@ -192,7 +193,7 @@ const handleToggle = (value: boolean) => {
 
 <style lang="scss" scoped>
 .payManage {
-  margin: unit(20);
+  padding: unit(20);
 
   &_calendarChart {
     border-radius: 10px;
@@ -212,10 +213,20 @@ const handleToggle = (value: boolean) => {
   &_list {
     margin-top: unit(20);
   }
+  &_listContent {
+    padding: unit(17);
+    gap: unit(4);
+    margin: unit(16) 0;
+  }
 }
 .blur {
   background: rgba(217, 217, 217, 0.3);
   filter: blur(5px);
   // pointer-events: none;
+}
+
+.date {
+  font-size: unit(14);
+  font-weight: 500;
 }
 </style>
