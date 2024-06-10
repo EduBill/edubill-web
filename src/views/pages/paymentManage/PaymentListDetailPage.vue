@@ -9,13 +9,25 @@
       </div>
       <div class="row_container">
         <div>메모</div>
-        <div v-if="paymentDetailData?.memo === ''">
-          {{ paymentDetailData?.memo }}
-        </div>
-        <div else class="memo_button" @click="writeMemo">
-          <div>메모 남기기</div>
+        <div class="memo_button" @click="writeMemo">
+          <div
+            v-if="paymentDetailData?.memo !== '' && !isClickMemo"
+            class="memo_text"
+          >
+            {{ paymentDetailData?.memo }}
+          </div>
+          <div v-else-if="!isClickMemo" class="memo_text__color">
+            메모 남기기
+          </div>
+          <div v-else-if="isClickMemo" class="memo_text__color">저장</div>
           <svg-icon class="chevron" name="chevronRight" />
         </div>
+      </div>
+      <div v-if="paymentDetailData && isClickMemo" class="memo_box">
+        <textarea
+          v-model="paymentDetailData.memo"
+          placeholder="메모를 남겨주세요"
+        />
       </div>
       <div class="row_container">
         <div>일시</div>
@@ -54,17 +66,14 @@ const formatDate = originalDate => {
 };
 const getPaymentDetail = async () => {
   const res = await paymentListApi.getPaymentDetail(id);
-  console.log('응답데이터 출력', res.data);
   res.data.depositDate = formatDate(new Date(res.data.depositDate));
   paymentDetailData.value = { ...res.data };
-  // console.log(paymentDetailData.value?.depositDate);
 };
 onMounted(async () => {
   await getPaymentDetail();
 });
 
 const writeMemo = () => {
-  console.log('메모');
   isClickMemo.value = !isClickMemo.value;
 };
 </script>
@@ -106,11 +115,34 @@ const writeMemo = () => {
   display: flex;
   justify-content: space-between;
   gap: unit(3);
-  color: $color-primary;
+  color: black;
   cursor: pointer;
+}
+.memo_text {
+  max-height: unit(42);
+  max-width: unit(134);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  &__color {
+    color: $color-primary;
+  }
 }
 
 .chevron {
   color: $color-primary;
+}
+.memo_box {
+  width: 100%;
+  height: unit(123);
+  border-radius: 8px;
+  border: 0.5px solid #666;
+  padding: unit(12);
+  font-size: unit(26);
+  font-weight: 600;
+  textarea {
+    width: 100%;
+  }
 }
 </style>
