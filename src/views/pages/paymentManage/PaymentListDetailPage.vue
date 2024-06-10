@@ -19,7 +19,13 @@
           <div v-else-if="!isClickMemo" class="memo_text__color">
             메모 남기기
           </div>
-          <div v-else-if="isClickMemo" class="memo_text__color">저장</div>
+          <div
+            v-else-if="isClickMemo"
+            class="memo_text__color"
+            @click="editMemo"
+          >
+            저장
+          </div>
           <svg-icon class="chevron" name="chevronRight" />
         </div>
       </div>
@@ -64,10 +70,22 @@ const formatDate = originalDate => {
 
   return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
 };
+
+//상세 정보 받아오는 함수
 const getPaymentDetail = async () => {
   const res = await paymentListApi.getPaymentDetail(id);
   res.data.depositDate = formatDate(new Date(res.data.depositDate));
   paymentDetailData.value = { ...res.data };
+};
+
+//메모 수정
+const editMemo = async () => {
+  if (paymentDetailData.value?.memo) {
+    console.log('메모가 수정됨', id, paymentDetailData.value.memo);
+    await paymentListApi.putMemo(Number(id), paymentDetailData.value.memo);
+  } else {
+    alert('수정된 내용이 없습니다.');
+  }
 };
 onMounted(async () => {
   await getPaymentDetail();

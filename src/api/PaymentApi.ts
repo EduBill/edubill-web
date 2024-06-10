@@ -90,4 +90,16 @@ export class PaymentApi<
       type: ContentType.Json,
     });
   };
+
+  putMemo = (id: number, memo: string) => {
+    return this.request({
+      path: `/v1/payment/memo`,
+      method: 'PUT',
+      type: ContentType.Json,
+      body: {
+        paymentHistoryId: id,
+        memoDescription: memo,
+      },
+    });
+  };
 }
