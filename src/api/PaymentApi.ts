@@ -102,4 +102,14 @@ export class PaymentApi<
       },
     });
   };
+
+  getUnpaidList = (
+    props: PaymentListProps
+  ): Promise<PaymentListApiResponse> => {
+    return this.request({
+      path: `/v1/payment/unpaidHistories/${props.yearMonth}?page=${props.page}&size=${props.size}`,
+      method: 'GET',
+      type: ContentType.Json,
+    });
+  };
 }

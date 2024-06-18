@@ -52,6 +52,7 @@ import { onMounted, ref } from 'vue';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
 import { PaymentDetail, PaymentApi } from '@/api/PaymentApi';
+import { formatFullDate } from '@/utils/formatDate';
 const router = useRouter();
 const id = router.currentRoute.value.query.id as string;
 const paymentListApi = new PaymentApi();
@@ -61,20 +62,10 @@ const paymentDetailData = ref<PaymentDetail>();
 //메모 클릭 상태
 const isClickMemo = ref(false);
 
-const formatDate = originalDate => {
-  const year = originalDate?.getFullYear();
-  const month = ('0' + (originalDate.getMonth() + 1)).slice(-2);
-  const day = ('0' + originalDate.getDate()).slice(-2);
-  const hours = ('0' + originalDate.getHours()).slice(-2);
-  const minutes = ('0' + originalDate.getMinutes()).slice(-2);
-
-  return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
-};
-
 //상세 정보 받아오는 함수
 const getPaymentDetail = async () => {
   const res = await paymentListApi.getPaymentDetail(id);
-  res.data.depositDate = formatDate(new Date(res.data.depositDate));
+  res.data.depositDate = formatFullDate(new Date(res.data.depositDate));
   paymentDetailData.value = { ...res.data };
 };
 

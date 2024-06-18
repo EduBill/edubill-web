@@ -12,13 +12,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { formatYearMonthDate } from '@/utils/formatDate';
+import { PaymentApi } from '@/api/PaymentApi';
+const props = defineProps({
+  year: {
+    type: Number,
+    default: 0,
+  },
+  month: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const paymentListApi = new PaymentApi();
 
 const isToggleOpen = ref(false);
 
 const handleToggle = () => {
   isToggleOpen.value = !isToggleOpen.value;
 };
+const page = 0;
+const fetchData = async () => {
+  const date = formatYearMonthDate(props.year, props.month);
+  const res = await paymentListApi.getUnpaidList({
+    yearMonth: '2023-04',
+    page,
+    size: 10,
+  });
+
+  console.log(res);
+};
+
+onMounted(async () => {
+  await fetchData();
+});
 </script>
 
 <style scoped lang="scss">

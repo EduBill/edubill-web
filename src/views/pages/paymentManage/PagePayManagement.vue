@@ -45,7 +45,7 @@
           />
         </div>
         <div v-else>
-          <UnknownPaymentListItem />
+          <UnknownPaymentListItem :year="state.year" :month="state.month" />
         </div>
       </div>
     </div>
@@ -63,6 +63,7 @@ import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
 import FileUpload from '@/components/resources/payment/FileUpload.vue';
 import UnknownPaymentListItem from '@/components/resources/payment/unknownPaymentListItem.vue';
+import { formatYearMonthDate } from '@/utils/formatDate';
 const state = reactive({
   isExcelUploaded: false,
   year: 0,
@@ -97,21 +98,9 @@ const setCurrentDate = () => {
   state.month = date.getMonth() + 1;
 };
 
-function formatDate() {
-  let formatDate = '';
-  // month가 한자리 수일 경우 앞에 0 붙이기
-  if (state.month < 10) {
-    formatDate = `${state.year}-0${state.month}`;
-  } else {
-    formatDate = `${state.year}-${state.month}`;
-  }
-  console.log('현재 날짜' + formatDate);
-  return formatDate;
-}
-
 async function getPaymentStatus() {
   // 현재 날짜를 YYYY-MM 형태로 만듦
-  const date = formatDate();
+  const date = formatYearMonthDate(state.year, state.month);
 
   // 현재 날짜 전달하여 납부 현황 가져오기
   const res = await paymentApi.getPaymentStatus(date);
@@ -137,7 +126,7 @@ function changeChart({ year, month }) {
 
   state.year = year;
   state.month = month;
-  const date = formatDate();
+  const date = formatYearMonthDate(state.year, state.month);
   // 저장된 데이터가 있는지 찾기
   const savedData = savedPaymentStatusData.get(date);
   if (savedData) {
@@ -176,7 +165,9 @@ function savePaymentStatusData(date: string) {
 
 async function excelUploaded() {
   console.log('pagePayManagement에 반영 - 엑셀 업로드되었습니다.');
-  await excelApi.updateIsExcelUploaded(formatDate());
+  await excelApi.updateIsExcelUploaded(
+    formatYearMonthDate(state.year, state.month)
+  );
   // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
   state.firstExcelUploaded = true;
   state.navKey++;
