@@ -22,7 +22,7 @@ export class AuthApi<
       path: `/v1/auth/phone`,
       method: 'POST',
       body: data,
-      type: ContentType.TextPlain,
+      type: ContentType.Json,
     });
 
   /**
@@ -89,7 +89,7 @@ export class AuthApi<
     this.request<void, void>({
       path: `/v1/auth/login`,
       method: 'POST',
-      body: data,
+      body: JSON.stringify(data),
       type: ContentType.Json,
     });
 

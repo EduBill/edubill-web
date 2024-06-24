@@ -186,7 +186,7 @@ function checkPhoneLength(e) {
   }
 }
 
-async function onClickCertified() {
+function onClickCertified() {
   console.log('onClickCertified');
 
   if (!timerActive.value) {
@@ -205,7 +205,7 @@ async function onClickRequestCertified(e) {
     console.log('is number');
     state.isRequestCertified = true;
 
-    const res = await authApi.authPhoneVerifySend(e);
+    const res = await authApi.authPhoneVerifySend({ phoneNumber: e });
     state.requestId = res.data.requestId;
     state.verificationNumber = res.data.verificationNumber;
     startTimer();
@@ -236,11 +236,13 @@ async function onClickSubmit() {
     phoneNumber: state.phoneNumber,
   });
   if (res.status === 200 && res.data === state.requestId) {
+    console.log('res status 200');
     const isUser = await authApi.authCheckUser({
       phoneNumber: state.phoneNumber,
       requestId: state.requestId,
     });
     if (isUser.data) {
+      console.log('api 호출');
       await authApi
         .authLogin({
           requestId: state.requestId,
