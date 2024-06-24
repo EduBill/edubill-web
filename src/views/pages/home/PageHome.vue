@@ -83,8 +83,8 @@ const getUserProfile = async () => {
 const isPaymentDay = ref(false);
 
 const checkPaymentDay = () => {
-  const today = dayjs();
-  const day = today.date();
+  const today = new Date();
+  const day = today.getDate();
   isPaymentDay.value = day === day;
 };
 
