@@ -250,6 +250,7 @@ async function onClickSubmit() {
         })
         .then(res => {
           if (res.status === 200) {
+            console.log('로그인완료');
             router.push({
               name: 'Home',
             });
