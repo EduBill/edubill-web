@@ -9,16 +9,15 @@
         :key="index"
         class="list_container"
       >
-        <div
-          class="list"
-          @click="() => handleListClick(paymentListData.paymentHistoryId)"
-        >
-          <div class="row_container">
-            <div>{{ paymentListData.studentName }}</div>
-            <div>+{{ paymentListData.paidAmount }}</div>
-          </div>
-          <div class="timestamp">{{ paymentListData.paidDateTime }}</div>
-        </div>
+        <PaymentItem
+          :payment-history-id="paymentListData.paymentHistoryId"
+          :student-name="paymentListData.studentName"
+          :paid-amount="paymentListData.paidAmount"
+          :paid-date-time="paymentListData.paidDateTime"
+          :handle-click="
+            () => handlePaymentClick(paymentListData.paymentHistoryId)
+          "
+        />
       </div>
     </div>
     <div id="target" className="targetRef"></div>
@@ -26,13 +25,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, reactive } from 'vue';
+import { onMounted, ref, reactive, onUnmounted } from 'vue';
 import FileUpload from './FileUpload.vue';
+import PaymentItem from './PaymentItem.vue';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 
 import router from '@/router';
 import { formatYearMonthDate } from '@/utils/formatDate';
-
+import { intersectionObserver } from '@/utils/intersectionObserver';
 const emit = defineEmits(['update:excelUploaded']);
 const paymentListApi = new PaymentApi();
 const paymentData = ref<PaymentData[]>([]);
@@ -51,12 +51,8 @@ const props = defineProps({
   },
 });
 
-let page = 0;
-let hasMoreData = true;
-
-onMounted(async () => {
-  await fetchData();
-});
+const page = ref(0);
+const hasMoreData = ref(true);
 
 //api 호출
 const fetchData = async () => {
@@ -65,47 +61,43 @@ const fetchData = async () => {
 
   const res = await paymentListApi.getPaymentList({
     yearMonth: date,
-    page,
+    page: page.value,
     size: 12,
   });
 
   // 받은 데이터를 paymentData에 저장
   if (Array.isArray(res.data.content)) {
     if (res.data.content.length === 0) {
-      hasMoreData = false;
-      page = 0;
+      hasMoreData.value = false;
     }
     paymentData.value = [...paymentData.value, ...res.data.content];
+    page.value++;
   }
 
   console.log('액셀데이터 불러옴: ' + paymentData.value);
 };
 
-//무한스크롤
-const observer = new IntersectionObserver(
-  async entries => {
-    if (hasMoreData && entries[0].isIntersecting) {
-      page++; // 페이지 증가
-      await fetchData();
-    }
-  },
-  { root: null, rootMargin: '0px', threshold: 0.5 }
-);
+const observer = intersectionObserver(hasMoreData, page, fetchData);
 
-onMounted(() => {
+onMounted(async () => {
+  await fetchData();
   const targetElement = document.getElementById('target');
   if (targetElement) {
     observer.observe(targetElement);
   }
 });
 
-function handleListClick(id: number) {
-  router.push(`/payManage/payDetail?id=${id}`);
-}
+onUnmounted(() => {
+  observer.disconnect();
+});
 
 function excelUploaded() {
   console.log('paymentList에 반영 - 엑셀 업로드되었습니다.');
   emit('update:excelUploaded');
+}
+
+function handlePaymentClick(id: number) {
+  router.push(`/payManage/payDetail?id=${id}`);
 }
 </script>
 
@@ -114,7 +106,6 @@ function excelUploaded() {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: unit(17);
   gap: unit(4);
   margin: unit(16) 0;
 }
@@ -123,19 +114,7 @@ function excelUploaded() {
   flex-direction: column;
   gap: unit(4);
 }
-.list {
-  padding: unit(16) 0;
-}
-.row_container {
-  display: flex;
-  justify-content: space-between;
-  font-size: unit(18);
-  font-weight: 600;
-}
-.timestamp {
-  font-size: unit(14);
-  font-weight: 500;
-}
+
 .targetRef {
   height: 10px;
 }

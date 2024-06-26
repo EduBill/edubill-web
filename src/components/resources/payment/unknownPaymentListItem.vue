@@ -10,7 +10,7 @@
         <svg-icon class="chevron" name="chevronRight" />
       </div>
       <div v-if="isToggleOpen[index]" class="list_toggle_box">
-        <div class="button">완납 처리</div>
+        <div class="button" @click="navigateToUnknownList">완납 처리</div>
         <div class="button">청구서 재발송</div>
       </div>
     </div>
@@ -21,6 +21,7 @@
 import { onMounted, ref, watch } from 'vue';
 import { formatYearMonthDate } from '@/utils/formatDate';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
+import router from '@/router';
 const props = defineProps({
   year: {
     type: Number,
@@ -61,6 +62,10 @@ const fetchData = async () => {
 onMounted(async () => {
   await fetchData();
 });
+
+function navigateToUnknownList() {
+  router.push('/payManage/unknownList');
+}
 </script>
 
 <style scoped lang="scss">
@@ -68,7 +73,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
   margin: unit(16) 0;
-  gap: unit(4);
+  gap: unit(16);
 }
 .list_item_container {
   width: 100%;
@@ -93,7 +98,7 @@ onMounted(async () => {
   gap: unit(11);
   width: 100%;
   justify-content: center;
-  padding: unit(7) unit(18);
+  padding-top: unit(16);
 }
 .button {
   width: unit(130);

@@ -44,6 +44,13 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '납부내역 상세' },
       },
       {
+        path: '/payManage/unknownList',
+        component: () =>
+          import('@/views/pages/paymentManage/UnknownPaymentListPage.vue'),
+        name: 'unknownPayment',
+        meta: { title: '납부내역 상세' },
+      },
+      {
         path: '/:catchAll(.*)',
         component: Blank,
         children: [
