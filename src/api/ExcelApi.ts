@@ -35,9 +35,9 @@ export class ExcelApi<
    * @secure
    */
 
-  postExcelData = (data: FormData) => {
+  postExcelData = (data: FormData, date: String) => {
     return this.request({
-      path: `/v1/excel/upload`,
+      path: `/v1/excel/upload?yearMonth=${date}`,
       method: 'post',
       body: data,
     });
