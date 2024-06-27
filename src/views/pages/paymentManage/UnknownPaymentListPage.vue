@@ -1,56 +1,62 @@
 <template>
   <div class="container">
     <PayManageNav :title="'미확인입금내역'" :plus-btn="false" />
-    <div class="payment_detail_container">
-      <!-- <div>{{ checkedNames }}</div> -->
-      <div
-        v-for="(paymentListData, index) in paymentList"
-        :key="index"
-        class="list_item_container"
-      >
-        <div v-if="index === 0" class="date">
-          {{ formatDate(new Date(paymentListData.paidDateTime), 'monthDay') }}
-        </div>
+    <div class="payment_list_container">
+      <div class="payment_detail_container">
         <div
-          v-else-if="
-            index !== 0 &&
-            isDifferentDate(
-              paymentListData.paidDateTime,
-              paymentList[index - 1].paidDateTime
-            )
-          "
-          class="date"
+          v-for="(paymentListData, index) in paymentList"
+          :key="index"
+          class="list_item_container"
         >
-          {{ formatDate(new Date(paymentListData.paidDateTime), 'monthDay') }}
-        </div>
-        <div class="list-item">
-          <input
-            :id="'check-' + index"
-            v-model="checkedNames"
-            type="checkbox"
-            :name="'user' + index"
-            :value="'user-' + index"
-          />
-          <label :for="'check-' + index" class="label">
-            <!-- 라벨 안에 텍스트를 div로 감싸서 정리 -->
-            <div v-if="checkedNames.includes(('user-' + index) as never)">
-              <svg-icon name="checkCircle" />
+          <div class="list-item">
+            <div v-if="index === 0" class="date">
+              {{
+                formatDate(new Date(paymentListData.paidDateTime), 'monthDay')
+              }}
             </div>
-            <div v-else><svg-icon name="circle" /></div>
-            <PaymentItem
-              :payment-history-id="paymentListData.paymentHistoryId"
-              :student-name="paymentListData.studentName"
-              :paid-amount="paymentListData.paidAmount"
-              :paid-date-time="
-                formatTime(new Date(paymentListData.paidDateTime))
+            <div
+              v-else-if="
+                index !== 0 &&
+                isDifferentDate(
+                  paymentListData.paidDateTime,
+                  paymentList[index - 1].paidDateTime
+                )
               "
-              :handle-click="handleListClick"
+              class="date"
+            >
+              {{
+                formatDate(new Date(paymentListData.paidDateTime), 'monthDay')
+              }}
+            </div>
+            <input
+              :id="'check-' + index"
+              v-model="checkedNames"
+              type="checkbox"
+              :name="'user' + index"
+              :value="'user-' + index"
             />
-          </label>
+            <label :for="'check-' + index" class="label">
+              <!-- 라벨 안에 텍스트를 div로 감싸서 정리 -->
+              <div v-if="checkedNames.includes(('user-' + index) as never)">
+                <svg-icon name="checkCircle" />
+              </div>
+              <div v-else><svg-icon name="circle" /></div>
+              <PaymentItem
+                :payment-history-id="paymentListData.paymentHistoryId"
+                :student-name="paymentListData.studentName"
+                :paid-amount="paymentListData.paidAmount"
+                :paid-date-time="
+                  formatTime(new Date(paymentListData.paidDateTime))
+                "
+                :handle-click="handleListClick"
+              />
+            </label>
+          </div>
         </div>
       </div>
+      <div id="target" className="targetRef"></div>
     </div>
-    <div id="target" className="targetRef"></div>
+
     <div class="button">
       <RectangleTextButton
         text="완납연결"
@@ -63,6 +69,7 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
+import InfiniteScroll from 'infinite-loading-vue3-ts';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
@@ -82,31 +89,31 @@ const checkedNames = ref([]);
 const page = ref(0);
 const hasMoreData = ref(true);
 const paymentListApi = new PaymentApi();
-
 const fetchData = async () => {
-  console.log('fetchData', page.value);
-  const date = formatYearMonthDate('2024', '5');
-  const res = await paymentListApi.getUnpaidList({
-    yearMonth: date,
-    page: page.value,
-    size: 1,
-  });
-  console.log('받아왔니?', res.data.content);
-  console.log(res.data.content, page.value, '번째 데이터');
-  if (Array.isArray(res.data.content)) {
-    console.log(page.value, '데이터 들어옴');
-    if (res.data.content.length === 0) {
-      console.log('데이터가없습니다.');
-      hasMoreData.value = false;
+  try {
+    console.log('fetchData', page.value);
+    const date = formatYearMonthDate('2024', '3');
+    const res = await paymentListApi.getUnpaidList({
+      yearMonth: date,
+      page: page.value,
+      size: 5,
+    });
+    if (Array.isArray(res.data.content)) {
+      console.log(page.value, '데이터 들어옴');
+      if (res.data.content.length === 0) {
+        console.log('데이터가없습니다.');
+        hasMoreData.value = false;
+      } else {
+        console.log('데이터 있음 ');
+        paymentList.value = [...paymentList.value, ...res.data.content];
+        page.value++;
+      }
     }
-    console.log('데이터 있음 ');
-    paymentList.value = [...paymentList.value, ...res.data.content];
-    console.log('페이지 증가', page.value);
-    page.value++;
-    console.log(page.value, hasMoreData.value);
+  } catch (error) {
+    console.error('데이터 불러오는 중 오류 발생', error);
+    hasMoreData.value = false;
   }
 };
-
 const observer = intersectionObserver(hasMoreData, page, fetchData);
 
 onMounted(async () => {
@@ -116,11 +123,9 @@ onMounted(async () => {
     observer.observe(targetElement);
   }
 });
-
 onUnmounted(() => {
   observer.disconnect();
 });
-
 function handleListClick() {}
 function isDifferentDate(
   currentDate: string,
@@ -167,6 +172,11 @@ function isDifferentDate(
   display: flex;
   flex-direction: column;
   gap: unit(16);
+}
+
+.payment_list_container {
+  height: calc(100vh - 140px);
+  overflow-y: auto;
 }
 .label {
   display: flex;

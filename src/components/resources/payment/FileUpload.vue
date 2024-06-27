@@ -36,7 +36,12 @@ import { ExcelApi } from '@/api/ExcelApi';
 
 const emit = defineEmits(['update:excelUploaded']);
 const excelUploadApi = new ExcelApi();
-
+const props = defineProps({
+  date: {
+    type: String,
+    default: '',
+  },
+});
 const handleFileUpload = (event: any) => {
   const file = event.target.files[0];
   if (!file) {
@@ -47,7 +52,7 @@ const handleFileUpload = (event: any) => {
   ExcelUploadFormData.append('bankCode', '004');
   console.log('파일업로드합니다');
   try {
-    excelUploadApi.postExcelData(ExcelUploadFormData);
+    excelUploadApi.postExcelData(ExcelUploadFormData, props.date);
     emit('update:excelUploaded');
   } catch (error) {
     console.log(error);

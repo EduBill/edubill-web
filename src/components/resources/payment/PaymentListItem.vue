@@ -1,27 +1,22 @@
 <template>
   <div class="payment_container">
-    <div v-if="!isExcelUploaded">
-      <FileUpload @update:excel-uploaded="excelUploaded" />
+    <div
+      v-for="(paymentListData, index) in paymentData"
+      :key="index"
+      class="list_container"
+    >
+      <PaymentItem
+        :payment-history-id="paymentListData.paymentHistoryId"
+        :student-name="paymentListData.studentName"
+        :paid-amount="paymentListData.paidAmount"
+        :paid-date-time="paymentListData.paidDateTime"
+        :handle-click="
+          () => handlePaymentClick(paymentListData.paymentHistoryId)
+        "
+      />
     </div>
-    <div v-else>
-      <div
-        v-for="(paymentListData, index) in paymentData"
-        :key="index"
-        class="list_container"
-      >
-        <PaymentItem
-          :payment-history-id="paymentListData.paymentHistoryId"
-          :student-name="paymentListData.studentName"
-          :paid-amount="paymentListData.paidAmount"
-          :paid-date-time="paymentListData.paidDateTime"
-          :handle-click="
-            () => handlePaymentClick(paymentListData.paymentHistoryId)
-          "
-        />
-      </div>
-    </div>
-    <div id="target" className="targetRef"></div>
   </div>
+  <div id="target" className="targetRef"></div>
 </template>
 
 <script setup lang="ts">
@@ -52,17 +47,18 @@ const props = defineProps({
 });
 
 const page = ref(0);
+const date = ref('');
 const hasMoreData = ref(true);
 
 //api 호출
 const fetchData = async () => {
   // 전달받은 날짜를 YYYY-MM 형태로 만듦
-  const date = formatYearMonthDate(props.year, props.month);
+  date.value = formatYearMonthDate(props.year, props.month);
 
   const res = await paymentListApi.getPaymentList({
-    yearMonth: date,
+    yearMonth: date.value,
     page: page.value,
-    size: 12,
+    size: 2,
   });
 
   // 받은 데이터를 paymentData에 저장
