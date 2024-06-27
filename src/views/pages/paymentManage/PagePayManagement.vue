@@ -34,25 +34,27 @@
         />
       </div>
       <div class="payManage_listContent">
-        <div class="date">{{ state.year }}년 {{ state.month }}월</div>
-        <div v-if="!state.isExcelUploaded">
-          <FileUpload
-            :date="formatYearMonthDate(state.year, state.month)"
-            @update:excel-uploaded="excelUploaded"
-          />
-        </div>
-        <div v-else-if="state.isExcelUploaded">
-          <div v-if="isClickCheckedPaymentList">
-            <PaymentListItem
-              :key="state.listKey"
-              :year="state.year"
-              :month="state.month"
-              :is-excel-uploaded="state.isExcelUploaded"
+        <!-- <div class="date">{{ state.year }}년 {{ state.month }}월</div> -->
+        <div class="payManage_listContainer">
+          <div v-if="!state.isExcelUploaded">
+            <FileUpload
+              :date="formatYearMonthDate(state.year, state.month)"
               @update:excel-uploaded="excelUploaded"
             />
           </div>
-          <div v-else>
-            <UnknownPaymentListItem :year="state.year" :month="state.month" />
+          <div v-else-if="state.isExcelUploaded">
+            <div v-if="isClickCheckedPaymentList">
+              <PaymentListItem
+                :key="state.listKey"
+                :year="state.year"
+                :month="state.month"
+                :is-excel-uploaded="state.isExcelUploaded"
+                @update:excel-uploaded="excelUploaded"
+              />
+            </div>
+            <div v-else>
+              <UnknownPaymentListItem :year="state.year" :month="state.month" />
+            </div>
           </div>
         </div>
       </div>
@@ -193,6 +195,7 @@ const handleToggle = (value: boolean) => {
 <style lang="scss" scoped>
 .payManage {
   padding: unit(20);
+  height: 100vh;
 
   &_calendarChart {
     border-radius: 10px;
@@ -216,6 +219,11 @@ const handleToggle = (value: boolean) => {
     padding: unit(17);
     gap: unit(4);
     margin: unit(16) 0;
+  }
+  &_listContainer {
+    height: unit(338);
+    overflow: scroll;
+    margin-top: unit(10);
   }
 }
 .blur {

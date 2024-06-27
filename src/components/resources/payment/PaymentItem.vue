@@ -4,13 +4,13 @@
       <div>{{ props.studentName }}</div>
       <div>+{{ props.paidAmount }}</div>
     </div>
-    <div class="timestamp">{{ props.paidDateTime }}</div>
+    <div class="timestamp">{{ formatTime(new Date(props.paidDateTime)) }}</div>
   </div>
 </template>
 
 <script setup lang="ts">
 import router from '@/router';
-
+import { formatTime } from '@/utils/formatDate';
 const props = defineProps({
   studentName: {
     type: String,
