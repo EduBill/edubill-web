@@ -101,6 +101,7 @@ import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import router from '@/router';
+import { setAccessToken } from '@/modules/axios';
 const authApi = new AuthApi();
 const refForm = ref(null);
 const state = reactive({
@@ -241,6 +242,7 @@ async function onClickSubmit() {
       phoneNumber: state.phoneNumber,
       requestId: state.requestId,
     });
+    console.log('isUser data', isUser);
     if (isUser.data) {
       console.log('api 호출');
       await authApi
@@ -250,6 +252,10 @@ async function onClickSubmit() {
         })
         .then(res => {
           if (res.status === 200) {
+            console.log(res.data.jwtToken.accessToken.replace('Bearer ', ''));
+            setAccessToken(
+              res.data.jwtToken.accessToken.replace('Bearer ', '')
+            );
             router.push({
               name: 'Home',
             });

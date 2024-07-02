@@ -16,6 +16,7 @@ axios.interceptors.request.use(
 
 export function setAccessToken(accessToken: string | null) {
   if (accessToken) {
+    console.log('accessToken 저장');
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
     delete axios.defaults.headers.common.Authorization;
