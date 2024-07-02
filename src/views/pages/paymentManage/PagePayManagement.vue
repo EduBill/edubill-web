@@ -3,6 +3,9 @@
     <PayManageNav
       :key="state.navKey"
       :first-excel-uploaded="state.firstExcelUploaded"
+      :plus-btn="true"
+      :year-month="formatYearMonthDate(state.year, state.month)"
+      :click-back-btn="'/home'"
     />
     <!-- payManage_calendarChart class를 기본 적용,
     isExcelUploaded false이면 blur 추가 적용 -->
@@ -53,7 +56,11 @@
               />
             </div>
             <div v-else>
-              <UnknownPaymentListItem :year="state.year" :month="state.month" />
+              <UnknownPaymentListItem
+                :year="state.year"
+                :month="state.month"
+                :click="isClickCheckedPaymentList"
+              />
             </div>
           </div>
         </div>
@@ -95,7 +102,8 @@ const savedPaymentStatusData = new Map();
 
 const excelApi = new ExcelApi();
 const paymentApi = new PaymentApi();
-
+//토글의 상태값 컨트롤
+const isClickCheckedPaymentList = ref(true);
 onMounted(() => {
   setCurrentDate();
   getPaymentStatus();
@@ -133,7 +141,6 @@ async function getPaymentStatus() {
 
 function changeChart({ year, month }) {
   console.log('chart change 시작');
-
   state.year = year;
   state.month = month;
   const date = formatYearMonthDate(state.year, state.month);
@@ -183,9 +190,6 @@ async function excelUploaded() {
   state.navKey++;
   getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
 }
-
-//토글의 상태값 컨트롤
-const isClickCheckedPaymentList = ref(true);
 
 const handleToggle = (value: boolean) => {
   isClickCheckedPaymentList.value = value;

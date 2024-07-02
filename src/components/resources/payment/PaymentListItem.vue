@@ -1,5 +1,6 @@
 <template>
   <div class="payment_container">
+    <div v-if="paymentData.length === 0">데이터가 없습니다.</div>
     <div
       v-for="(paymentListData, index) in paymentData"
       :key="index"
@@ -77,6 +78,7 @@ const fetchData = async () => {
     page: page.value,
     size: 6,
   });
+  console.log('응답', res);
 
   // 받은 데이터를 paymentData에 저장
   if (Array.isArray(res.data.content)) {
