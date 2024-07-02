@@ -32,11 +32,10 @@ import router from '@/router';
 import BottomTooltip from '@/components/molecules/BottomTooltip.vue';
 import { ExcelApi } from '@/api/ExcelApi';
 
+import { usePaymentStatusStore } from '@/stores/modules/payment';
+const paymentStatusStore = usePaymentStatusStore();
+
 const props = defineProps({
-  firstExcelUploaded: {
-    type: Boolean,
-    default: false,
-  },
   title: {
     type: String,
     default: '납부관리',
@@ -58,11 +57,12 @@ const props = defineProps({
 const showTooltip = ref(false);
 
 const hideTooltip = () => {
+  paymentStatusStore.firstExcelUploaded = false;
   showTooltip.value = false;
 };
 
 watch(
-  () => props.firstExcelUploaded,
+  () => paymentStatusStore.firstExcelUploaded,
   newVal => {
     if (newVal) {
       showTooltip.value = true;

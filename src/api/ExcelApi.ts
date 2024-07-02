@@ -1,5 +1,4 @@
 import { ContentType, HttpClient, RequestParams } from './http-client';
-import { setAccessToken } from '@/modules/axios/index';
 
 export class ExcelApi<
   SecurityDataType = unknown,

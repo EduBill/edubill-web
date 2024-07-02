@@ -29,6 +29,7 @@ import PageLaunch from '@/views/pages/launch/PageLaunch.vue';
 import { useWNInterface } from '@/plugins/vue-wni';
 import { NativeInterceptor } from '@/plugins/native-interceptor';
 import { useLayoutStore } from '@/stores/modules/layout';
+import { setKeyboardHeight } from '@/composable/layoutFunctions';
 import { useSessionStore } from '@/stores/modules/session';
 
 const app = ref(null);
@@ -109,9 +110,9 @@ function initWNInterface() {
 
       wni.onKeyboard(data => {
         if (data.isVisibility === true) {
-          layoutStore.setKeyboardHeight(data.height);
+          setKeyboardHeight(data.height);
         } else {
-          layoutStore.setKeyboardHeight(0);
+          setKeyboardHeight(0);
         }
       });
 

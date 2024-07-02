@@ -34,14 +34,26 @@
 <script setup lang="ts">
 import { ExcelApi } from '@/api/ExcelApi';
 
-const emit = defineEmits(['update:excelUploaded']);
-const excelUploadApi = new ExcelApi();
-const props = defineProps({
-  date: {
-    type: String,
-    default: '',
-  },
-});
+// const emit = defineEmits(['update:excelUploaded']);
+// const excelUploadApi = new ExcelApi();
+// const props = defineProps({
+//   date: {
+//     type: String,
+//     default: '',
+//   },
+// });
+import {
+  usePaymentDateStore,
+  usePaymentStatusStore,
+} from '@/stores/modules/payment';
+import { formatYearMonthDate } from '@/utils/formatDate';
+const paymentDate = usePaymentDateStore();
+const paymentStatus = usePaymentStatusStore();
+const paymentStatusStore = usePaymentStatusStore();
+
+const excelApi = new ExcelApi();
+const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
+
 const handleFileUpload = (event: any) => {
   const file = event.target.files[0];
   if (!file) {
@@ -52,8 +64,10 @@ const handleFileUpload = (event: any) => {
   ExcelUploadFormData.append('bankCode', '004');
   console.log('파일업로드합니다');
   try {
-    excelUploadApi.postExcelData(ExcelUploadFormData, props.date);
-    emit('update:excelUploaded');
+    // excelUploadApi.postExcelData(ExcelUploadFormData, props.date);
+    // emit('update:excelUploaded');
+    excelApi.postExcelData(ExcelUploadFormData, date);
+    paymentStatusStore.firstExcelUploaded = true;
   } catch (error) {
     console.log(error);
   }

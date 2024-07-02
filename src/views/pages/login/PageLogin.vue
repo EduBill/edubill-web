@@ -242,9 +242,7 @@ async function onClickSubmit() {
       phoneNumber: state.phoneNumber,
       requestId: state.requestId,
     });
-    console.log('isUser data', isUser);
     if (isUser.data) {
-      console.log('api 호출');
       await authApi
         .authLogin({
           requestId: state.requestId,
@@ -252,7 +250,6 @@ async function onClickSubmit() {
         })
         .then(res => {
           if (res.status === 200) {
-            console.log(res.data.jwtToken.accessToken.replace('Bearer ', ''));
             setAccessToken(
               res.data.jwtToken.accessToken.replace('Bearer ', '')
             );

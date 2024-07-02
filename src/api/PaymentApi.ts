@@ -1,6 +1,4 @@
 import { ContentType, HttpClient, RequestParams } from './http-client';
-import { PaymentStatus } from '@/stores/typings/types.paymentStatus';
-import { setAccessToken } from '@/modules/axios/index';
 
 // PaymentData 인터페이스 정의
 export interface PaymentData {

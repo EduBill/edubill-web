@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 
 const props = defineProps({

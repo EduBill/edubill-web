@@ -46,23 +46,19 @@ import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import { formatDate, formatYearMonthDate } from '@/utils/formatDate';
 import router from '@/router';
 import { intersectionObserver } from '@/utils/intersectionObserver';
+
+import { useFormatDate } from '@/composable/formatDate';
+
+import {
+  usePaymentDateStore,
+  usePaymentStatusStore,
+} from '@/stores/modules/payment';
 const emit = defineEmits(['update:excelUploaded']);
+const paymentDate = usePaymentDateStore();
+const paymentStatusStore = usePaymentStatusStore();
+
 const paymentListApi = new PaymentApi();
 const paymentData = ref<PaymentData[]>([]);
-const props = defineProps({
-  year: {
-    type: Number,
-    default: 0,
-  },
-  month: {
-    type: Number,
-    default: 0,
-  },
-  isExcelUploaded: {
-    type: Boolean,
-    default: false,
-  },
-});
 
 const page = ref(0);
 const date = ref('');
@@ -71,7 +67,7 @@ const hasMoreData = ref(true);
 //api 호출
 const fetchData = async () => {
   // 전달받은 날짜를 YYYY-MM 형태로 만듦
-  date.value = formatYearMonthDate(props.year, props.month);
+  date.value = formatYearMonthDate(paymentDate.year, paymentDate.month);
 
   const res = await paymentListApi.getPaymentList({
     yearMonth: date.value,
