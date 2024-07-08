@@ -33,19 +33,19 @@
       <div class="payManage_listContent">
         <!-- <div class="date">{{ state.year }}년 {{ state.month }}월</div> -->
         <div class="payManage_listContainer">
-          <div v-if="!paymentStatusStore.isExcelUploaded">
+          <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
               @update:excel-uploaded="excelUploaded"
             />
           </div>
-          <div v-else-if="paymentStatusStore.isExcelUploaded">
+          <div v-else-if="paymentStatus.isExcelUploaded">
             <div v-if="isClickCheckedPaymentList">
               <PaymentListItem
                 :key="state.listKey"
                 :year="paymentDate.year"
                 :month="paymentDate.month"
-                :is-excel-uploaded="paymentStatusStore.isExcelUploaded"
+                :is-excel-uploaded="paymentStatus.isExcelUploaded"
                 @update:excel-uploaded="excelUploaded"
               />
             </div>
