@@ -33,6 +33,7 @@
       <div class="payManage_listContent">
         <!-- <div class="date">{{ state.year }}년 {{ state.month }}월</div> -->
         <div class="payManage_listContainer">
+          {{ paymentStatus.isExcelUploaded }}
           <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
@@ -74,8 +75,7 @@ import ToggleMenu from '@/components/resources/payment/ToggleMenu.vue';
 import PaymentListItem from '@/components/resources/payment/PaymentListItem.vue';
 import UnknownPaymentListItem from '@/components/resources/payment/unknownPaymentListItem.vue';
 import { formatYearMonthDate } from '@/utils/formatDate';
-
-//pinia
+import FileUpload from '@/components/resources/payment/FileUpload.vue';
 import {
   usePaymentDateStore,
   usePaymentStatusStore,
@@ -83,14 +83,17 @@ import {
 const paymentDate = usePaymentDateStore();
 const paymentStatus = usePaymentStatusStore();
 
-//pinia
-
 const state = reactive({
   chartKey: 0,
   listKey: 0,
   // 처음으로 엑셀 Upload시 PayManageNav의 + 아이콘에
   // 툴팁을 띄울 수 있도록 하는 navKey
   navKey: 0,
+  paidCount: 28,
+  unpaidCount: 12,
+  totalPaidAmount: 0,
+  totalUnpaidAmount: 0,
+  formattedDate: '',
 });
 
 // API 호출로 얻은 데이터를 저장할 const
@@ -106,22 +109,24 @@ onMounted(() => {
 
 async function getPaymentStatus() {
   // 현재 날짜를 YYYY-MM 형태로 만듦
-  const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
-
+  console.log('현재 날짜 ', state.formattedDate);
   // 현재 날짜 전달하여 납부 현황 가져오기
-  const res = await paymentApi.getPaymentStatus(date);
-  paymentStatus.isExcelUploaded = res.data.isExcelUploaded;
-  if (paymentStatus.isExcelUploaded) {
-    paymentStatus.paidCount = res.data.paidCount;
-    paymentStatus.unpaidCount = res.data.unpaidCount;
-    paymentStatus.totalPaidAmount = res.data.totalPaidAmount;
-    paymentStatus.totalUnpaidAmount = res.data.totalUnpaidAmount;
+  if (state.formattedDate !== '') {
+    const res = await paymentApi.getPaymentStatus(state.formattedDate);
+    console.log('getPaymentStatus', res.data);
+    paymentStatus.isExcelUploaded = res.data.isExcelUploaded;
+    if (paymentStatus.isExcelUploaded) {
+      state.paidCount = res.data.paidCount;
+      state.unpaidCount = res.data.unpaidCount;
+      state.totalPaidAmount = res.data.totalPaidAmount;
+      state.totalUnpaidAmount = res.data.totalUnpaidAmount;
 
-    // chart 리렌더링
-    state.chartKey += 1;
+      // chart 리렌더링
+      state.chartKey += 1;
 
-    // 데이터 저장
-    savePaymentStatusData(date);
+      // 데이터 저장
+      savePaymentStatusData(state.formattedDate);
+    }
   }
   // list 리렌더링
   state.listKey++;
@@ -132,15 +137,18 @@ function changeChart({ year, month }) {
 
   paymentDate.year = year;
   paymentDate.month = month;
-  const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
+  state.formattedDate = formatYearMonthDate(
+    paymentDate.year,
+    paymentDate.month
+  );
   // 저장된 데이터가 있는지 찾기
-  const savedData = savedPaymentStatusData.get(date);
+  const savedData = savedPaymentStatusData.get(state.formattedDate);
   if (savedData) {
     console.log('저장된 차트 데이터 출력');
-    paymentStatus.paidCount = savedData.paidCount;
-    paymentStatus.unpaidCount = savedData.unpaidCount;
-    paymentStatus.totalPaidAmount = savedData.totalPaidAmount;
-    paymentStatus.totalUnpaidAmount = savedData.totalUnpaidAmount;
+    state.paidCount = savedData.paidCount;
+    state.unpaidCount = savedData.unpaidCount;
+    state.totalPaidAmount = savedData.totalPaidAmount;
+    state.totalUnpaidAmount = savedData.totalUnpaidAmount;
     paymentStatus.isExcelUploaded = savedData.isExcelUploaded;
 
     // chart, list 리렌더링
@@ -156,10 +164,10 @@ function savePaymentStatusData(date: string) {
   const key = date;
   // date를 key로 하여 payment status 데이터 저장
   savedPaymentStatusData.set(key, {
-    paidCount: paymentStatus.paidCount,
-    unpaidCount: paymentStatus.unpaidCount,
-    totalPaidAmount: paymentStatus.totalPaidAmount,
-    totalUnpaidAmount: paymentStatus.totalUnpaidAmount,
+    paidCount: state.paidCount,
+    unpaidCount: state.unpaidCount,
+    totalPaidAmount: state.totalPaidAmount,
+    totalUnpaidAmount: state.totalUnpaidAmount,
     isExcelUploaded: paymentStatus.isExcelUploaded,
   });
   // 저장된 데이터를 순회하여 콘솔에 출력
@@ -170,7 +178,6 @@ function savePaymentStatusData(date: string) {
 }
 
 async function excelUploaded() {
-  console.log('pagePayManagement에 반영 - 엑셀 업로드되었습니다.');
   await excelApi.updateIsExcelUploaded(
     formatYearMonthDate(paymentDate.year, paymentDate.month)
   );

@@ -3,7 +3,6 @@ import { computed, reactive } from 'vue';
 
 export const usePaymentDateStore = defineStore('paymentDate', () => {
   const date = new Date();
-
   const state = reactive({
     currentYear: computed(() => date.getFullYear()),
     currentMonth: computed(() => date.getMonth() + 1),

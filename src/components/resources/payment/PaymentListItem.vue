@@ -74,7 +74,7 @@ const fetchData = async () => {
     page: page.value,
     size: 6,
   });
-  console.log('응답', res);
+  console.log('응답', res.data.content);
 
   // 받은 데이터를 paymentData에 저장
   if (Array.isArray(res.data.content)) {
