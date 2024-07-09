@@ -1,10 +1,4 @@
 import { ContentType, HttpClient, RequestParams } from './http-client';
-import { PaymentStatus } from '@/stores/typings/types.paymentStatus';
-import { setAccessToken } from '@/modules/axios/index';
-
-setAccessToken(
-  'eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjoiQUNBREVNWSIsInN1YiI6IjAxMDI3ODkyMTY1IiwiaWF0IjoxNzEyMTU2NzIxLCJleHAiOjQ4NjU3NTY3MjF9.p0vjwBv25irPuk0Cbd4iGTRoHbIsN1QJ3W2KC5Dcoaw'
-);
 
 // PaymentData 인터페이스 정의
 export interface PaymentData {

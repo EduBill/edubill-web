@@ -101,6 +101,7 @@ import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import router from '@/router';
+import { setAccessToken } from '@/modules/axios';
 const authApi = new AuthApi();
 const refForm = ref(null);
 const state = reactive({
@@ -242,7 +243,6 @@ async function onClickSubmit() {
       requestId: state.requestId,
     });
     if (isUser.data) {
-      console.log('api 호출');
       await authApi
         .authLogin({
           requestId: state.requestId,
@@ -250,7 +250,13 @@ async function onClickSubmit() {
         })
         .then(res => {
           if (res.status === 200) {
-            console.log('로그인완료');
+            sessionStorage.setItem(
+              'Token',
+              res.data.jwtToken.accessToken.replace('Bearer ', '')
+            );
+            // setAccessToken(
+            //   res.data.jwtToken.accessToken.replace('Bearer ', '')
+            // );
             router.push({
               name: 'Home',
             });

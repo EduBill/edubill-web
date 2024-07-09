@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <PayManageNav :title="'미확인입금내역'" :plus-btn="false" />
+    <PayManageNav
+      :title="'미확인입금내역'"
+      :plus-btn="false"
+      :click-back-btn="'/payManage'"
+    />
     <div class="payment_list_container">
       <div class="payment_detail_container">
         <div
@@ -45,9 +49,7 @@
                 :payment-history-id="paymentListData.paymentHistoryId"
                 :student-name="paymentListData.studentName"
                 :paid-amount="paymentListData.paidAmount"
-                :paid-date-time="
-                  formatTime(new Date(paymentListData.paidDateTime))
-                "
+                :paid-date-time="paymentListData.paidDateTime"
                 :handle-click="handleListClick"
               />
             </label>
@@ -70,6 +72,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
 import InfiniteScroll from 'infinite-loading-vue3-ts';
+import { useRouter } from 'vue-router';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
@@ -84,7 +87,8 @@ import { intersectionObserver } from '@/utils/intersectionObserver';
 
 const paymentList = ref<PaymentData[]>([]);
 const checkedNames = ref([]);
-
+const router = useRouter();
+const yearMonth = router.currentRoute.value.query.yearMonth as string;
 //무한스크롤
 const page = ref(0);
 const hasMoreData = ref(true);
@@ -92,19 +96,16 @@ const paymentListApi = new PaymentApi();
 const fetchData = async () => {
   try {
     console.log('fetchData', page.value);
-    const date = formatYearMonthDate('2024', '3');
+    const date = yearMonth;
     const res = await paymentListApi.getUnpaidList({
       yearMonth: date,
       page: page.value,
-      size: 5,
+      size: 10,
     });
     if (Array.isArray(res.data.content)) {
-      console.log(page.value, '데이터 들어옴');
       if (res.data.content.length === 0) {
-        console.log('데이터가없습니다.');
         hasMoreData.value = false;
       } else {
-        console.log('데이터 있음 ');
         paymentList.value = [...paymentList.value, ...res.data.content];
         page.value++;
       }

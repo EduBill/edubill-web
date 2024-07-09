@@ -3,11 +3,19 @@
     <svg-icon
       class="chevronLeft"
       name="largeChevronLeft"
-      @click="router.go(-1)"
+      @click="clickBackBtn ? router.push(clickBackBtn) : router.go(-1)"
     />
     <p>{{ title }}</p>
     <div v-if="plusBtn" class="tooltip_container">
-      <svg-icon class="plus" name="plusOutline" />
+      <input
+        id="excelData"
+        type="file"
+        class="input_file"
+        @change="handleFileUpload"
+      />
+      <label for="excelData" class="label_file">
+        <svg-icon class="plus" name="plusOutline" />
+      </label>
       <BottomTooltip
         v-if="showTooltip"
         class="plus_tooltip"
@@ -22,12 +30,12 @@ import { onMounted, onUnmounted, ref, watch } from 'vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import router from '@/router';
 import BottomTooltip from '@/components/molecules/BottomTooltip.vue';
+import { ExcelApi } from '@/api/ExcelApi';
+
+import { usePaymentStatusStore } from '@/stores/modules/payment';
+const paymentStatusStore = usePaymentStatusStore();
 
 const props = defineProps({
-  firstExcelUploaded: {
-    type: Boolean,
-    default: false,
-  },
   title: {
     type: String,
     default: '납부관리',
@@ -36,16 +44,25 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+  yearMonth: {
+    type: String,
+    default: '',
+  },
+  clickBackBtn: {
+    type: String || Number,
+    default: -1,
+  },
 });
 
 const showTooltip = ref(false);
 
 const hideTooltip = () => {
+  paymentStatusStore.firstExcelUploaded = false;
   showTooltip.value = false;
 };
 
 watch(
-  () => props.firstExcelUploaded,
+  () => paymentStatusStore.firstExcelUploaded,
   newVal => {
     if (newVal) {
       showTooltip.value = true;
@@ -53,7 +70,8 @@ watch(
   },
   { immediate: true }
 );
-
+const emit = defineEmits(['update:excelUploaded']);
+const excelUploadApi = new ExcelApi();
 onMounted(() => {
   // 컴포넌트가 마운트될 때 'mousedown' 이벤트 리스너를 추가
   // tooltip이 나타났을 때 화면을 터치하면 툴팁 제거
@@ -64,6 +82,23 @@ onUnmounted(() => {
   // 컴포넌트가 언마운트될 때 'mousedown' 이벤트 리스너를 제거
   window.removeEventListener('mousedown', hideTooltip);
 });
+
+const handleFileUpload = (event: any) => {
+  const file = event.target.files[0];
+  if (!file) {
+    return;
+  }
+  const ExcelUploadFormData = new FormData();
+  ExcelUploadFormData.append('file', file);
+  ExcelUploadFormData.append('bankCode', '004');
+  console.log('파일업로드합니다');
+  try {
+    excelUploadApi.postExcelData(ExcelUploadFormData, props.yearMonth);
+    emit('update:excelUploaded');
+  } catch (error) {
+    console.log(error);
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -105,10 +140,15 @@ onUnmounted(() => {
   height: unit(24);
   z-index: 10;
   position: relative;
+  cursor: pointer;
 
   &_tooltip {
     position: absolute;
     right: unit(-9);
   }
+}
+
+.input_file {
+  display: none;
 }
 </style>
