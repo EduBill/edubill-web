@@ -51,6 +51,27 @@ const routes: Array<RouteRecordRaw> = [
         meta: { title: '납부내역 상세' },
       },
       {
+        path: '/studentManage',
+        component: () =>
+          import('@/views/pages/studentManage/StudentManagePage.vue'),
+        name: 'studentManage',
+        meta: { title: '상세반정보' },
+      },
+      {
+        path: '/studentManage/classDetail',
+        component: () =>
+          import('@/views/pages/studentManage/ClassDetailPage.vue'),
+        name: 'classDetail',
+        meta: { title: '상세반정보' },
+      },
+      {
+        path: '/studentManage/newClass',
+        component: () =>
+          import('@/views/pages/studentManage/AddNewClassPage.vue'),
+        name: 'newClass',
+        meta: { title: '새로운반추가' },
+      },
+      {
         path: '/:catchAll(.*)',
         component: Blank,
         children: [

@@ -15,9 +15,12 @@ axios.interceptors.request.use(
 );
 
 export function setAccessToken(accessToken: string | null) {
+  const Token = sessionStorage.getItem('Token');
   if (accessToken) {
     console.log('accessToken 저장');
     axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+  } else if (Token) {
+    axios.defaults.headers.common.Authorization = `Bearer ${sessionStorage.getItem('Token')}`;
   } else {
     delete axios.defaults.headers.common.Authorization;
   }

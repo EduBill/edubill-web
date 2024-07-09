@@ -250,9 +250,13 @@ async function onClickSubmit() {
         })
         .then(res => {
           if (res.status === 200) {
-            setAccessToken(
+            sessionStorage.setItem(
+              'Token',
               res.data.jwtToken.accessToken.replace('Bearer ', '')
             );
+            // setAccessToken(
+            //   res.data.jwtToken.accessToken.replace('Bearer ', '')
+            // );
             router.push({
               name: 'Home',
             });
