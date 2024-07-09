@@ -5,14 +5,14 @@
       <PaymentChartLabel
         ellipse-name="purpleEllipse"
         title="납입완료"
-        :data-num="paidCount"
-        :amount="totalPaidAmount"
+        :data-num="paymentStatusStore.paidCount"
+        :amount="paymentStatusStore.totalPaidAmount"
       />
       <PaymentChartLabel
         ellipse-name="yellowEllipse"
         title="미납입"
-        :data-num="unpaidCount"
-        :amount="totalUnpaidAmount"
+        :data-num="paymentStatusStore.unpaidCount"
+        :amount="paymentStatusStore.totalUnpaidAmount"
       />
       <PaymentChartLabel
         ellipse-name="pinkEllipse"
@@ -29,24 +29,10 @@ import { onMounted, ref } from 'vue';
 import Chart from 'chart.js/auto';
 import PaymentChartLabel from './PaymentChartLabel.vue';
 
+import { usePaymentStatusStore } from '@/stores/modules/payment';
+const paymentStatusStore = usePaymentStatusStore();
+
 const props = defineProps({
-  // 은행데이터 첨부 전 도넛차트 default로 보여줘야 하므로 default에 임의의 값을 주었음.
-  paidCount: {
-    type: Number,
-    default: 0,
-  },
-  unpaidCount: {
-    type: Number,
-    default: 0,
-  },
-  totalPaidAmount: {
-    type: Number,
-    default: 0,
-  },
-  totalUnpaidAmount: {
-    type: Number,
-    default: 0,
-  },
   unConfirmed: {
     type: Number,
     default: 10,
@@ -59,7 +45,11 @@ const chartData = ref({
     {
       label: 'Payment Status',
       // 청구서 미확인 우선 10으로 처리
-      data: [props.paidCount, props.unpaidCount, props.unConfirmed],
+      data: [
+        paymentStatusStore.paidCount,
+        paymentStatusStore.unpaidCount,
+        props.unConfirmed,
+      ],
       backgroundColor: ['#7535FF', '#FFBA33', '#ff7581'],
       borderWidth: 1,
     },
@@ -76,8 +66,8 @@ const createChart = () => {
   if (!chartCanvas.value) {
     return;
   } else {
-    console.log('chart - paidCount ' + props.paidCount);
-    console.log('chart - unpaidCount ' + props.unpaidCount);
+    console.log('chart - paidCount ' + paymentStatusStore.paidCount);
+    console.log('chart - unpaidCount ' + paymentStatusStore.unpaidCount);
     console.log('chart - unConfirmed ' + props.unConfirmed);
 
     const ctx = chartCanvas.value.getContext('2d');

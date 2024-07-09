@@ -40,12 +40,13 @@ const isToggleOpen = ref<boolean[]>([]);
 const handleToggle = index => {
   isToggleOpen.value[index] = !isToggleOpen.value[index];
 };
-const page = 0;
+const page = ref(0);
+const date = ref('');
 const fetchData = async () => {
-  const date = formatYearMonthDate(props.year, props.month);
+  date.value = formatYearMonthDate(props.year, props.month);
   const res = await paymentListApi.getUnpaidList({
-    yearMonth: date,
-    page,
+    yearMonth: date.value,
+    page: page.value,
     size: 10,
   });
 
@@ -64,16 +65,25 @@ onMounted(async () => {
 });
 
 function navigateToUnknownList() {
-  router.push('/payManage/unknownList');
+  router.push(`/payManage/unknownList?yearMonth=${date.value}`);
 }
+
+watch(
+  () => [props.year, props.month],
+  async ([newYear, newMonth]) => {
+    date.value = formatYearMonthDate(newYear, newMonth);
+    await fetchData();
+  }
+);
 </script>
 
 <style scoped lang="scss">
 .list_container {
   display: flex;
   flex-direction: column;
-  margin: unit(16) 0;
+  //margin: unit(16) 0;
   gap: unit(16);
+  height: 100%;
 }
 .list_item_container {
   width: 100%;

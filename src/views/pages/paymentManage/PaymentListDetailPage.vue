@@ -1,6 +1,10 @@
 <template>
   <div class="container">
-    <PayManageNav :title="paymentDetailData?.depositorName" :plus-btn="false" />
+    <PayManageNav
+      :title="paymentDetailData?.depositorName"
+      :plus-btn="false"
+      :click-back-btn="'/payManage'"
+    />
     <div class="payment_detail_container">
       <div class="amount">+{{ paymentDetailData?.paidAmount }}원</div>
       <div class="row_container">

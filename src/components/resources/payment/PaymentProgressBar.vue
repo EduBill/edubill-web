@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const props = defineProps({
   percent: {

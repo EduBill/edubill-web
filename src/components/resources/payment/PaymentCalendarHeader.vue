@@ -17,27 +17,20 @@
 import { onMounted, ref } from 'vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 
-const emit = defineEmits(['update:calendarDate']);
-const props = defineProps({
-  currentYear: {
-    type: Number,
-    default: 0,
-  },
-  currentMonth: {
-    type: Number,
-    default: 0,
-  },
-});
+import { usePaymentDateStore } from '@/stores/modules/payment';
+const paymentDate = usePaymentDateStore();
 
-const calYear = ref(props.currentYear);
-const calMonth = ref(props.currentMonth);
+const emit = defineEmits(['update:calendarDate']);
+
+const calYear = ref(paymentDate.year);
+const calMonth = ref(paymentDate.month);
 const calMonthStr = ref('');
 
 onMounted(() => {
   console.log(
-    '캘린더의 현재 날짜' + props.currentYear + '-' + props.currentMonth
+    '캘린더의 현재 날짜' + paymentDate.year + '-' + paymentDate.month
   );
-  setCalendarDate(props.currentYear, props.currentMonth);
+  setCalendarDate(paymentDate.year, paymentDate.month);
 });
 
 const setCalendarDate = (year: number, month: number) => {
