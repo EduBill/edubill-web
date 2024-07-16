@@ -68,6 +68,8 @@ const handleFileUpload = (event: any) => {
     // emit('update:excelUploaded');
     excelApi.postExcelData(ExcelUploadFormData, date);
     paymentStatusStore.firstExcelUploaded = true;
+
+    
   } catch (error) {
     console.log(error);
   }

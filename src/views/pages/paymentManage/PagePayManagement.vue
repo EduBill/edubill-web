@@ -31,16 +31,19 @@
         />
       </div>
       <div class="payManage_listContent">
-        <!-- <div class="date">{{ state.year }}년 {{ state.month }}월</div> -->
+        <div class="date">
+          {{ paymentDate.year }}년 {{ paymentDate.month }}월
+        </div>
         <div class="payManage_listContainer">
           {{ paymentStatus.isExcelUploaded }}
-          <div v-if="!paymentStatus.isExcelUploaded">
+          <!-- <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
               @update:excel-uploaded="excelUploaded"
             />
-          </div>
-          <div v-else-if="paymentStatus.isExcelUploaded">
+          </div> -->
+          <!-- <div v-else-if="paymentStatus.isExcelUploaded"> -->
+          <div>
             <div v-if="isClickCheckedPaymentList">
               <PaymentListItem
                 :key="state.listKey"
@@ -110,6 +113,7 @@ onMounted(() => {
 async function getPaymentStatus() {
   // 현재 날짜를 YYYY-MM 형태로 만듦
   console.log('현재 날짜 ', state.formattedDate);
+  console.log('getPaymentstatus 함수 실행');
   // 현재 날짜 전달하여 납부 현황 가져오기
   if (state.formattedDate !== '') {
     const res = await paymentApi.getPaymentStatus(state.formattedDate);
@@ -178,9 +182,8 @@ function savePaymentStatusData(date: string) {
 }
 
 async function excelUploaded() {
-  await excelApi.updateIsExcelUploaded(
-    formatYearMonthDate(paymentDate.year, paymentDate.month)
-  );
+  console.log('excel uploaded 함수 실행');
+  await excelApi.updateIsExcelUploaded(state.formattedDate);
   // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
   state.navKey++;
   getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링

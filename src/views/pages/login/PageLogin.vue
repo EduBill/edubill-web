@@ -254,9 +254,9 @@ async function onClickSubmit() {
               'Token',
               res.data.jwtToken.accessToken.replace('Bearer ', '')
             );
-            // setAccessToken(
-            //   res.data.jwtToken.accessToken.replace('Bearer ', '')
-            // );
+            setAccessToken(
+              res.data.jwtToken.accessToken.replace('Bearer ', '')
+            );
             router.push({
               name: 'Home',
             });
