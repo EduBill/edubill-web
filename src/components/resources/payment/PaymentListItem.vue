@@ -13,7 +13,7 @@
         <div
           v-else-if="
             index !== 0 &&
-            isDifferentDate(
+            hasDateChanged(
               paymentListData.paidDateTime,
               paymentData[index - 1].paidDateTime
             )
@@ -40,23 +40,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref, reactive, onUnmounted } from 'vue';
-import FileUpload from './FileUpload.vue';
 import PaymentItem from './PaymentItem.vue';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import { formatDate, formatYearMonthDate } from '@/utils/formatDate';
 import router from '@/router';
 import { intersectionObserver } from '@/utils/intersectionObserver';
-
-import { useFormatDate } from '@/composable/formatDate';
-
-import {
-  usePaymentDateStore,
-  usePaymentStatusStore,
-} from '@/stores/modules/payment';
+import { usePaymentDateStore } from '@/stores/modules/payment';
+import { hasDateChanged } from '@/utils/hasDateChanged';
 const emit = defineEmits(['update:excelUploaded']);
 const paymentDate = usePaymentDateStore();
-const paymentStatusStore = usePaymentStatusStore();
-
 const paymentListApi = new PaymentApi();
 const paymentData = ref<PaymentData[]>([]);
 
@@ -74,7 +66,6 @@ const fetchData = async () => {
     page: page.value,
     size: 6,
   });
-  console.log('응답', res.data.content);
 
   // 받은 데이터를 paymentData에 저장
   if (Array.isArray(res.data.content)) {
@@ -84,10 +75,9 @@ const fetchData = async () => {
     paymentData.value = [...paymentData.value, ...res.data.content];
     page.value++;
   }
-
-  console.log('액셀데이터 불러옴: ' + paymentData.value);
 };
 
+//무한스크롤
 const observer = intersectionObserver(hasMoreData, page, fetchData);
 
 onMounted(async () => {
@@ -102,29 +92,9 @@ onUnmounted(() => {
   observer.disconnect();
 });
 
-function excelUploaded() {
-  console.log('paymentList에 반영 - 엑셀 업로드되었습니다.');
-  emit('update:excelUploaded');
-}
-
+//납부 내역을 클릭하면 상세페이지로 이동
 function handlePaymentClick(id: number) {
   router.push(`/payManage/payDetail?id=${id}`);
-}
-
-function isDifferentDate(
-  currentDate: string,
-  prevDate: string | null
-): boolean {
-  if (prevDate === null) {
-    return false;
-  }
-  const current = formatDate(new Date(currentDate), 'monthDay');
-  const prev = formatDate(new Date(prevDate), 'monthDay');
-  if (current === prev) {
-    return false;
-  } else {
-    return true;
-  }
 }
 </script>
 

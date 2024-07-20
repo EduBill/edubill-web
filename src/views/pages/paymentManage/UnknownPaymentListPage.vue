@@ -21,7 +21,7 @@
             <div
               v-else-if="
                 index !== 0 &&
-                isDifferentDate(
+                hasDateChanged(
                   paymentListData.paidDateTime,
                   paymentList[index - 1].paidDateTime
                 )
@@ -40,7 +40,6 @@
               :value="'user-' + index"
             />
             <label :for="'check-' + index" class="label">
-              <!-- 라벨 안에 텍스트를 div로 감싸서 정리 -->
               <div v-if="checkedNames.includes(('user-' + index) as never)">
                 <svg-icon name="checkCircle" />
               </div>
@@ -71,7 +70,6 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import InfiniteScroll from 'infinite-loading-vue3-ts';
 import { useRouter } from 'vue-router';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
@@ -84,18 +82,19 @@ import {
 import PaymentItem from '@/components/resources/payment/PaymentItem.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { intersectionObserver } from '@/utils/intersectionObserver';
+import { hasDateChanged } from '@/utils/hasDateChanged';
 
 const paymentList = ref<PaymentData[]>([]);
 const checkedNames = ref([]);
 const router = useRouter();
 const yearMonth = router.currentRoute.value.query.yearMonth as string;
-//무한스크롤
 const page = ref(0);
 const hasMoreData = ref(true);
 const paymentListApi = new PaymentApi();
+
+//미확인내역 데이터 불러오기
 const fetchData = async () => {
   try {
-    console.log('fetchData', page.value);
     const date = yearMonth;
     const res = await paymentListApi.getUnpaidList({
       yearMonth: date,
@@ -111,10 +110,11 @@ const fetchData = async () => {
       }
     }
   } catch (error) {
-    console.error('데이터 불러오는 중 오류 발생', error);
     hasMoreData.value = false;
   }
 };
+
+//무한스크롤
 const observer = intersectionObserver(hasMoreData, page, fetchData);
 
 onMounted(async () => {
@@ -127,22 +127,8 @@ onMounted(async () => {
 onUnmounted(() => {
   observer.disconnect();
 });
+
 function handleListClick() {}
-function isDifferentDate(
-  currentDate: string,
-  prevDate: string | null
-): boolean {
-  if (prevDate === null) {
-    return false;
-  }
-  const current = formatDate(new Date(currentDate), 'monthDay');
-  const prev = formatDate(new Date(prevDate), 'monthDay');
-  if (current === prev) {
-    return false;
-  } else {
-    return true;
-  }
-}
 </script>
 
 <style lang="scss" scoped>

@@ -106,4 +106,15 @@ export class PaymentApi<
       type: ContentType.Json,
     });
   };
+  getUnpaidStudents = (date: string) => {
+    return this.request({
+      path: `/v1/payment/unpaidStudents`,
+      method: 'GET',
+      type: ContentType.Json,
+      body: {
+        userId: '1',
+        yearMonth: date,
+      },
+    });
+  };
 }

@@ -44,11 +44,12 @@ const page = ref(0);
 const date = ref('');
 const fetchData = async () => {
   date.value = formatYearMonthDate(props.year, props.month);
-  const res = await paymentListApi.getUnpaidList({
-    yearMonth: date.value,
-    page: page.value,
-    size: 10,
-  });
+  // const res = await paymentListApi.getUnpaidList({
+  //   yearMonth: date.value,
+  //   page: page.value,
+  //   size: 10,
+  // });
+  const res = await paymentListApi.getUnpaidStudents(date.value);
 
   if (Array.isArray(res.data.content)) {
     if (res.data.content.length === 0) {

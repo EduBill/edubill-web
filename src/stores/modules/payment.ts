@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 export const usePaymentDateStore = defineStore('paymentDate', () => {
   const date = new Date();
@@ -16,16 +16,21 @@ export const usePaymentDateStore = defineStore('paymentDate', () => {
 });
 
 export const usePaymentStatusStore = defineStore('paymentStatus', () => {
-  const state = reactive({
-    paidCount: 0,
-    unpaidCount: 0,
-    totalPaidAmount: 0,
-    totalUnpaidAmount: 0,
-    isExcelUploaded: false,
-    firstExcelUploaded: false,
-  });
+  const isExcelUploaded = ref(false);
+  const firstExcelUploaded = ref(false);
+
+  function setExcelUploaded(status: boolean) {
+    isExcelUploaded.value = status;
+  }
+
+  function setFirstExcelUploaded(status: boolean) {
+    firstExcelUploaded.value = status;
+  }
 
   return {
-    ...state,
+    isExcelUploaded,
+    firstExcelUploaded,
+    setExcelUploaded,
+    setFirstExcelUploaded,
   };
 });

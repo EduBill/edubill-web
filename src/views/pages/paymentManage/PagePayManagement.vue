@@ -111,13 +111,9 @@ onMounted(() => {
 });
 
 async function getPaymentStatus() {
-  // 현재 날짜를 YYYY-MM 형태로 만듦
-  console.log('현재 날짜 ', state.formattedDate);
-  console.log('getPaymentstatus 함수 실행');
   // 현재 날짜 전달하여 납부 현황 가져오기
   if (state.formattedDate !== '') {
     const res = await paymentApi.getPaymentStatus(state.formattedDate);
-    console.log('getPaymentStatus', res.data);
     paymentStatus.isExcelUploaded = res.data.isExcelUploaded;
     if (paymentStatus.isExcelUploaded) {
       state.paidCount = res.data.paidCount;
@@ -174,15 +170,9 @@ function savePaymentStatusData(date: string) {
     totalUnpaidAmount: state.totalUnpaidAmount,
     isExcelUploaded: paymentStatus.isExcelUploaded,
   });
-  // 저장된 데이터를 순회하여 콘솔에 출력
-  console.log('데이터 저장됨: ');
-  savedPaymentStatusData.forEach((value, key) => {
-    console.log(`Date: ${key}, 저장된 차트, 수납리스트 데이터:`, value);
-  });
 }
 
 async function excelUploaded() {
-  console.log('excel uploaded 함수 실행');
   await excelApi.updateIsExcelUploaded(state.formattedDate);
   // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
   state.navKey++;
