@@ -96,11 +96,13 @@ const paymentListApi = new PaymentApi();
 const fetchData = async () => {
   try {
     const date = yearMonth;
-    const res = await paymentListApi.getUnpaidList({
-      yearMonth: date,
-      page: page.value,
-      size: 10,
-    });
+    // const res = await paymentListApi.getUnpaidList({
+    //   yearMonth: date,
+    //   page: page.value,
+    //   size: 10,
+    // });
+    const res = await paymentListApi.getUnpaidStudents(date);
+    console.log('미확인 데이터 확인', res.data.content);
     if (Array.isArray(res.data.content)) {
       if (res.data.content.length === 0) {
         hasMoreData.value = false;

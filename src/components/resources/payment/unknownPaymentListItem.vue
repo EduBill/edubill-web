@@ -10,8 +10,14 @@
         <svg-icon class="chevron" name="chevronRight" />
       </div>
       <div v-if="isToggleOpen[index]" class="list_toggle_box">
-        <div class="button" @click="navigateToUnknownList">완납 처리</div>
-        <div class="button">청구서 재발송</div>
+        <div class="button" @click="handleModalClick">완납 처리</div>
+        <div class="button" @click="handleModalClick">청구서 재발송</div>
+        <unknownPaymentModal
+          :id="paymentListData.studentId"
+          :use-modal="useModal"
+          :handle-modal-click="handleModalClick"
+          :name="paymentListData.studentName"
+        ></unknownPaymentModal>
       </div>
     </div>
   </div>
@@ -19,63 +25,53 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
+import unknownPaymentModal from './unknownPaymentModal.vue';
 import { formatYearMonthDate } from '@/utils/formatDate';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
-import router from '@/router';
-const props = defineProps({
-  year: {
-    type: Number,
-    default: 0,
-  },
-  month: {
-    type: Number,
-    default: 0,
-  },
-});
+import { usePaymentDateStore } from '@/stores/modules/payment';
+
+const useModal = ref(false);
+const paymentDate = usePaymentDateStore();
+const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
 
 const paymentListApi = new PaymentApi();
-const paymentList = ref<PaymentData[]>([]);
+const paymentList = ref([
+  {
+    studentId: 0,
+    studentName: '',
+  },
+]);
+
 const isToggleOpen = ref<boolean[]>([]);
 
 const handleToggle = index => {
   isToggleOpen.value[index] = !isToggleOpen.value[index];
 };
-const page = ref(0);
-const date = ref('');
 const fetchData = async () => {
-  date.value = formatYearMonthDate(props.year, props.month);
-  // const res = await paymentListApi.getUnpaidList({
-  //   yearMonth: date.value,
-  //   page: page.value,
-  //   size: 10,
-  // });
-  const res = await paymentListApi.getUnpaidStudents(date.value);
-
+  const res = await paymentListApi.getUnpaidStudents(date);
   if (Array.isArray(res.data.content)) {
     if (res.data.content.length === 0) {
       console.log('데이터가없습니다.');
     }
-    paymentList.value = [...res.data.content];
+    paymentList.value = [{ ...res.data.content }];
   }
-  isToggleOpen.value = new Array(paymentList.value.length).fill(false);
-  console.log(res);
 };
 
 onMounted(async () => {
   await fetchData();
 });
 
-function navigateToUnknownList() {
-  router.push(`/payManage/unknownList?yearMonth=${date.value}`);
-}
+// watch(
+//   () => [paymentDate.year, paymentDate.month],
+//   async ([newYear, newMonth]) => {
+//     date = formatYearMonthDate(newYear, newMonth);
+//     await fetchData();
+//   }
+// );
 
-watch(
-  () => [props.year, props.month],
-  async ([newYear, newMonth]) => {
-    date.value = formatYearMonthDate(newYear, newMonth);
-    await fetchData();
-  }
-);
+function handleModalClick() {
+  useModal.value = !useModal.value;
+}
 </script>
 
 <style scoped lang="scss">

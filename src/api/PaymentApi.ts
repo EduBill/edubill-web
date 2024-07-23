@@ -26,6 +26,10 @@ export interface PaymentDetail {
   depositDate: string;
 }
 
+export interface unknownPaymentList {
+  studentId: number;
+  studentName: string;
+}
 export class PaymentApi<
   SecurityDataType = unknown,
 > extends HttpClient<SecurityDataType> {
@@ -109,12 +113,20 @@ export class PaymentApi<
   getUnpaidStudents = (date: string) => {
     return this.request({
       path: `/v1/payment/unpaidStudents`,
-      method: 'GET',
+      method: 'POST',
       type: ContentType.Json,
       body: {
-        userId: '1',
+        userId: '01098152327@phone.auth',
         yearMonth: date,
       },
+    });
+  };
+
+  putManualInput = (data: FormData) => {
+    return this.request({
+      path: `/v1/payment/manualProcessing/input`,
+      method: 'PUT',
+      body: data,
     });
   };
 }

@@ -44,7 +44,7 @@ const paymentStatusStore = usePaymentStatusStore();
 const excelApi = new ExcelApi();
 const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
 
-const handleFileUpload = (event: any) => {
+const handleFileUpload = async (event: any) => {
   const file = event.target.files[0];
   if (!file) {
     return;
@@ -53,8 +53,7 @@ const handleFileUpload = (event: any) => {
   ExcelUploadFormData.append('file', file);
   ExcelUploadFormData.append('bankCode', '004');
   try {
-    excelApi.postExcelData(ExcelUploadFormData, date);
-    paymentStatusStore.setFirstExcelUploaded(true);
+    await excelApi.postExcelData(ExcelUploadFormData, date);
   } catch (error) {
     console.log(error);
   }

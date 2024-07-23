@@ -35,30 +35,25 @@
           {{ paymentDate.year }}년 {{ paymentDate.month }}월
         </div>
         <div class="payManage_listContainer">
-          {{ paymentStatus.isExcelUploaded }}
-          <!-- <div v-if="!paymentStatus.isExcelUploaded">
+          <!-- <div @click="deleteExcelData">테스트 : 해당 월의 데이터 삭제하기</div> -->
+          <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
-              @update:excel-uploaded="excelUploaded"
             />
-          </div> -->
-          <!-- <div v-else-if="paymentStatus.isExcelUploaded"> -->
-          <div>
-            <div v-if="isClickCheckedPaymentList">
-              <PaymentListItem
-                :key="state.listKey"
-                :year="paymentDate.year"
-                :month="paymentDate.month"
-                :is-excel-uploaded="paymentStatus.isExcelUploaded"
-                @update:excel-uploaded="excelUploaded"
-              />
-            </div>
-            <div v-else>
-              <UnknownPaymentListItem
-                :year="paymentDate.year"
-                :month="paymentDate.month"
-                :click="isClickCheckedPaymentList"
-              />
+          </div>
+          <div v-else-if="paymentStatus.isExcelUploaded">
+            <div>
+              <div v-if="isClickCheckedPaymentList">
+                <PaymentListItem
+                  :key="state.listKey"
+                  :year="paymentDate.year"
+                  :month="paymentDate.month"
+                  :is-excel-uploaded="paymentStatus.isExcelUploaded"
+                />
+              </div>
+              <div v-else>
+                <UnknownPaymentListItem :click="isClickCheckedPaymentList" />
+              </div>
             </div>
           </div>
         </div>
@@ -102,7 +97,6 @@ const state = reactive({
 // API 호출로 얻은 데이터를 저장할 const
 const savedPaymentStatusData = new Map();
 
-const excelApi = new ExcelApi();
 const paymentApi = new PaymentApi();
 //토글의 상태값 컨트롤
 const isClickCheckedPaymentList = ref(true);
@@ -114,6 +108,7 @@ async function getPaymentStatus() {
   // 현재 날짜 전달하여 납부 현황 가져오기
   if (state.formattedDate !== '') {
     const res = await paymentApi.getPaymentStatus(state.formattedDate);
+    console.log(res.data.isExcelUploaded);
     paymentStatus.isExcelUploaded = res.data.isExcelUploaded;
     if (paymentStatus.isExcelUploaded) {
       state.paidCount = res.data.paidCount;
@@ -130,6 +125,17 @@ async function getPaymentStatus() {
   }
   // list 리렌더링
   state.listKey++;
+}
+
+//테스트용 : 엑셀 데이터 삭제할 때 사용하는 api
+const excelApi = new ExcelApi();
+
+async function deleteExcelData() {
+  try {
+    await excelApi.deleteExcelData(state.formattedDate);
+  } catch (error) {
+    console.log(error, '삭제실패');
+  }
 }
 
 function changeChart({ year, month }) {
@@ -172,22 +178,22 @@ function savePaymentStatusData(date: string) {
   });
 }
 
-async function excelUploaded() {
-  await excelApi.updateIsExcelUploaded(state.formattedDate);
-  // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
-  state.navKey++;
-  getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
-}
+// async function excelUploaded() {
+//   await excelApi.updateIsExcelUploaded(state.formattedDate);
+//   // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
+//   state.navKey++;
+//   getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
+// }
 
-// firstExcelUploaded 상태 변화를 감지
-watch(
-  () => paymentStatus.firstExcelUploaded,
-  async newValue => {
-    if (newValue) {
-      await excelUploaded();
-    }
-  }
-);
+// // firstExcelUploaded 상태 변화를 감지
+// watch(
+//   () => paymentStatus.firstExcelUploaded,
+//   async newValue => {
+//     if (newValue) {
+//       await excelUploaded();
+//     }
+//   }
+// );
 
 const handleToggle = (value: boolean) => {
   isClickCheckedPaymentList.value = value;

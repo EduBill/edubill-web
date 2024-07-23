@@ -6,8 +6,8 @@ export const usePaymentDateStore = defineStore('paymentDate', () => {
   const state = reactive({
     currentYear: computed(() => date.getFullYear()),
     currentMonth: computed(() => date.getMonth() + 1),
-    year: 0,
-    month: 0,
+    year: computed(() => date.getFullYear()),
+    month: computed(() => date.getMonth() + 1),
   });
 
   return {
@@ -16,8 +16,8 @@ export const usePaymentDateStore = defineStore('paymentDate', () => {
 });
 
 export const usePaymentStatusStore = defineStore('paymentStatus', () => {
-  const isExcelUploaded = ref(false);
-  const firstExcelUploaded = ref(false);
+  const isExcelUploaded = ref();
+  const firstExcelUploaded = ref();
 
   function setExcelUploaded(status: boolean) {
     isExcelUploaded.value = status;
