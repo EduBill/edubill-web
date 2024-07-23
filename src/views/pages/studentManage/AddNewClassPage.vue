@@ -1,6 +1,5 @@
 <template>
   <page-header :title="'새로운 반 추가'" back />
-
   <div class="page-content has-bottom-tabbar">
     <ui-form ref="refForm" class="form-passport">
       <ul>
@@ -50,25 +49,60 @@
             <div class="">
               <ul class="weekend-button-box">
                 <li class="btn-weekend-area">
-                  <button class="btn-weekend" type="button">월</button>
+                  <Buttons
+                    variants="long"
+                    color="disabled"
+                    text="월"
+                    onclick=""
+                  />
                 </li>
                 <li class="btn-weekend-area">
-                  <button class="btn-weekend" type="button">화</button>
+                  <Buttons
+                    variants="long"
+                    color="disabled"
+                    text="화"
+                    onclick=""
+                  />
                 </li>
                 <li class="btn-weekend-area">
-                  <button class="btn-weekend" type="button">수</button>
+                  <Buttons
+                    variants="long"
+                    color="disabled"
+                    text="수"
+                    onclick=""
+                  />
                 </li>
                 <li class="btn-weekend-area">
-                  <button class="btn-weekend" type="button">목</button>
+                  <Buttons
+                    variants="long"
+                    color="disabled"
+                    text="목"
+                    onclick=""
+                  />
                 </li>
                 <li class="btn-weekend-area">
-                  <button class="btn-weekend" type="button">금</button>
+                  <Buttons
+                    variants="long"
+                    color="disabled"
+                    text="금"
+                    onclick=""
+                  />
                 </li>
                 <li class="btn-weekend-area">
-                  <button class="btn-weekend" type="button">토</button>
+                  <Buttons
+                    variants="long"
+                    color="disabled"
+                    text="토"
+                    onclick=""
+                  />
                 </li>
                 <li class="btn-weekend-area">
-                  <button class="btn-weekend" type="button">일</button>
+                  <Buttons
+                    variants="long"
+                    color="disabled"
+                    text="일"
+                    onclick=""
+                  />
                 </li>
               </ul>
               <div class="settime-box">
@@ -110,7 +144,7 @@
               inputmode="numeric"
               pattern="^\d*$"
               :maxlength="11"
-              :placeholder="'000,000                                            원'"
+              :placeholder="'000,000'"
             />
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
@@ -150,7 +184,7 @@ import {
 } from 'vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
-import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
+import Buttons from '@/components/resources/buttons/Buttons.vue';
 
 const selected = ref('1');
 
@@ -282,6 +316,9 @@ const selectClasses = option => {
         .btn-weekend-area {
           height: 100%;
           width: unit(38);
+          & button {
+            font-weight: 400;
+          }
         }
 
         .btn-weekend {
@@ -350,13 +387,20 @@ const selectClasses = option => {
   width: 100%;
   height: unit(48);
   margin-top: unit(16);
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-content: center;
   .btn-text {
     font-size: unit(16);
     color: $color-primary;
     flex-shrink: 0;
     line-height: unit(48);
     text-align: center;
-    width: 100%;
+    width: unit(335);
     border: 1px solid $color-primary;
     border-radius: unit(10);
   }
