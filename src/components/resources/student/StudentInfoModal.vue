@@ -74,7 +74,6 @@ import { ref } from 'vue';
 import Buttons from '../buttons/Buttons.vue';
 import TextCheckbox from '../student/TextCheckbox.vue';
 import Checkbox from '@/components/atoms/Checkbox.vue';
-
 import Modal from '@/components/modules/modal/Modal.vue';
 const props = defineProps({
   useModal: {

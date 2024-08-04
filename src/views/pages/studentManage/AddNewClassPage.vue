@@ -2,16 +2,15 @@
   <page-header :title="'새로운 반 추가'" back />
   <div class="page-content has-bottom-tabbar">
     <ui-form ref="refForm" class="form-passport">
-      <ul>
+      <ul class="text-field-form">
         <li class="text-field">
-          <label for="phone-number">{{ '수업명' }}</label>
+          <label for="group-name">{{ '수업명' }}</label>
           <div class="input-box">
             <ui-text-input
-              id="phone-number"
+              id="group-name"
+              v-model:value="state.groupName"
               type="text"
-              inputmode="numeric"
-              pattern="^\d*$"
-              :maxlength="11"
+              inputmode="text"
               :placeholder="'반 및 레벨명을 참고해서 입력해주세요'"
             />
           </div>
@@ -26,138 +25,149 @@
                   v-for="option in options"
                   :key="option.no"
                   :value="option.value"
-                  @click="selectClasses(option)"
                 >
-                  {{ option.text }}
+                  <Buttons
+                    variants="long"
+                    :color="
+                      state.schoolType.includes(option.text)
+                        ? 'selected'
+                        : 'disabled'
+                    "
+                    :text="option.text"
+                    @click="() => selectSchoolType(option)"
+                  />
+                  <span class="rightTriangle">
+                    <svg-icon name="rightTriangle" />
+                  </span>
                 </li>
               </ul>
             </div>
-            <div class="classtarget-option-background">
+            <div class="classtarget-option-background overflowyScroll">
               <ul class="classtarget-option-school">
                 <li v-for="classItem in selectedClasses" :key="classItem">
-                  {{ classItem }}
+                  <Buttons
+                    variants="long"
+                    :color="
+                      state.schoolLevel.includes(classItem)
+                        ? 'selected'
+                        : 'disabled'
+                    "
+                    :text="classItem"
+                    @click="() => selectSchoolLevel(classItem)"
+                  />
                 </li>
-                <!-- <button v-if=""></button> -->
               </ul>
             </div>
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
+          <div
+            v-if="state.schoolLevel.includes('직접 입력')"
+            class="school-level-input-box"
+          >
+            <div class="input-box">
+              <ui-text-input
+                id="school-level"
+                v-model:value="state.groupName"
+                type="text"
+                inputmode="text"
+                pattern="^\d*$"
+                :placeholder="'예) 영어 유치원'"
+              />
+            </div>
+          </div>
         </li>
         <li class="text-field">
           <h2>{{ '수업 시간' }}</h2>
           <div class="classtime-box">
             <div class="">
               <ul class="weekend-button-box">
-                <li class="btn-weekend-area">
+                <li
+                  v-for="day in weekend"
+                  :key="day.id"
+                  class="btn-weekend-area"
+                >
                   <Buttons
                     variants="long"
-                    color="disabled"
-                    text="월"
-                    onclick=""
-                  />
-                </li>
-                <li class="btn-weekend-area">
-                  <Buttons
-                    variants="long"
-                    color="disabled"
-                    text="화"
-                    onclick=""
-                  />
-                </li>
-                <li class="btn-weekend-area">
-                  <Buttons
-                    variants="long"
-                    color="disabled"
-                    text="수"
-                    onclick=""
-                  />
-                </li>
-                <li class="btn-weekend-area">
-                  <Buttons
-                    variants="long"
-                    color="disabled"
-                    text="목"
-                    onclick=""
-                  />
-                </li>
-                <li class="btn-weekend-area">
-                  <Buttons
-                    variants="long"
-                    color="disabled"
-                    text="금"
-                    onclick=""
-                  />
-                </li>
-                <li class="btn-weekend-area">
-                  <Buttons
-                    variants="long"
-                    color="disabled"
-                    text="토"
-                    onclick=""
-                  />
-                </li>
-                <li class="btn-weekend-area">
-                  <Buttons
-                    variants="long"
-                    color="disabled"
-                    text="일"
-                    onclick=""
+                    :color="day.selected ? 'selected' : 'disabled'"
+                    :text="day.value"
+                    @click="toggleDisabled(day.id)"
                   />
                 </li>
               </ul>
               <div class="settime-box">
                 <div class="input-box">
                   <ui-text-input
-                    id="time-set"
+                    id="time-set-forward"
+                    v-model:value="state.forwardTime"
                     type="text"
                     inputmode="numeric"
-                    pattern="^\d*$"
-                    :maxlength="11"
-                    :placeholder="'00:00'"
+                    :maxlength="5"
+                    placeholder="00:00"
+                    @keyup="e => onChangeTimeFormat(e, 'forwardTime')"
                   />
                 </div>
                 <span>~</span>
                 <div class="input-box">
                   <ui-text-input
-                    id="time-set"
+                    id="time-set-backward"
+                    v-model:value="state.backwardTime"
                     type="text"
                     inputmode="numeric"
-                    pattern="^\d*$"
-                    :maxlength="11"
-                    :placeholder="'24:00'"
+                    :maxlength="5"
+                    placeholder="24:00"
+                    @keyup="e => onChangeTimeFormat(e, 'backwardTime')"
                   />
                 </div>
               </div>
             </div>
             <div class="btn-plus-area">
-              <button class="btn-plus">+</button>
+              <button class="btn-plus" @click="addTime">+</button>
             </div>
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
         </li>
+        <ul v-if="state.schoolTime.length !== 0" class="time-add-field">
+          <li
+            v-for="time in state.schoolTime"
+            :key="time.day"
+            class="time-add-box"
+          >
+            <div>
+              <p class="time-add-day">{{ time.day }}</p>
+              <p class="time-add-period">{{ time.time }}</p>
+            </div>
+            <span class="close" @click="() => delectSelectedClasses(time.id)">
+              <svg-icon name="purpleClose" />
+            </span>
+          </li>
+        </ul>
+
         <li class="text-field">
-          <label for="phone-number">{{ '수강료' }}</label>
+          <label for="tuition">{{ '수강료' }}</label>
           <div class="input-box">
             <ui-text-input
-              id="phone-number"
+              id="tuition"
+              v-model:value="state.tuition"
               type="text"
               inputmode="numeric"
               pattern="^\d*$"
               :maxlength="11"
               :placeholder="'000,000'"
             />
+            <span class="won">원</span>
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
         </li>
         <li class="text-field">
-          <label for="phone-number">{{ '메모' }}</label>
+          <label for="memo">{{ '메모' }}</label>
           <div class="input-box">
             <ui-text-input
-              id="phone-number"
+              id="memo"
+              v-model:value="state.memo"
               type="text"
-              inputmode="numeric"
+              inputmode="text"
               pattern="^\d*$"
-              :maxlength="11"
+              :maxlength="20"
               :placeholder="'입력해주세요'"
             />
           </div>
@@ -166,27 +176,65 @@
       </ul>
     </ui-form>
     <div class="button-area">
-      <button class="btn-text" type="button" :disabled="true">
-        {{ '작성 완료' }}
-      </button>
+      <Buttons
+        class="btn-text"
+        variants="long"
+        :disabled="!isFormValid"
+        :color="isFormValid ? 'selected' : 'disabled'"
+        :text="'작성 완료'"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  reactive,
-  ref,
-  watch,
-} from 'vue';
+import { computed, reactive, ref } from 'vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
+import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 
-const selected = ref('1');
+interface SchoolTime {
+  id: number;
+  day: string;
+  time: string;
+}
+
+interface State {
+  groupName: string;
+  schoolLevel: string;
+  schoolTime: SchoolTime[];
+  day: string;
+  forwardTime: string;
+  backwardTime: string;
+  tuition: string;
+  memo: string;
+  schoolType: string;
+  check: boolean;
+}
+
+const state = reactive<State>({
+  groupName: '',
+  schoolType: '',
+  schoolLevel: '',
+  schoolTime: [],
+  day: '월',
+  forwardTime: '',
+  backwardTime: '',
+  tuition: '',
+  memo: '',
+  check: false,
+});
+
+const weekend = ref([
+  { id: 0, value: '월', selected: true },
+  { id: 1, value: '화', selected: false },
+  { id: 2, value: '수', selected: false },
+  { id: 3, value: '목', selected: false },
+  { id: 4, value: '금', selected: false },
+  { id: 5, value: '토', selected: false },
+  { id: 6, value: '일', selected: false },
+]);
 
 const options = ref([
   {
@@ -207,14 +255,75 @@ const options = ref([
     no: '2',
     class: ['1학년', '2학년', '3학년'],
   },
-  { text: '기타', value: '4', no: '3' },
+  { text: '기타', value: '4', no: '3', class: ['직접 입력'] },
 ]);
 
-const selectedClasses = ref<string[]>([]);
+const selectedClasses = ref<any[]>([]);
+let idCounter = 0;
 
-const selectClasses = option => {
+function selectSchoolType(option) {
   selectedClasses.value = option.class ?? [];
-};
+  state.schoolType = option.text;
+  if (state.schoolLevel) {
+    state.schoolLevel = '';
+  }
+}
+
+function delectSelectedClasses(id) {
+  state.schoolTime = state.schoolTime.filter(time => time.id !== id);
+}
+
+const isFormValid = computed(() => {
+  return (
+    state.groupName !== '' &&
+    selectedClasses.value.length > 0 &&
+    state.forwardTime !== '' &&
+    state.backwardTime !== '' &&
+    state.tuition !== ''
+  );
+});
+
+function selectSchoolLevel(schoolType) {
+  state.schoolLevel = schoolType;
+}
+
+function addTime() {
+  state.schoolTime.push({
+    id: idCounter++,
+    day: `${state.day}요일`,
+    time: `${state.forwardTime}~${state.backwardTime}`,
+  });
+  state.forwardTime = '';
+  state.backwardTime = '';
+}
+
+function toggleDisabled(id: number) {
+  const selectedDay = weekend.value.find(day => day.id === id);
+  if (selectedDay) {
+    state.day = selectedDay.value;
+    selectedDay.selected = !selectedDay.selected;
+    if (selectedDay.selected) {
+      weekend.value.forEach(day => {
+        if (day.id !== id && day.selected) {
+          day.selected = false;
+        }
+      });
+    }
+  }
+}
+
+function onChangeTimeFormat(e, stateKey) {
+  const formatValue = e.target.value.replace(/\D/g, '');
+  let formattedValue = '';
+  if (formatValue.length >= 3) {
+    formattedValue = formatValue.slice(0, 2) + ':' + formatValue.slice(2, 4);
+  } else if (formatValue === 2) {
+    formattedValue = formatValue + ':';
+  } else {
+    formattedValue = formatValue;
+  }
+  state[stateKey] = formattedValue;
+}
 </script>
 
 <style lang="scss" scoped>
@@ -224,9 +333,54 @@ const selectClasses = option => {
   white-space: pre-wrap;
 
   .form-passport {
+    .time-add-field {
+      margin-top: unit(20);
+      .time-add-box {
+        width: 100%;
+        height: unit(36);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: #f2edff;
+        border: 1px solid #7535ff;
+        color: #7535ff;
+        font-weight: 600;
+        font-size: unit(15);
+        border-radius: unit(8);
+        padding: unit(7.5) unit(20);
+
+        .close {
+          cursor: pointer;
+          width: unit(24);
+          height: unit(24);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .time-add-day {
+          margin-right: unit(20);
+        }
+        .close-btn {
+          text-align: right;
+        }
+
+        :deep() {
+          div {
+            display: flex;
+          }
+        }
+      }
+
+      :deep(li:not(:last-child)) {
+        margin-bottom: unit(10);
+      }
+    }
+
     .text-field {
       position: relative;
-      padding-top: unit(32);
+      /* padding-top: unit(32); */
+      margin-top: unit(40);
 
       label {
         display: block;
@@ -240,6 +394,12 @@ const selectClasses = option => {
         margin-bottom: unit(16);
       }
 
+      .school-level-input-box {
+        margin-top: unit(10);
+      }
+      .won {
+        color: $color-gray-500;
+      }
       .classtarget-box {
         width: 100%;
         display: flex;
@@ -247,23 +407,51 @@ const selectClasses = option => {
 
         .classtarget-option-background {
           width: 50%;
-          height: unit(142);
           background-color: $color-gray-200;
           border-radius: unit(8);
-          padding: unit(16) unit(58);
+          padding: unit(11) unit(10);
+          overflow-y: scroll;
+        }
+        .overflowyScroll {
+          max-height: unit(142);
           overflow-y: scroll;
         }
         .classtarget-option-school {
           display: flex;
           flex-direction: column;
-          gap: unit(10);
           align-items: center;
+
+          .rightTriangle {
+            position: absolute;
+            right: unit(8);
+            top: 0;
+            bottom: 0;
+            width: unit(4);
+            height: unit(6);
+            margin: auto;
+          }
 
           :deep() {
             li {
+              position: relative;
               color: $color-gray-500;
               font-size: unit(14);
-              height: unit(20);
+              height: unit(30);
+              width: 100%;
+
+              button {
+                font-weight: 400;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+
+              .disabled {
+                color: $color-gray-500;
+                font-weight: 400;
+                background-color: $color-gray-200;
+              }
             }
           }
         }
@@ -383,11 +571,11 @@ const selectClasses = option => {
     }
   }
 }
+
 .button-area {
   width: 100%;
   height: unit(48);
-  margin-top: unit(16);
-  bottom: 0;
+  bottom: unit(40);
   left: 0;
   right: 0;
   position: absolute;
@@ -399,7 +587,9 @@ const selectClasses = option => {
     color: $color-primary;
     flex-shrink: 0;
     line-height: unit(48);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: unit(335);
     border: 1px solid $color-primary;
     border-radius: unit(10);
