@@ -36,7 +36,7 @@
           {{ paymentDate.year }}년 {{ paymentDate.month }}월
         </div>
         <div class="payManage_listContainer">
-          <div class="testList">
+          <!-- <div class="testList">
             <div>테스트 리스트</div>
             <div class="btn" @click="deleteExcelData">엑셀 삭제하기</div>
             <div class="addClass">
@@ -45,7 +45,7 @@
             </div>
             <div>엑셀 업로드 상태 : {{ paymentStatus.isExcelUploaded }}</div>
             <div class="btn" @click="addClass">반추가</div>
-          </div>
+          </div> -->
           <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
