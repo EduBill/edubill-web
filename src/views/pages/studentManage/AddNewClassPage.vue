@@ -269,7 +269,7 @@ function selectSchoolType(option) {
   }
 }
 
-function delectSelectedClasses(id) {
+function deleteSelectedClasses(id) {
   state.schoolTime = state.schoolTime.filter(time => time.id !== id);
 }
 
