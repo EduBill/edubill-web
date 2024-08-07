@@ -9,7 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import router from '@/router';
 import { formatTime } from '@/utils/formatDate';
 const props = defineProps({
   studentName: {
@@ -29,8 +28,8 @@ const props = defineProps({
     default: '',
   },
   handleClick: {
-    type: Function,
-    required: true,
+    type: MouseEvent,
+    default: null,
   },
 });
 

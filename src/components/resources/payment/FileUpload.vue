@@ -40,11 +40,13 @@ import {
 import { formatYearMonthDate } from '@/utils/formatDate';
 const paymentDate = usePaymentDateStore();
 const paymentStatusStore = usePaymentStatusStore();
+const emit = defineEmits(['update:excelUploaded']);
 
 const excelApi = new ExcelApi();
 const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
 
 const handleFileUpload = async (event: any) => {
+  console.log('handle file upload를 실행합니다');
   const file = event.target.files[0];
   if (!file) {
     return;
@@ -53,11 +55,39 @@ const handleFileUpload = async (event: any) => {
   ExcelUploadFormData.append('file', file);
   ExcelUploadFormData.append('bankCode', '004');
   try {
-    await excelApi.postExcelData(ExcelUploadFormData, date);
+    console.log('date 출력:', date);
+
+    const res = await excelApi.postExcelData(ExcelUploadFormData, date);
+    console.log('postExcelData 응답:', res);
+
+    // 응답 상태 코드나 데이터를 체크
+    if (res.status === 200) {
+      paymentStatusStore.setExcelUploaded(true);
+      excelApi.updateIsExcelUploaded(date);
+    } else {
+      console.log('postExcelData 실패, 상태 코드:', res.status);
+    }
   } catch (error) {
-    console.log(error);
+    console.log('오류 발생:', error);
   }
 };
+
+// const handleFileUpload = (event: any) => {
+//   const file = event.target.files[0];
+//   if (!file) {
+//     return;
+//   }
+//   const ExcelUploadFormData = new FormData();
+//   ExcelUploadFormData.append('file', file);
+//   ExcelUploadFormData.append('bankCode', '004');
+//   console.log('파일업로드합니다');
+//   try {
+//     excelApi.postExcelData(ExcelUploadFormData, date);
+//     emit('update:excelUploaded');
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 </script>
 
 <style lang="scss" scoped>

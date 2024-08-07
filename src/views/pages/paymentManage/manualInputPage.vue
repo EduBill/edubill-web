@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <PayManageNav
-      :title="'name'"
+      :title="paymentStatus.currentUserInfo.name"
       :plus-btn="false"
       :click-back-btn="'/payManage'"
     />
@@ -68,10 +68,14 @@ import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
 import { PaymentDetail, PaymentApi } from '@/api/PaymentApi';
 import { formatFullDate, formatYearMonthDate } from '@/utils/formatDate';
-import { usePaymentDateStore } from '@/stores/modules/payment';
+import {
+  usePaymentDateStore,
+  usePaymentStatusStore,
+} from '@/stores/modules/payment';
 const router = useRouter();
 const paymentListApi = new PaymentApi();
 const paymentDate = usePaymentDateStore();
+const paymentStatus = usePaymentStatusStore();
 const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
 const id = router.currentRoute.value.query.studentId as string;
 //수납 내역 데이터를 저장하는 변수

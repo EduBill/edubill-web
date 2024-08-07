@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal :use-modal="props.useModal" @close="props.handleModalClick">
+    <Modal :use-modal="props.useModal" @click="props.handleModalClick">
       <div class="modal_frame_container">
         <div class="modal_content_container">
           <div class="text">
@@ -31,7 +31,10 @@
 import Modal from '@/components/modules/modal/Modal.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
 import router from '@/router';
-import { usePaymentDateStore } from '@/stores/modules/payment';
+import {
+  usePaymentDateStore,
+  usePaymentStatusStore,
+} from '@/stores/modules/payment';
 import { formatYearMonthDate } from '@/utils/formatDate';
 
 const props = defineProps({
@@ -54,12 +57,19 @@ const props = defineProps({
 });
 const paymentDate = usePaymentDateStore();
 const formatDate = formatYearMonthDate(paymentDate.year, paymentDate.month);
+const paymentStatus = usePaymentStatusStore();
 
 function navigateToUnknownList() {
+  setCurrentStudentInfo();
   router.push(`/payManage/unknownList?yearMonth=${formatDate}`);
 }
 function navigateToManualInput() {
+  setCurrentStudentInfo();
   router.push(`/payManage/manualInput?studentId=${props.id}`);
+}
+
+function setCurrentStudentInfo() {
+  paymentStatus.currentUserInfo = { name: props.name, id: props.id };
 }
 </script>
 

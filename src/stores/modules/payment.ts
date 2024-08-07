@@ -18,6 +18,13 @@ export const usePaymentDateStore = defineStore('paymentDate', () => {
 export const usePaymentStatusStore = defineStore('paymentStatus', () => {
   const isExcelUploaded = ref();
   const firstExcelUploaded = ref();
+  const paidData = reactive({
+    paidCount: 0,
+    unpaidCount: 0,
+    totalPaidAmount: 0,
+    totalUnpaidAmount: 0,
+    currentUserInfo: { name: '', id: 0 },
+  });
 
   function setExcelUploaded(status: boolean) {
     isExcelUploaded.value = status;
@@ -32,5 +39,6 @@ export const usePaymentStatusStore = defineStore('paymentStatus', () => {
     firstExcelUploaded,
     setExcelUploaded,
     setFirstExcelUploaded,
+    ...paidData,
   };
 });

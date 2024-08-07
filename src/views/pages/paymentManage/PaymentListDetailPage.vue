@@ -1,10 +1,10 @@
 <template>
+  <PayManageNav
+    :title="paymentDetailData?.depositorName"
+    :plus-btn="false"
+    :click-back-btn="'/payManage'"
+  />
   <div class="container">
-    <PayManageNav
-      :title="paymentDetailData?.depositorName"
-      :plus-btn="false"
-      :click-back-btn="'/payManage'"
-    />
     <div class="payment_detail_container">
       <input
         v-if="paymentDetailData"
@@ -99,7 +99,7 @@ onMounted(async () => {
 .payment_detail_container {
   display: flex;
   flex-direction: column;
-  padding: unit(20) unit(20);
+  padding: unit(20) unit(0);
   font-size: unit(15);
   font-weight: 600;
   gap: unit(18);

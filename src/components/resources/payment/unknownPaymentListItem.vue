@@ -28,17 +28,21 @@ import { onMounted, ref, watch } from 'vue';
 import unknownPaymentModal from './unknownPaymentModal.vue';
 import { formatYearMonthDate } from '@/utils/formatDate';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
-import { usePaymentDateStore } from '@/stores/modules/payment';
+import {
+  usePaymentDateStore,
+  usePaymentStatusStore,
+} from '@/stores/modules/payment';
 
 const useModal = ref(false);
 const paymentDate = usePaymentDateStore();
+const paymentStatus = usePaymentStatusStore();
 const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
 
 const paymentListApi = new PaymentApi();
 const paymentList = ref([
   {
-    studentId: 0,
-    studentName: '',
+    studentId: paymentStatus.currentUserInfo.id,
+    studentName: paymentStatus.currentUserInfo.name,
   },
 ]);
 
@@ -49,11 +53,11 @@ const handleToggle = index => {
 };
 const fetchData = async () => {
   const res = await paymentListApi.getUnpaidStudents(date);
-  if (Array.isArray(res.data.content)) {
-    if (res.data.content.length === 0) {
+  if (Array.isArray(res.data)) {
+    if (res.data.length === 0) {
       console.log('데이터가없습니다.');
     }
-    paymentList.value = [{ ...res.data.content }];
+    paymentList.value = [...res.data];
   }
 };
 

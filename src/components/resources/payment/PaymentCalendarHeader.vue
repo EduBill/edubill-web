@@ -27,9 +27,6 @@ const calMonth = ref(paymentDate.month);
 const calMonthStr = ref('');
 
 onMounted(() => {
-  console.log(
-    '캘린더의 현재 날짜' + paymentDate.year + '-' + paymentDate.month
-  );
   setCalendarDate(paymentDate.year, paymentDate.month);
 });
 

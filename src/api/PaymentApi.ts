@@ -30,6 +30,11 @@ export interface unknownPaymentList {
   studentId: number;
   studentName: string;
 }
+export interface completedPaymentType {
+  studentId: number;
+  paymentHistoryId: number;
+  yearMonth: string;
+}
 export class PaymentApi<
   SecurityDataType = unknown,
 > extends HttpClient<SecurityDataType> {
@@ -112,13 +117,9 @@ export class PaymentApi<
   };
   getUnpaidStudents = (date: string) => {
     return this.request({
-      path: `/v1/payment/unpaidStudents`,
-      method: 'POST',
+      path: `/v1/payment/unpaidStudents/${date}`,
+      method: 'GET',
       type: ContentType.Json,
-      body: {
-        userId: '01098152327@phone.auth',
-        yearMonth: date,
-      },
     });
   };
 
@@ -127,6 +128,49 @@ export class PaymentApi<
       path: `/v1/payment/manualProcessing/input`,
       method: 'PUT',
       body: data,
+    });
+  };
+
+  //완납내역 연결
+  postCompletedPayments = (data: completedPaymentType) => {
+    return this.request({
+      path: `/v1/payment/manualProcessing`,
+      method: 'POST',
+      body: data,
+    });
+  };
+
+  //테스트용 원생 등록 api
+  addStudents = (name: string) => {
+    return this.request({
+      path: `v1/student`,
+      method: 'POST',
+      body: {
+        studentName: name,
+        studentPhoneNumber: '01012345678',
+        parentName: '부모',
+        parentPhoneNumber: '01098769876',
+        groupIds: [2],
+        schoolType: '중학교',
+        gradeLevel: '2학년',
+        departmentType: '이과',
+        schoolName: '에듀빌중학교',
+        memo: '메모 내용',
+      },
+    });
+  };
+
+  //테스트용 반 등록 api
+  addClass = () => {
+    return this.request({
+      path: `v1/student/test`,
+      method: 'POST',
+      body: {
+        studentName: '유저1',
+        studentPhoneNumber: '01011111111',
+        parentName: '부모1',
+        parentPhoneNumber: '01011112222',
+      },
     });
   };
 }
