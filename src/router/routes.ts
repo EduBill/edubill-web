@@ -78,6 +78,7 @@ const routes: Array<RouteRecordRaw> = [
         name: 'newClass',
         meta: { title: '새로운반추가' },
       },
+
       {
         path: '/:catchAll(.*)',
         component: Blank,
