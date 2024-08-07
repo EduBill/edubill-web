@@ -1,5 +1,4 @@
 <template>
-  <div>하이</div>
   <Modal :use-modal="props.useModal" @close="props.handleModalClick">
     <div class="modal_frame_container">
       <div class="modal_content_container">

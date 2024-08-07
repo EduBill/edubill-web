@@ -12,7 +12,7 @@
         @click="onClickBack"
       >
         <!-- <img src="/imgs/icon/arrow-back.svg" alt="뒤로 가기" /> -->
-        <svg-icon name="arrow-back-page-header" />
+        <svg-icon name="chevronLeft" />
       </button>
     </div>
 
@@ -145,6 +145,11 @@ function onCancel() {
 
     .svg-icon {
       font-size: unit(40);
+      width: unit(24);
+      height: unit(24);
+      z-index: 10;
+      position: relative;
+      cursor: pointer;
     }
   }
 
