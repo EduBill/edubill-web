@@ -136,7 +136,7 @@
               <p class="time-add-day">{{ time.day }}</p>
               <p class="time-add-period">{{ time.time }}</p>
             </div>
-            <span class="close" @click="() => delectSelectedClasses(time.id)">
+            <span class="close" @click="() => deleteSelectedClasses(time.id)">
               <svg-icon name="purpleClose" />
             </span>
           </li>
@@ -188,7 +188,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
+import Modal from '../../../components/modules/modal/Modal.vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
@@ -212,6 +213,10 @@ interface State {
   schoolType: string;
   check: boolean;
 }
+
+const useModal = ref(false);
+const selectedClasses = ref<any[]>([]);
+let idCounter = 0;
 
 const state = reactive<State>({
   groupName: '',
@@ -258,8 +263,9 @@ const options = ref([
   { text: '기타', value: '4', no: '3', class: ['직접 입력'] },
 ]);
 
-const selectedClasses = ref<any[]>([]);
-let idCounter = 0;
+function handleModalClick() {
+  useModal.value = !useModal.value;
+}
 
 function selectSchoolType(option) {
   selectedClasses.value = option.class ?? [];
@@ -276,9 +282,9 @@ function deleteSelectedClasses(id) {
 const isFormValid = computed(() => {
   return (
     state.groupName !== '' &&
-    selectedClasses.value.length > 0 &&
-    state.forwardTime !== '' &&
-    state.backwardTime !== '' &&
+    state.schoolTime.length > 0 &&
+    state.schoolType !== '' &&
+    state.schoolLevel !== '' &&
     state.tuition !== ''
   );
 });
@@ -599,6 +605,9 @@ function onChangeTimeFormat(e, stateKey) {
     color: $color-gray-500;
     background-color: $color-gray-200;
     border: none;
+  }
+  .selected {
+    color: white;
   }
 }
 </style>
