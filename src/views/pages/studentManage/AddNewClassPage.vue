@@ -1,5 +1,5 @@
 <template>
-  <page-header :title="'새로운 반 추가'" back />
+  <page-header :title="'새로운 반 추가'" :back="true" />
   <div class="page-content has-bottom-tabbar">
     <ui-form ref="refForm" class="form-passport">
       <ul class="text-field-form">
