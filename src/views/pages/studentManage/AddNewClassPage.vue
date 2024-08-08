@@ -182,9 +182,14 @@
         :disabled="!isFormValid"
         :color="isFormValid ? 'selected' : 'disabled'"
         :text="'작성 완료'"
+        @click="handleModalClick"
       />
     </div>
   </div>
+  <ClassAddInfoModal
+    :use-modal="useModal"
+    :handle-modal-click="handleModalClick"
+  />
 </template>
 
 <script setup lang="ts">
@@ -194,6 +199,7 @@ import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
+import ClassAddInfoModal from '@/components/resources/class/ClassAddInfoModal.vue';
 
 interface SchoolTime {
   id: number;
