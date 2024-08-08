@@ -49,13 +49,13 @@ async function getPaymentStatus() {
   const res = await paymentApi.getPaymentStatus(formatDate);
   state.paidCount = res.data.paidCount;
   state.unpaidCount = res.data.unpaidCount;
-  console.log('납입완료: ' + state.paidCount);
-  console.log('미납입: ' + state.unpaidCount);
+  //console.log('납입완료: ' + state.paidCount);
+  //console.log('미납입: ' + state.unpaidCount);
 
   // 납부 percent 계산
   const allCount = state.paidCount + state.unpaidCount;
   state.paymentPercent = Math.floor((state.paidCount / allCount) * 100);
-  console.log('납입 현황 percent' + state.paymentPercent);
+  //console.log('납입 현황 percent' + state.paymentPercent);
 }
 </script>
 

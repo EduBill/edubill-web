@@ -38,4 +38,11 @@ export class ExcelApi<
       body: data,
     });
   };
+
+  deleteExcelData = (date: String) => {
+    return this.request({
+      path: `/v1/test/deletePaymentHistory/${date}`,
+      method: 'delete',
+    });
+  };
 }

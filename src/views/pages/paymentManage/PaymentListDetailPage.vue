@@ -1,47 +1,38 @@
 <template>
+  <PayManageNav
+    :title="paymentDetailData?.depositorName"
+    :plus-btn="false"
+    :click-back-btn="'/payManage'"
+  />
   <div class="container">
-    <PayManageNav
-      :title="paymentDetailData?.depositorName"
-      :plus-btn="false"
-      :click-back-btn="'/payManage'"
-    />
     <div class="payment_detail_container">
-      <div class="amount">+{{ paymentDetailData?.paidAmount }}원</div>
-      <div class="row_container">
-        <div>거래유형</div>
-        <div>{{ paymentDetailData?.paymentTypeDescription }}</div>
-      </div>
-      <div class="row_container">
-        <div>메모</div>
-        <div class="memo_button" @click="writeMemo">
-          <div
-            v-if="paymentDetailData?.memo !== '' && !isClickMemo"
-            class="memo_text"
-          >
-            {{ paymentDetailData?.memo }}
+      <input
+        v-if="paymentDetailData"
+        v-model="paymentDetailData.memo"
+        class="memo_box"
+        placeholder="메모입력(최대 20글자)"
+      />
+      <div class="payment_info_container">
+        <div class="row_container">
+          <div class="category">일시</div>
+          <div class="content">{{ paymentDetailData?.depositDate }}</div>
+        </div>
+        <div class="row_container">
+          <div class="category">거래유형</div>
+          <div class="content">
+            {{ paymentDetailData?.paymentTypeDescription }}
           </div>
-          <div v-else-if="!isClickMemo" class="memo_text__color">
-            메모 남기기
+        </div>
+        <div class="row_container">
+          <div class="category">거래금액</div>
+          <div class="content paid_amount">
+            {{ paymentDetailData?.paidAmount }}원
           </div>
-          <div
-            v-else-if="isClickMemo"
-            class="memo_text__color"
-            @click="editMemo"
-          >
-            저장
-          </div>
-          <svg-icon class="chevron" name="chevronRight" />
         </div>
       </div>
-      <div v-if="paymentDetailData && isClickMemo" class="memo_box">
-        <textarea
-          v-model="paymentDetailData.memo"
-          placeholder="메모를 남겨주세요"
-        />
-      </div>
-      <div class="row_container">
-        <div>일시</div>
-        <div>{{ paymentDetailData?.depositDate }}</div>
+      <div class="search_container">
+        <div>'{{ paymentDetailData?.depositorName }}' 검색하기</div>
+        <svg-icon name="chevronRight"></svg-icon>
       </div>
     </div>
     <div class="button">
@@ -63,14 +54,22 @@ const paymentListApi = new PaymentApi();
 
 //수납 내역 데이터를 저장하는 변수
 const paymentDetailData = ref<PaymentDetail>();
-//메모 클릭 상태
-const isClickMemo = ref(false);
 
 //상세 정보 받아오는 함수
 const getPaymentDetail = async () => {
-  const res = await paymentListApi.getPaymentDetail(id);
-  res.data.depositDate = formatFullDate(new Date(res.data.depositDate));
-  paymentDetailData.value = { ...res.data };
+  try {
+    const res = await paymentListApi.getPaymentDetail(id);
+    res.data.depositDate = formatFullDate(new Date(res.data.depositDate));
+    paymentDetailData.value = { ...res.data };
+  } catch {
+    paymentDetailData.value = {
+      depositorName: 'dummyuser',
+      paidAmount: 20000,
+      paymentTypeDescription: 'payment type',
+      memo: 'memo',
+      depositDate: '2024-07-08',
+    };
+  }
 };
 
 //메모 수정
@@ -85,10 +84,6 @@ const editMemo = async () => {
 onMounted(async () => {
   await getPaymentDetail();
 });
-
-const writeMemo = () => {
-  isClickMemo.value = !isClickMemo.value;
-};
 </script>
 
 <style lang="scss" scoped>
@@ -104,20 +99,46 @@ const writeMemo = () => {
 .payment_detail_container {
   display: flex;
   flex-direction: column;
-  padding: 0 unit(42);
+  padding: unit(20) unit(0);
   font-size: unit(15);
   font-weight: 600;
   gap: unit(18);
+}
+
+.payment_info_container {
+  display: flex;
+  flex-direction: column;
+  gap: unit(8);
+  border-top: unit(1) solid #f1f1f1;
+  border-bottom: unit(1) solid #f1f1f1;
+  padding: unit(16) 0;
+  font-size: 15px;
+  font-weight: 400;
+
+  .category {
+    color: #737373;
+  }
+  .content {
+    color: #000;
+  }
+  .paid_amount {
+    color: #7535ff;
+    font-weight: 600;
+  }
 }
 .row_container {
   display: flex;
   justify-content: space-between;
 }
-.amount {
-  font-size: unit(26);
-  font-weight: 600;
-  margin: unit(14) 0;
+
+.search_container {
+  display: flex;
+  justify-content: space-between;
+  text-decoration: underline;
+  color: #737373;
+  font-weight: 400;
 }
+
 .button {
   width: 100%;
   padding: 0 unit(20);
@@ -127,35 +148,15 @@ const writeMemo = () => {
   left: 0;
 }
 
-.memo_button {
-  display: flex;
-  justify-content: space-between;
-  gap: unit(3);
-  color: black;
-  cursor: pointer;
-}
-.memo_text {
-  max-height: unit(42);
-  max-width: unit(134);
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  &__color {
-    color: $color-primary;
-  }
-}
-
 .chevron {
-  color: $color-primary;
+  color: #737373;
 }
 .memo_box {
   width: 100%;
-  height: unit(123);
-  border-radius: 8px;
-  border: 0.5px solid #666;
-  padding: unit(12);
-  font-size: unit(26);
+  border-radius: unit(10);
+  border: unit(1) solid #f1f1f1;
+  padding: unit(15) unit(20);
+  font-size: unit(15);
   font-weight: 600;
   textarea {
     width: 100%;

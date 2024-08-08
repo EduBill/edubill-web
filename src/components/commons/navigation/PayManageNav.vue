@@ -94,6 +94,9 @@ const handleFileUpload = (event: any) => {
   console.log('파일업로드합니다');
   try {
     excelUploadApi.postExcelData(ExcelUploadFormData, props.yearMonth);
+    paymentStatusStore.setExcelUploaded(true);
+    excelUploadApi.updateIsExcelUploaded(props.yearMonth);
+
     emit('update:excelUploaded');
   } catch (error) {
     console.log(error);

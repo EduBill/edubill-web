@@ -66,9 +66,9 @@ const createChart = () => {
   if (!chartCanvas.value) {
     return;
   } else {
-    console.log('chart - paidCount ' + paymentStatusStore.paidCount);
-    console.log('chart - unpaidCount ' + paymentStatusStore.unpaidCount);
-    console.log('chart - unConfirmed ' + props.unConfirmed);
+    //console.log('chart - paidCount ' + paymentStatusStore.paidCount);
+    //console.log('chart - unpaidCount ' + paymentStatusStore.unpaidCount);
+    //console.log('chart - unConfirmed ' + props.unConfirmed);
 
     const ctx = chartCanvas.value.getContext('2d');
     if (ctx) {

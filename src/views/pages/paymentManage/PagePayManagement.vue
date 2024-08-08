@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-parsing-error -->
 <template>
   <div class="payManage">
     <PayManageNav
@@ -35,30 +36,34 @@
           {{ paymentDate.year }}년 {{ paymentDate.month }}월
         </div>
         <div class="payManage_listContainer">
-          {{ paymentStatus.isExcelUploaded }}
-          <!-- <div v-if="!paymentStatus.isExcelUploaded">
+          <!-- <div class="testList">
+            <div>테스트 리스트</div>
+            <div class="btn" @click="deleteExcelData">엑셀 삭제하기</div>
+            <div class="addClass">
+              <input v-model="studentName" placeholder="이름을 입력하세요" />
+              <div class="btn" @click="addStudent">학생추가</div>
+            </div>
+            <div>엑셀 업로드 상태 : {{ paymentStatus.isExcelUploaded }}</div>
+            <div class="btn" @click="addClass">반추가</div>
+          </div> -->
+          <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
-              @update:excel-uploaded="excelUploaded"
             />
-          </div> -->
-          <!-- <div v-else-if="paymentStatus.isExcelUploaded"> -->
-          <div>
-            <div v-if="isClickCheckedPaymentList">
-              <PaymentListItem
-                :key="state.listKey"
-                :year="paymentDate.year"
-                :month="paymentDate.month"
-                :is-excel-uploaded="paymentStatus.isExcelUploaded"
-                @update:excel-uploaded="excelUploaded"
-              />
-            </div>
-            <div v-else>
-              <UnknownPaymentListItem
-                :year="paymentDate.year"
-                :month="paymentDate.month"
-                :click="isClickCheckedPaymentList"
-              />
+          </div>
+          <div v-else-if="paymentStatus.isExcelUploaded">
+            <div>
+              <div v-if="isClickCheckedPaymentList">
+                <PaymentListItem
+                  :key="state.listKey"
+                  :year="paymentDate.year"
+                  :month="paymentDate.month"
+                  :is-excel-uploaded="paymentStatus.isExcelUploaded"
+                />
+              </div>
+              <div v-else>
+                <UnknownPaymentListItem :click="isClickCheckedPaymentList" />
+              </div>
             </div>
           </div>
         </div>
@@ -85,24 +90,19 @@ import {
 } from '@/stores/modules/payment';
 const paymentDate = usePaymentDateStore();
 const paymentStatus = usePaymentStatusStore();
-
+const studentName = ref('');
 const state = reactive({
   chartKey: 0,
   listKey: 0,
   // 처음으로 엑셀 Upload시 PayManageNav의 + 아이콘에
   // 툴팁을 띄울 수 있도록 하는 navKey
   navKey: 0,
-  paidCount: 28,
-  unpaidCount: 12,
-  totalPaidAmount: 0,
-  totalUnpaidAmount: 0,
   formattedDate: '',
 });
 
 // API 호출로 얻은 데이터를 저장할 const
 const savedPaymentStatusData = new Map();
 
-const excelApi = new ExcelApi();
 const paymentApi = new PaymentApi();
 //토글의 상태값 컨트롤
 const isClickCheckedPaymentList = ref(true);
@@ -111,24 +111,20 @@ onMounted(() => {
 });
 
 async function getPaymentStatus() {
-  // 현재 날짜를 YYYY-MM 형태로 만듦
-  console.log('현재 날짜 ', state.formattedDate);
-  console.log('getPaymentstatus 함수 실행');
   // 현재 날짜 전달하여 납부 현황 가져오기
   if (state.formattedDate !== '') {
     const res = await paymentApi.getPaymentStatus(state.formattedDate);
-    console.log('getPaymentStatus', res.data);
     paymentStatus.isExcelUploaded = res.data.isExcelUploaded;
     if (paymentStatus.isExcelUploaded) {
-      state.paidCount = res.data.paidCount;
-      state.unpaidCount = res.data.unpaidCount;
-      state.totalPaidAmount = res.data.totalPaidAmount;
-      state.totalUnpaidAmount = res.data.totalUnpaidAmount;
+      paymentStatus.paidCount = res.data.paidCount;
+      paymentStatus.unpaidCount = res.data.unpaidCount;
+      paymentStatus.totalPaidAmount = res.data.totalPaidAmount;
+      paymentStatus.totalUnpaidAmount = res.data.totalUnpaidAmount;
 
       // chart 리렌더링
       state.chartKey += 1;
 
-      // 데이터 저장
+      // // 데이터 저장
       savePaymentStatusData(state.formattedDate);
     }
   }
@@ -136,9 +132,21 @@ async function getPaymentStatus() {
   state.listKey++;
 }
 
-function changeChart({ year, month }) {
-  console.log('chart change 시작');
+//테스트용 : 엑셀 데이터 삭제할 때 사용하는 api
+const excelApi = new ExcelApi();
 
+async function deleteExcelData() {
+  try {
+    await excelApi.deleteExcelData(state.formattedDate);
+  } catch (error) {
+    console.log(error, '삭제실패');
+  }
+}
+
+function changeChart({ year, month }) {
+  console.log('chart change 시작', year, month);
+
+  //차트의 좌우 버튼을 클릭했을 때 paymentDate 를 변경해준다.
   paymentDate.year = year;
   paymentDate.month = month;
   state.formattedDate = formatYearMonthDate(
@@ -149,10 +157,10 @@ function changeChart({ year, month }) {
   const savedData = savedPaymentStatusData.get(state.formattedDate);
   if (savedData) {
     console.log('저장된 차트 데이터 출력');
-    state.paidCount = savedData.paidCount;
-    state.unpaidCount = savedData.unpaidCount;
-    state.totalPaidAmount = savedData.totalPaidAmount;
-    state.totalUnpaidAmount = savedData.totalUnpaidAmount;
+    paymentStatus.paidCount = savedData.paidCount;
+    paymentStatus.unpaidCount = savedData.unpaidCount;
+    paymentStatus.totalPaidAmount = savedData.totalPaidAmount;
+    paymentStatus.totalUnpaidAmount = savedData.totalUnpaidAmount;
     paymentStatus.isExcelUploaded = savedData.isExcelUploaded;
 
     // chart, list 리렌더링
@@ -168,40 +176,42 @@ function savePaymentStatusData(date: string) {
   const key = date;
   // date를 key로 하여 payment status 데이터 저장
   savedPaymentStatusData.set(key, {
-    paidCount: state.paidCount,
-    unpaidCount: state.unpaidCount,
-    totalPaidAmount: state.totalPaidAmount,
-    totalUnpaidAmount: state.totalUnpaidAmount,
+    paidCount: paymentStatus.paidCount,
+    unpaidCount: paymentStatus.unpaidCount,
+    totalPaidAmount: paymentStatus.totalPaidAmount,
+    totalUnpaidAmount: paymentStatus.totalUnpaidAmount,
     isExcelUploaded: paymentStatus.isExcelUploaded,
   });
-  // 저장된 데이터를 순회하여 콘솔에 출력
-  console.log('데이터 저장됨: ');
-  savedPaymentStatusData.forEach((value, key) => {
-    console.log(`Date: ${key}, 저장된 차트, 수납리스트 데이터:`, value);
-  });
 }
 
-async function excelUploaded() {
-  console.log('excel uploaded 함수 실행');
-  await excelApi.updateIsExcelUploaded(state.formattedDate);
-  // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
-  state.navKey++;
-  getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
-}
+// async function excelUploaded() {
+//   await excelApi.updateIsExcelUploaded(state.formattedDate);
+//   // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
+//   state.navKey++;
+//   getPaymentStatus(); // 납부 현황 가져와서 chart, list 리렌더링
+// }
 
-// firstExcelUploaded 상태 변화를 감지
-watch(
-  () => paymentStatus.firstExcelUploaded,
-  async newValue => {
-    if (newValue) {
-      await excelUploaded();
-    }
-  }
-);
+// // firstExcelUploaded 상태 변화를 감지
+// watch(
+//   () => paymentStatus.firstExcelUploaded,
+//   async newValue => {
+//     if (newValue) {
+//       await excelUploaded();
+//     }
+//   }
+// );
 
 const handleToggle = (value: boolean) => {
   isClickCheckedPaymentList.value = value;
 };
+
+//테스트용 원생추거
+async function addStudent() {
+  await paymentApi.addStudents(studentName.value);
+}
+async function addClass() {
+  await paymentApi.addClass();
+}
 </script>
 
 <style lang="scss" scoped>
@@ -247,5 +257,27 @@ const handleToggle = (value: boolean) => {
 .date {
   font-size: unit(14);
   font-weight: 500;
+}
+
+.testList {
+  display: flex;
+  flex-direction: column;
+  gap: unit(10);
+  .addClass {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .btn {
+    padding: unit(5);
+    background-color: #f2f2f2;
+    border-radius: unit(3);
+    text-align: center;
+  }
+  input {
+    border: 1px solid #f2f2f2;
+    padding: unit(5);
+  }
 }
 </style>

@@ -21,7 +21,7 @@
             <div
               v-else-if="
                 index !== 0 &&
-                isDifferentDate(
+                hasDateChanged(
                   paymentListData.paidDateTime,
                   paymentList[index - 1].paidDateTime
                 )
@@ -34,14 +34,14 @@
             </div>
             <input
               :id="'check-' + index"
-              v-model="checkedNames"
               type="checkbox"
               :name="'user' + index"
-              :value="'user-' + index"
+              :value="paymentListData.paymentHistoryId"
+              @click="handleCheckboxChange(paymentListData.paymentHistoryId)"
             />
+
             <label :for="'check-' + index" class="label">
-              <!-- 라벨 안에 텍스트를 div로 감싸서 정리 -->
-              <div v-if="checkedNames.includes(('user-' + index) as never)">
+              <div v-if="checkedItemId === paymentListData.paymentHistoryId">
                 <svg-icon name="checkCircle" />
               </div>
               <div v-else><svg-icon name="circle" /></div>
@@ -50,7 +50,6 @@
                 :student-name="paymentListData.studentName"
                 :paid-amount="paymentListData.paidAmount"
                 :paid-date-time="paymentListData.paidDateTime"
-                :handle-click="handleListClick"
               />
             </label>
           </div>
@@ -63,7 +62,8 @@
       <RectangleTextButton
         text="완납연결"
         is-fulls="true"
-        :back-color="checkedNames.length === 0 ? '#D1D3D9' : '#7535FF'"
+        :back-color="checkedItemId === -1 ? '#D1D3D9' : '#7535FF'"
+        @click="handleCompletePaymentMerge"
       />
     </div>
   </div>
@@ -71,32 +71,29 @@
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from 'vue';
-import InfiniteScroll from 'infinite-loading-vue3-ts';
 import { useRouter } from 'vue-router';
 import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
-import {
-  formatYearMonthDate,
-  formatTime,
-  formatDate,
-} from '@/utils/formatDate';
+import { formatDate } from '@/utils/formatDate';
 import PaymentItem from '@/components/resources/payment/PaymentItem.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { intersectionObserver } from '@/utils/intersectionObserver';
+import { hasDateChanged } from '@/utils/hasDateChanged';
+import { usePaymentStatusStore } from '@/stores/modules/payment';
 
 const paymentList = ref<PaymentData[]>([]);
-const checkedNames = ref([]);
+const checkedItemId = ref(-1);
 const router = useRouter();
-const yearMonth = router.currentRoute.value.query.yearMonth as string;
-//무한스크롤
+const date = router.currentRoute.value.query.yearMonth as string;
 const page = ref(0);
 const hasMoreData = ref(true);
 const paymentListApi = new PaymentApi();
+const paymentStatus = usePaymentStatusStore();
+
+//미확인내역 데이터 불러오기
 const fetchData = async () => {
   try {
-    console.log('fetchData', page.value);
-    const date = yearMonth;
     const res = await paymentListApi.getUnpaidList({
       yearMonth: date,
       page: page.value,
@@ -111,10 +108,11 @@ const fetchData = async () => {
       }
     }
   } catch (error) {
-    console.error('데이터 불러오는 중 오류 발생', error);
     hasMoreData.value = false;
   }
 };
+
+//무한스크롤
 const observer = intersectionObserver(hasMoreData, page, fetchData);
 
 onMounted(async () => {
@@ -127,21 +125,31 @@ onMounted(async () => {
 onUnmounted(() => {
   observer.disconnect();
 });
-function handleListClick() {}
-function isDifferentDate(
-  currentDate: string,
-  prevDate: string | null
-): boolean {
-  if (prevDate === null) {
-    return false;
+
+async function handleCompletePaymentMerge() {
+  console.log(checkedItemId);
+  if (paymentStatus.currentUserInfo.id === 0) {
+    alert('이전 페이지로 돌아가 학생을 다시 선택해주세요');
   }
-  const current = formatDate(new Date(currentDate), 'monthDay');
-  const prev = formatDate(new Date(prevDate), 'monthDay');
-  if (current === prev) {
-    return false;
-  } else {
-    return true;
+  const completePaymentData = {
+    studentId: paymentStatus.currentUserInfo.id,
+    paymentHistoryId: checkedItemId.value,
+    yearMonth: date,
+  };
+
+  try {
+    const res = await paymentListApi.postCompletedPayments(completePaymentData);
+    console.log('해당 데이터로 완납연결을 시도합니다', completePaymentData);
+    if (res.status === 200) {
+      alert('정상적으로 처리되었습니다');
+      router.push(`/payManage`);
+    }
+  } catch {
+    console.log('완납연결 실패');
   }
+}
+function handleCheckboxChange(paymentHistoryId: number) {
+  checkedItemId.value = paymentHistoryId;
 }
 </script>
 

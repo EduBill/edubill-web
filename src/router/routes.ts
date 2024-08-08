@@ -48,7 +48,14 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
           import('@/views/pages/paymentManage/UnknownPaymentListPage.vue'),
         name: 'unknownList',
-        meta: { title: '납부내역 상세' },
+        meta: { title: '미확인내역' },
+      },
+      {
+        path: '/payManage/manualInput',
+        component: () =>
+          import('@/views/pages/paymentManage/manualInputPage.vue'),
+        name: 'manualInput',
+        meta: { title: '수동입력' },
       },
       {
         path: '/studentManage',
