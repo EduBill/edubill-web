@@ -1,5 +1,5 @@
 <template>
-  <div class="list" @click="props.handleClick">
+  <div class="list" @click?="props.handleClick">
     <div class="row_container">
       <div>{{ props.studentName }}</div>
       <div>+{{ props.paidAmount }}</div>
@@ -32,8 +32,6 @@ const props = defineProps({
     default: null,
   },
 });
-
-function handleListClick(id: number) {}
 </script>
 
 <style scoped lang="scss">
