@@ -2,7 +2,7 @@
   <Modal :use-modal="props.useModal" @close="props.handleModalClick">
     <div class="modal_frame_container">
       <header class="modal-frame-header">
-        <div class="close-btn">
+        <div class="close-btn" @click="handleClose">
           <svg-icon name="purpleClose" />
         </div>
         <div class="header-text">이렇게 입력하시겠어요?</div>
@@ -11,15 +11,17 @@
         <ul class="class-info-container">
           <li>
             <div class="class-info-key">수업명</div>
-            <div class="class-info-value">기초반</div>
+            <div class="class-info-value">{{ classInfo.groupName }}</div>
           </li>
           <li>
             <div class="class-info-key">학교</div>
-            <div class="class-info-value">영어 유치원</div>
+            <div class="class-info-value">
+              {{ classInfo.schoolType }}
+            </div>
           </li>
           <li>
             <div class="class-info-key">학년</div>
-            <div class="class-info-value">없음</div>
+            <div class="class-info-value">{{ classInfo.schoolLevel }}</div>
           </li>
           <li>
             <div class="class-info-key">학년</div>
@@ -28,8 +30,9 @@
           <li>
             <div class="class-info-key">수업 시간</div>
             <ul class="class-info-timeList">
-              <li>월 | 14:00 ~ 18:00</li>
-              <li>월 | 14:00 ~ 18:00</li>
+              <li v-for="time in classInfo.schoolTime" :key="time.id">
+                {{ time.day }} | {{ time.time }}
+              </li>
             </ul>
           </li>
         </ul>
@@ -57,11 +60,20 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  classInfo: {
+    type: Object,
+    required: true,
+  },
   handleModalClick: {
     type: Function,
     required: true,
   },
 });
+const emit = defineEmits(['close']);
+
+function handleClose() {
+  emit('close');
+}
 
 function handleSubmit() {}
 </script>

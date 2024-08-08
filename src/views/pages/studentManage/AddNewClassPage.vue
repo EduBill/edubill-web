@@ -8,7 +8,7 @@
           <div class="input-box">
             <ui-text-input
               id="group-name"
-              v-model:value="state.groupName"
+              v-model:value="newClassInfo.groupName"
               type="text"
               inputmode="text"
               :placeholder="'반 및 레벨명을 참고해서 입력해주세요'"
@@ -29,7 +29,7 @@
                   <Buttons
                     variants="long"
                     :color="
-                      state.schoolType.includes(option.text)
+                      newClassInfo.schoolType.includes(option.text)
                         ? 'selected'
                         : 'disabled'
                     "
@@ -48,7 +48,7 @@
                   <Buttons
                     variants="long"
                     :color="
-                      state.schoolLevel.includes(classItem)
+                      newClassInfo.schoolLevel.includes(classItem)
                         ? 'selected'
                         : 'disabled'
                     "
@@ -61,13 +61,13 @@
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
           <div
-            v-if="state.schoolLevel.includes('직접 입력')"
+            v-if="newClassInfo.schoolLevel.includes('직접 입력')"
             class="school-level-input-box"
           >
             <div class="input-box">
               <ui-text-input
                 id="school-level"
-                v-model:value="state.groupName"
+                v-model:value="newClassInfo.groupName"
                 type="text"
                 inputmode="text"
                 pattern="^\d*$"
@@ -98,7 +98,7 @@
                 <div class="input-box">
                   <ui-text-input
                     id="time-set-forward"
-                    v-model:value="state.forwardTime"
+                    v-model:value="newClassInfo.forwardTime"
                     type="text"
                     inputmode="numeric"
                     :maxlength="5"
@@ -110,7 +110,7 @@
                 <div class="input-box">
                   <ui-text-input
                     id="time-set-backward"
-                    v-model:value="state.backwardTime"
+                    v-model:value="newClassInfo.backwardTime"
                     type="text"
                     inputmode="numeric"
                     :maxlength="5"
@@ -126,9 +126,9 @@
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
         </li>
-        <ul v-if="state.schoolTime.length !== 0" class="time-add-field">
+        <ul v-if="newClassInfo.schoolTime.length !== 0" class="time-add-field">
           <li
-            v-for="time in state.schoolTime"
+            v-for="time in newClassInfo.schoolTime"
             :key="time.day"
             class="time-add-box"
           >
@@ -147,7 +147,7 @@
           <div class="input-box">
             <ui-text-input
               id="tuition"
-              v-model:value="state.tuition"
+              v-model:value="newClassInfo.tuition"
               type="text"
               inputmode="numeric"
               pattern="^\d*$"
@@ -163,7 +163,7 @@
           <div class="input-box">
             <ui-text-input
               id="memo"
-              v-model:value="state.memo"
+              v-model:value="newClassInfo.memo"
               type="text"
               inputmode="text"
               pattern="^\d*$"
@@ -189,6 +189,7 @@
   <ClassAddInfoModal
     :use-modal="useModal"
     :handle-modal-click="handleModalClick"
+    :class-info="newClassInfo"
   />
 </template>
 
@@ -200,42 +201,13 @@ import UiForm from '@/components/molecules/forms/Form.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import ClassAddInfoModal from '@/components/resources/class/ClassAddInfoModal.vue';
-
-interface SchoolTime {
-  id: number;
-  day: string;
-  time: string;
-}
-
-interface State {
-  groupName: string;
-  schoolLevel: string;
-  schoolTime: SchoolTime[];
-  day: string;
-  forwardTime: string;
-  backwardTime: string;
-  tuition: string;
-  memo: string;
-  schoolType: string;
-  check: boolean;
-}
+import { useAddNewClassInfo } from '@/stores/modules/addNewClass';
 
 const useModal = ref(false);
 const selectedClasses = ref<any[]>([]);
 let idCounter = 0;
 
-const state = reactive<State>({
-  groupName: '',
-  schoolType: '',
-  schoolLevel: '',
-  schoolTime: [],
-  day: '월',
-  forwardTime: '',
-  backwardTime: '',
-  tuition: '',
-  memo: '',
-  check: false,
-});
+const newClassInfo = useAddNewClassInfo();
 
 const weekend = ref([
   { id: 0, value: '월', selected: true },
@@ -275,44 +247,46 @@ function handleModalClick() {
 
 function selectSchoolType(option) {
   selectedClasses.value = option.class ?? [];
-  state.schoolType = option.text;
-  if (state.schoolLevel) {
-    state.schoolLevel = '';
+  newClassInfo.schoolType = option.text;
+  if (newClassInfo.schoolLevel) {
+    newClassInfo.schoolLevel = '';
   }
 }
 
 function deleteSelectedClasses(id) {
-  state.schoolTime = state.schoolTime.filter(time => time.id !== id);
+  newClassInfo.schoolTime = newClassInfo.schoolTime.filter(
+    time => time.id !== id
+  );
 }
 
 const isFormValid = computed(() => {
   return (
-    state.groupName !== '' &&
-    state.schoolTime.length > 0 &&
-    state.schoolType !== '' &&
-    state.schoolLevel !== '' &&
-    state.tuition !== ''
+    newClassInfo.groupName !== '' &&
+    newClassInfo.schoolTime.length > 0 &&
+    newClassInfo.schoolType !== '' &&
+    newClassInfo.schoolLevel !== '' &&
+    newClassInfo.tuition !== ''
   );
 });
 
 function selectSchoolLevel(schoolType) {
-  state.schoolLevel = schoolType;
+  newClassInfo.schoolLevel = schoolType;
 }
 
 function addTime() {
-  state.schoolTime.push({
+  newClassInfo.schoolTime.push({
     id: idCounter++,
-    day: `${state.day}요일`,
-    time: `${state.forwardTime}~${state.backwardTime}`,
+    day: `${newClassInfo.day}요일`,
+    time: `${newClassInfo.forwardTime}~${newClassInfo.backwardTime}`,
   });
-  state.forwardTime = '';
-  state.backwardTime = '';
+  newClassInfo.forwardTime = '';
+  newClassInfo.backwardTime = '';
 }
 
 function toggleDisabled(id: number) {
   const selectedDay = weekend.value.find(day => day.id === id);
   if (selectedDay) {
-    state.day = selectedDay.value;
+    newClassInfo.day = selectedDay.value;
     selectedDay.selected = !selectedDay.selected;
     if (selectedDay.selected) {
       weekend.value.forEach(day => {
@@ -334,7 +308,7 @@ function onChangeTimeFormat(e, stateKey) {
   } else {
     formattedValue = formatValue;
   }
-  state[stateKey] = formattedValue;
+  newClassInfo[stateKey] = formattedValue;
 }
 </script>
 
