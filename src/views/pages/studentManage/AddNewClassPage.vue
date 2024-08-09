@@ -153,6 +153,7 @@
               pattern="^\d*$"
               :maxlength="11"
               :placeholder="'000,000'"
+              @keyup="e => onChangePriceFormat(e)"
             />
             <span class="won">원</span>
           </div>
@@ -296,6 +297,16 @@ function toggleDisabled(id: number) {
       });
     }
   }
+}
+
+function onChangePriceFormat(e) {
+  const value = e.target.value;
+
+  const numericValue = value.replace(/[^0-9]/g, '');
+
+  const formattedValue = numericValue.replace(/\B(?=(\d{4})+(?!\d))/g, ',');
+
+  newClassInfo.tuition = formattedValue;
 }
 
 function onChangeTimeFormat(e, stateKey) {
