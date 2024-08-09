@@ -44,6 +44,7 @@
           :disabled="false"
           :color="'selected'"
           :text="'정확해요'"
+          @click="handleSubmit"
         />
       </footer>
     </div>
@@ -55,6 +56,7 @@ import { ref } from 'vue';
 import Buttons from '../buttons/Buttons.vue';
 import Modal from '@/components/modules/modal/Modal.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
+import router from '@/router';
 const props = defineProps({
   useModal: {
     type: Boolean,
@@ -70,7 +72,12 @@ const props = defineProps({
   },
 });
 
-function handleSubmit() {}
+function handleSubmit() {
+  props.handleModalClick();
+  router.push({
+    name: 'newClassInfo',
+  });
+}
 </script>
 
 <style lang="scss" scoped>

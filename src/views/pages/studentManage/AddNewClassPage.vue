@@ -307,7 +307,7 @@ function onChangePriceFormat(e) {
 
   const numericValue = value.replace(/[^0-9]/g, '');
 
-  const formattedValue = numericValue.replace(/\B(?=(\d{4})+(?!\d))/g, ',');
+  const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
   newClassInfo.tuition = formattedValue;
 }
@@ -324,6 +324,8 @@ function onChangeTimeFormat(e, stateKey) {
   }
   newClassInfo[stateKey] = formattedValue;
 }
+
+function onSubmit() {}
 </script>
 
 <style lang="scss" scoped>
