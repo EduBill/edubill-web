@@ -244,6 +244,9 @@ const options = ref([
 
 function handleModalClick() {
   useModal.value = !useModal.value;
+  useModal.value
+    ? (document.body.style.overflowY = 'hidden')
+    : (document.body.style.overflowY = 'auto');
 }
 
 function selectSchoolType(option) {

@@ -1,8 +1,8 @@
 <template>
-  <Modal :use-modal="props.useModal" @close="props.handleModalClick">
+  <Modal :use-modal="props.useModal">
     <div class="modal_frame_container">
       <header class="modal-frame-header">
-        <div class="close-btn" @click="handleClose">
+        <div class="close-btn" @click="props.handleModalClick">
           <svg-icon name="purpleClose" />
         </div>
         <div class="header-text">이렇게 입력하시겠어요?</div>
@@ -69,11 +69,6 @@ const props = defineProps({
     required: true,
   },
 });
-const emit = defineEmits(['close']);
-
-function handleClose() {
-  emit('close');
-}
 
 function handleSubmit() {}
 </script>
