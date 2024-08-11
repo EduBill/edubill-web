@@ -1,5 +1,5 @@
 <template>
-  <page-header :title="'새로운 반 추가'" back />
+  <page-header :title="'새로운 반 추가'" :back="true" />
   <div class="page-content has-bottom-tabbar">
     <ui-form ref="refForm" class="form-passport">
       <ul class="text-field-form">
@@ -8,7 +8,7 @@
           <div class="input-box">
             <ui-text-input
               id="group-name"
-              v-model:value="state.groupName"
+              v-model:value="newClassInfo.groupName"
               type="text"
               inputmode="text"
               :placeholder="'반 및 레벨명을 참고해서 입력해주세요'"
@@ -29,7 +29,7 @@
                   <Buttons
                     variants="long"
                     :color="
-                      state.schoolType.includes(option.text)
+                      newClassInfo.schoolType.includes(option.text)
                         ? 'selected'
                         : 'disabled'
                     "
@@ -48,7 +48,7 @@
                   <Buttons
                     variants="long"
                     :color="
-                      state.schoolLevel.includes(classItem)
+                      newClassInfo.schoolLevel.includes(classItem)
                         ? 'selected'
                         : 'disabled'
                     "
@@ -61,13 +61,13 @@
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
           <div
-            v-if="state.schoolLevel.includes('직접 입력')"
+            v-if="newClassInfo.schoolLevel.includes('직접 입력')"
             class="school-level-input-box"
           >
             <div class="input-box">
               <ui-text-input
                 id="school-level"
-                v-model:value="state.groupName"
+                v-model:value="newClassInfo.groupName"
                 type="text"
                 inputmode="text"
                 pattern="^\d*$"
@@ -98,7 +98,7 @@
                 <div class="input-box">
                   <ui-text-input
                     id="time-set-forward"
-                    v-model:value="state.forwardTime"
+                    v-model:value="newClassInfo.forwardTime"
                     type="text"
                     inputmode="numeric"
                     :maxlength="5"
@@ -110,7 +110,7 @@
                 <div class="input-box">
                   <ui-text-input
                     id="time-set-backward"
-                    v-model:value="state.backwardTime"
+                    v-model:value="newClassInfo.backwardTime"
                     type="text"
                     inputmode="numeric"
                     :maxlength="5"
@@ -126,17 +126,19 @@
           </div>
           <p v-if="false">{{ '에러처리' }}</p>
         </li>
-        <ul v-if="state.schoolTime.length !== 0" class="time-add-field">
+        <ul v-if="newClassInfo.schoolTime.length !== 0" class="time-add-field">
           <li
-            v-for="time in state.schoolTime"
-            :key="time.day"
+            v-for="time in newClassInfo.schoolTime"
+            :key="time.dayOfWeek"
             class="time-add-box"
           >
             <div>
-              <p class="time-add-day">{{ time.day }}</p>
-              <p class="time-add-period">{{ time.time }}</p>
+              <p class="time-add-day">{{ time.dayOfWeek }}요일</p>
+              <p class="time-add-period">
+                {{ time.startTime }}~{{ time.endTime }}
+              </p>
             </div>
-            <span class="close" @click="() => delectSelectedClasses(time.id)">
+            <span class="close" @click="() => deleteSelectedClasses(time.id)">
               <svg-icon name="purpleClose" />
             </span>
           </li>
@@ -147,12 +149,13 @@
           <div class="input-box">
             <ui-text-input
               id="tuition"
-              v-model:value="state.tuition"
+              v-model:value="newClassInfo.tuition"
               type="text"
-              inputmode="numeric"
+              inputmode="text"
               pattern="^\d*$"
               :maxlength="11"
               :placeholder="'000,000'"
+              @keyup="e => onChangePriceFormat(e)"
             />
             <span class="won">원</span>
           </div>
@@ -163,7 +166,7 @@
           <div class="input-box">
             <ui-text-input
               id="memo"
-              v-model:value="state.memo"
+              v-model:value="newClassInfo.memo"
               type="text"
               inputmode="text"
               pattern="^\d*$"
@@ -182,49 +185,36 @@
         :disabled="!isFormValid"
         :color="isFormValid ? 'selected' : 'disabled'"
         :text="'작성 완료'"
+        @click="handleModalClick"
       />
     </div>
   </div>
+  <ClassAddInfoModal
+    :use-modal="useModal"
+    :handle-modal-click="handleModalClick"
+    :class-info="newClassInfo"
+    :submit="onSubmit"
+  />
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
+import Modal from '../../../components/modules/modal/Modal.vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
+import ClassAddInfoModal from '@/components/resources/class/ClassAddInfoModal.vue';
+import { useAddNewClassInfo } from '@/stores/modules/addNewClass';
+import { GroupApi } from '@/api/GroupApi';
+import router from '@/router';
 
-interface SchoolTime {
-  id: number;
-  day: string;
-  time: string;
-}
+const useModal = ref(false);
+const selectedClasses = ref<any[]>([]);
+let idCounter = 0;
 
-interface State {
-  groupName: string;
-  schoolLevel: string;
-  schoolTime: SchoolTime[];
-  day: string;
-  forwardTime: string;
-  backwardTime: string;
-  tuition: string;
-  memo: string;
-  schoolType: string;
-  check: boolean;
-}
-
-const state = reactive<State>({
-  groupName: '',
-  schoolType: '',
-  schoolLevel: '',
-  schoolTime: [],
-  day: '월',
-  forwardTime: '',
-  backwardTime: '',
-  tuition: '',
-  memo: '',
-  check: false,
-});
+const newClassInfo = useAddNewClassInfo();
+const groupApi = new GroupApi();
 
 const weekend = ref([
   { id: 0, value: '월', selected: true },
@@ -258,49 +248,56 @@ const options = ref([
   { text: '기타', value: '4', no: '3', class: ['직접 입력'] },
 ]);
 
-const selectedClasses = ref<any[]>([]);
-let idCounter = 0;
+function handleModalClick() {
+  useModal.value = !useModal.value;
+  useModal.value
+    ? (document.body.style.overflowY = 'hidden')
+    : (document.body.style.overflowY = 'auto');
+}
 
 function selectSchoolType(option) {
   selectedClasses.value = option.class ?? [];
-  state.schoolType = option.text;
-  if (state.schoolLevel) {
-    state.schoolLevel = '';
+  newClassInfo.schoolType = option.text;
+  if (newClassInfo.schoolLevel) {
+    newClassInfo.schoolLevel = '';
   }
 }
 
 function deleteSelectedClasses(id) {
-  state.schoolTime = state.schoolTime.filter(time => time.id !== id);
+  newClassInfo.schoolTime = newClassInfo.schoolTime.filter(
+    time => time.id !== id
+  );
 }
 
 const isFormValid = computed(() => {
   return (
-    state.groupName !== '' &&
-    selectedClasses.value.length > 0 &&
-    state.forwardTime !== '' &&
-    state.backwardTime !== '' &&
-    state.tuition !== ''
+    newClassInfo.groupName !== '' &&
+    newClassInfo.schoolTime.length > 0 &&
+    newClassInfo.schoolType !== '' &&
+    newClassInfo.schoolLevel !== '' &&
+    newClassInfo.tuition !== ''
   );
 });
 
 function selectSchoolLevel(schoolType) {
-  state.schoolLevel = schoolType;
+  newClassInfo.schoolLevel = schoolType;
 }
 
 function addTime() {
-  state.schoolTime.push({
+  newClassInfo.schoolTime.push({
     id: idCounter++,
-    day: `${state.day}요일`,
-    time: `${state.forwardTime}~${state.backwardTime}`,
+    dayOfWeek: `${newClassInfo.day}`,
+    startTime: `${newClassInfo.forwardTime}`,
+    endTime: `${newClassInfo.backwardTime}`,
   });
-  state.forwardTime = '';
-  state.backwardTime = '';
+  newClassInfo.forwardTime = '';
+  newClassInfo.backwardTime = '';
 }
 
 function toggleDisabled(id: number) {
   const selectedDay = weekend.value.find(day => day.id === id);
   if (selectedDay) {
-    state.day = selectedDay.value;
+    newClassInfo.day = selectedDay.value;
     selectedDay.selected = !selectedDay.selected;
     if (selectedDay.selected) {
       weekend.value.forEach(day => {
@@ -310,6 +307,16 @@ function toggleDisabled(id: number) {
       });
     }
   }
+}
+
+function onChangePriceFormat(e) {
+  const value = e.target.value;
+
+  const numericValue = value.replace(/[^0-9]/g, '');
+
+  const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  newClassInfo.tuition = formattedValue;
 }
 
 function onChangeTimeFormat(e, stateKey) {
@@ -322,7 +329,26 @@ function onChangeTimeFormat(e, stateKey) {
   } else {
     formattedValue = formatValue;
   }
-  state[stateKey] = formattedValue;
+  newClassInfo[stateKey] = formattedValue;
+}
+
+async function onSubmit() {
+  const res = await groupApi.postNewGroup({
+    groupName: newClassInfo.groupName,
+    schoolType: newClassInfo.schoolType,
+    gradeLevel: newClassInfo.schoolLevel,
+    classTimeRequestDtos: newClassInfo.schoolTime,
+    tuition: Number(newClassInfo.tuition.replace(/[^0-9]/g, '')),
+    groupMemo: newClassInfo.memo,
+  });
+  console.log(res);
+  const groupid = res.data.groupId;
+  handleModalClick();
+
+  router.push({
+    name: 'newClassInfo',
+    query: { groupId: groupid },
+  });
 }
 </script>
 
@@ -599,6 +625,9 @@ function onChangeTimeFormat(e, stateKey) {
     color: $color-gray-500;
     background-color: $color-gray-200;
     border: none;
+  }
+  .selected {
+    color: white;
   }
 }
 </style>
