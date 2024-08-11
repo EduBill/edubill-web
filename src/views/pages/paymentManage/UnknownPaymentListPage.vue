@@ -50,6 +50,7 @@
                 :student-name="paymentListData.studentName"
                 :paid-amount="paymentListData.paidAmount"
                 :paid-date-time="paymentListData.paidDateTime"
+                :is-click-detail="false"
               />
             </label>
           </div>
@@ -160,7 +161,7 @@ function handleCheckboxChange(paymentHistoryId: number) {
   height: 100vh;
   width: 100%;
   position: relative;
-  padding: unit(20) unit(42);
+  padding: unit(20);
   font-size: unit(15);
   font-weight: 600;
   gap: unit(20);

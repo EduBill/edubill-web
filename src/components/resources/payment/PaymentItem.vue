@@ -1,5 +1,12 @@
 <template>
-  <div class="list" @click?="props.handleClick">
+  <div
+    class="list"
+    @click="
+      isClickDetail
+        ? router.push(`/payManage/payDetail?id=${props.paymentHistoryId}`)
+        : ''
+    "
+  >
     <div class="row_container">
       <div>{{ props.studentName }}</div>
       <div>+{{ props.paidAmount }}</div>
@@ -9,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import router from '@/router';
 import { formatTime } from '@/utils/formatDate';
 const props = defineProps({
   studentName: {
@@ -27,11 +35,16 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  handleClick: {
-    type: MouseEvent,
-    default: null,
+  isClickDetail: {
+    type: Boolean,
+    default: false,
   },
 });
+
+function handleItemClick() {
+  console.log('상세페이지로 넘어갑니다');
+  router.push(`/payManage/payDetail?id=${props.paymentHistoryId}`);
+}
 </script>
 
 <style scoped lang="scss">
