@@ -129,12 +129,14 @@
         <ul v-if="newClassInfo.schoolTime.length !== 0" class="time-add-field">
           <li
             v-for="time in newClassInfo.schoolTime"
-            :key="time.day"
+            :key="time.dayOfWeek"
             class="time-add-box"
           >
             <div>
-              <p class="time-add-day">{{ time.day }}</p>
-              <p class="time-add-period">{{ time.time }}</p>
+              <p class="time-add-day">{{ time.dayOfWeek }}요일</p>
+              <p class="time-add-period">
+                {{ time.startTime }}~{{ time.endTime }}
+              </p>
             </div>
             <span class="close" @click="() => deleteSelectedClasses(time.id)">
               <svg-icon name="purpleClose" />
@@ -149,7 +151,7 @@
               id="tuition"
               v-model:value="newClassInfo.tuition"
               type="text"
-              inputmode="numeric"
+              inputmode="text"
               pattern="^\d*$"
               :maxlength="11"
               :placeholder="'000,000'"
@@ -191,6 +193,7 @@
     :use-modal="useModal"
     :handle-modal-click="handleModalClick"
     :class-info="newClassInfo"
+    :submit="onSubmit"
   />
 </template>
 
@@ -203,12 +206,15 @@ import Buttons from '@/components/resources/buttons/Buttons.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import ClassAddInfoModal from '@/components/resources/class/ClassAddInfoModal.vue';
 import { useAddNewClassInfo } from '@/stores/modules/addNewClass';
+import { GroupApi } from '@/api/GroupApi';
+import router from '@/router';
 
 const useModal = ref(false);
 const selectedClasses = ref<any[]>([]);
 let idCounter = 0;
 
 const newClassInfo = useAddNewClassInfo();
+const groupApi = new GroupApi();
 
 const weekend = ref([
   { id: 0, value: '월', selected: true },
@@ -280,8 +286,9 @@ function selectSchoolLevel(schoolType) {
 function addTime() {
   newClassInfo.schoolTime.push({
     id: idCounter++,
-    day: `${newClassInfo.day}요일`,
-    time: `${newClassInfo.forwardTime}~${newClassInfo.backwardTime}`,
+    dayOfWeek: `${newClassInfo.day}`,
+    startTime: `${newClassInfo.forwardTime}`,
+    endTime: `${newClassInfo.backwardTime}`,
   });
   newClassInfo.forwardTime = '';
   newClassInfo.backwardTime = '';
@@ -325,7 +332,24 @@ function onChangeTimeFormat(e, stateKey) {
   newClassInfo[stateKey] = formattedValue;
 }
 
-function onSubmit() {}
+async function onSubmit() {
+  const res = await groupApi.postNewGroup({
+    groupName: newClassInfo.groupName,
+    schoolType: newClassInfo.schoolType,
+    gradeLevel: newClassInfo.schoolLevel,
+    classTimeRequestDtos: newClassInfo.schoolTime,
+    tuition: Number(newClassInfo.tuition.replace(/[^0-9]/g, '')),
+    groupMemo: newClassInfo.memo,
+  });
+  console.log(res);
+  const groupid = res.data.groupId;
+  handleModalClick();
+
+  router.push({
+    name: 'newClassInfo',
+    query: { groupId: groupid },
+  });
+}
 </script>
 
 <style lang="scss" scoped>

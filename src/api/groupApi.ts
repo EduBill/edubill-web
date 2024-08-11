@@ -1,11 +1,13 @@
 import { ContentType, HttpClient, RequestParams } from './http-client';
+import { SchoolTime } from '@/stores/typings/types.addNewClass';
 
 interface AddNewGroupProps {
   groupName: string;
-  schoolLevel: string;
-  schoolTime: Array<string>;
+  gradeLevel: string;
+  schoolType: string;
+  classTimeRequestDtos: Array<SchoolTime>;
   tuition: number;
-  memo: string;
+  groupMemo: string;
 }
 
 export class GroupApi<
@@ -23,7 +25,7 @@ export class GroupApi<
 
   getGroupList = (PaidStatus: boolean, sortType: string) => {
     return this.request({
-      path: `/v1/groups`,
+      path: `/v1/student/groups`,
       method: 'GET',
       type: ContentType.Json,
       body: {
@@ -63,9 +65,17 @@ export class GroupApi<
 
   postNewGroup = (props: AddNewGroupProps) => {
     return this.request({
-      path: `/v1/groups?groupName=${props.groupName}&schoolLevel=${props.schoolLevel}&schoolTime=${props.schoolTime}&tuition=${props.tuition}&memo=${props.memo}`,
+      path: `/v1/student/groups`,
       method: 'POST',
       type: ContentType.Json,
+      body: {
+        groupName: props.groupName,
+        schoolType: props.schoolType,
+        gradeLevel: props.gradeLevel,
+        classTimeRequestDtos: props.classTimeRequestDtos,
+        tuition: props.tuition,
+        groupMemo: props.groupMemo,
+      },
     });
   };
 
@@ -79,11 +89,19 @@ export class GroupApi<
    * @secure
    */
 
-  putGroup = (id: number) => {
+  putGroup = (id: number, props: AddNewGroupProps) => {
     return this.request({
       path: `/v1/groups/${id}`,
       method: 'PUT',
       type: ContentType.Json,
+      body: {
+        groupId: id,
+        groupName: props.groupName,
+        schoolLevel: props.gradeLevel,
+        schoolTime: props.classTimeRequestDtos,
+        tuition: props.tuition,
+        memo: props.groupMemo,
+      },
     });
   };
 

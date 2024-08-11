@@ -31,7 +31,8 @@
             <div class="class-info-key">수업 시간</div>
             <ul class="class-info-timeList">
               <li v-for="time in classInfo.schoolTime" :key="time.id">
-                {{ time.day }} | {{ time.time }}
+                {{ time.dayOfWeek }}요일 | {{ time.startTime }} ~
+                {{ time.endTime }}
               </li>
             </ul>
           </li>
@@ -44,7 +45,7 @@
           :disabled="false"
           :color="'selected'"
           :text="'정확해요'"
-          @click="handleSubmit"
+          @click="props.submit"
         />
       </footer>
     </div>
@@ -56,7 +57,7 @@ import { ref } from 'vue';
 import Buttons from '../buttons/Buttons.vue';
 import Modal from '@/components/modules/modal/Modal.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
-import router from '@/router';
+
 const props = defineProps({
   useModal: {
     type: Boolean,
@@ -70,14 +71,11 @@ const props = defineProps({
     type: Function,
     required: true,
   },
+  submit: {
+    type: Function,
+    required: true,
+  },
 });
-
-function handleSubmit() {
-  props.handleModalClick();
-  router.push({
-    name: 'newClassInfo',
-  });
-}
 </script>
 
 <style lang="scss" scoped>

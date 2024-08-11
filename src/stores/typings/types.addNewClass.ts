@@ -10,8 +10,9 @@ export interface State {
   schoolType: string;
   check: boolean;
 }
-interface SchoolTime {
+export interface SchoolTime {
   id: number;
-  day: string;
-  time: string;
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
 }
