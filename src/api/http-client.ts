@@ -1,8 +1,13 @@
 import axios, {
+  // eslint-disable-next-line import/named
   AxiosInstance,
+  // eslint-disable-next-line import/named
   AxiosRequestConfig,
+  // eslint-disable-next-line import/named
   AxiosResponse,
+  // eslint-disable-next-line import/named
   HeadersDefaults,
+  // eslint-disable-next-line import/named
   ResponseType,
 } from 'axios';
 

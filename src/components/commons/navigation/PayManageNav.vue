@@ -3,7 +3,7 @@
     <svg-icon
       class="chevronLeft"
       name="largeChevronLeft"
-      @click="clickBackBtn ? router.push(clickBackBtn) : router.go(-1)"
+      @click="clickBackBtn ? router.push(props.clickBackBtn) : router.go(-1)"
     />
     <p>{{ title }}</p>
     <div v-if="plusBtn" class="tooltip_container">

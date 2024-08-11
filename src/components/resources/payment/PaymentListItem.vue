@@ -28,7 +28,7 @@
           :student-name="paymentListData.studentName"
           :paid-amount="paymentListData.paidAmount"
           :paid-date-time="paymentListData.paidDateTime"
-          :handle-click="handlePaymentClick(paymentListData.paymentHistoryId)"
+          :is-click-detail="true"
         />
       </div>
     </div>
@@ -91,9 +91,9 @@ onUnmounted(() => {
 });
 
 //납부 내역을 클릭하면 상세페이지로 이동
-function handlePaymentClick(id: number): any {
-  router.push(`/payManage/payDetail?id=${id}`);
-}
+// function handlePaymentClick(id: number): any {
+//   router.push(`/payManage/payDetail?id=${id}`);
+// }
 </script>
 
 <style scoped lang="scss">
