@@ -25,7 +25,7 @@ export default {
   },
   computed: {
     classNames() {
-      let classNames = ['animation'];
+      const classNames = ['animation'];
       classNames.push(this.type);
       return classNames;
     },

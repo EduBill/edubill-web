@@ -8,9 +8,9 @@
 
 <script lang="ts" setup>
 import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import { useLayoutStore } from '@/stores/modules/layout';
 import { useWNInterface } from '@/plugins/vue-wni';
-import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const layoutStore = useLayoutStore();

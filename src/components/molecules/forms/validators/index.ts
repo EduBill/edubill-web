@@ -1,13 +1,10 @@
-
 import _ from 'lodash';
 import ValidatorRequired from './validator.required';
 
-let importedValidators:{[key: string]: any} = {};
-importedValidators['required'] = ValidatorRequired;
+const importedValidators: { [key: string]: any } = {};
+importedValidators.required = ValidatorRequired;
 
 const validator = {
-  
-
   execute: (field, key) => {
     const errors = [];
     if (field.validation) {
@@ -20,8 +17,7 @@ const validator = {
       });
     }
     return errors;
-  }
+  },
 };
 
 export default validator;
-

@@ -3,14 +3,14 @@
     <p class="rectangleMenu_title">{{ title }}</p>
     <p class="rectangleMenu_content">{{ content }}</p>
     <div class="rectangleMenu_img">
-      <svg-icon class="icon" v-if="iconName" :name="iconName" />
+      <svg-icon v-if="iconName" class="icon" :name="iconName" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
-import { computed, defineProps } from 'vue';
 
 const props = defineProps({
   title: String,

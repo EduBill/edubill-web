@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [21.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -22,11 +22,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: 'npm'
       - name: Install modules
-        run: yarn install
+        run: npm install
       - name: Build project
-        run: CI='' yarn build:prod
+        run: CI='' npm build:prod
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1

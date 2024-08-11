@@ -34,8 +34,8 @@
 </template>
 
 <script lang="ts" setup>
-import UiLoader from './Loader.vue';
 import { computed, reactive, ref } from 'vue';
+import UiLoader from './Loader.vue';
 
 const props = defineProps({
   ripple: {

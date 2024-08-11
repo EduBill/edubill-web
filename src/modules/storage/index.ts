@@ -18,7 +18,7 @@ export class StorageModule {
       if (this._isNative) {
         useWNInterface().execute('wnDataStorageGetAll', {
           // trunk-ignore(eslint/object-shorthand)
-          keys: keys,
+          keys,
           callback: ({ status, values }) => {
             if (status !== 'SUCCESS') {
               reject(new Error(status));
@@ -53,7 +53,7 @@ export class StorageModule {
         if (this._isNative) {
           useWNInterface().execute('wnDataStorageGet', {
             // trunk-ignore(eslint/object-shorthand)
-            key: key,
+            key,
             callback: ({ status, key, value }) => {
               if (status !== 'SUCCESS') {
                 reject(new Error(status));
@@ -79,7 +79,7 @@ export class StorageModule {
       try {
         if (this._isNative) {
           useWNInterface().execute('wnDataStorageSet', {
-            key: key,
+            key,
             value: encodeURIComponent(value),
             callback: ({ status }) => {
               if (status !== 'SUCCESS') {

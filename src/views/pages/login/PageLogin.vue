@@ -88,10 +88,6 @@
 </template>
 
 <script lang="ts" setup>
-import { AuthApi } from '@/api/AuthApi';
-import PageHeader from '@/components/commons/headers/PageHeader.vue';
-import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
-import UiForm from '@/components/molecules/forms/Form.vue';
 import {
   computed,
   onBeforeUnmount,
@@ -100,7 +96,12 @@ import {
   ref,
   watch,
 } from 'vue';
+import { AuthApi } from '@/api/AuthApi';
+import PageHeader from '@/components/commons/headers/PageHeader.vue';
+import { UiButton, UiTextInput } from '@/plugins/vue-ui-components';
+import UiForm from '@/components/molecules/forms/Form.vue';
 import router from '@/router';
+import { setAccessToken } from '@/modules/axios';
 const authApi = new AuthApi();
 const refForm = ref(null);
 const state = reactive({
@@ -186,7 +187,7 @@ function checkPhoneLength(e) {
   }
 }
 
-async function onClickCertified() {
+function onClickCertified() {
   console.log('onClickCertified');
 
   if (!timerActive.value) {
@@ -205,7 +206,7 @@ async function onClickRequestCertified(e) {
     console.log('is number');
     state.isRequestCertified = true;
 
-    const res = await authApi.authPhoneVerifySend(e);
+    const res = await authApi.authPhoneVerifySend({ phoneNumber: e });
     state.requestId = res.data.requestId;
     state.verificationNumber = res.data.verificationNumber;
     startTimer();
@@ -236,6 +237,7 @@ async function onClickSubmit() {
     phoneNumber: state.phoneNumber,
   });
   if (res.status === 200 && res.data === state.requestId) {
+    console.log('res status 200');
     const isUser = await authApi.authCheckUser({
       phoneNumber: state.phoneNumber,
       requestId: state.requestId,
@@ -248,6 +250,13 @@ async function onClickSubmit() {
         })
         .then(res => {
           if (res.status === 200) {
+            sessionStorage.setItem(
+              'Token',
+              res.data.jwtToken.accessToken.replace('Bearer ', '')
+            );
+            setAccessToken(
+              res.data.jwtToken.accessToken.replace('Bearer ', '')
+            );
             router.push({
               name: 'Home',
             });

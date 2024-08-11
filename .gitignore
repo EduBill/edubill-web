@@ -23,7 +23,7 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-package-lock.json*
+# package-lock.json*
 /scripts/~$import.xlsx
 /scripts/import.csv
 /scripts/import.xls

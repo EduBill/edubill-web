@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const props = defineProps({
   percent: {
@@ -50,7 +50,7 @@ const paymentRate = computed(() => {
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .progressBar_container {
   width: 100%;
   height: unit(24);

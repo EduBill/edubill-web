@@ -1,9 +1,5 @@
-import { setAccessToken } from '@/modules/axios/index';
 import { ContentType, HttpClient, RequestParams } from './http-client';
-
-setAccessToken(
-  'eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjoiQUNBREVNWSIsInN1YiI6IjAxMDI3ODkyMTY1IiwiaWF0IjoxNzEyMTU2NzIxLCJleHAiOjQ4NjU3NTY3MjF9.p0vjwBv25irPuk0Cbd4iGTRoHbIsN1QJ3W2KC5Dcoaw'
-);
+import { setAccessToken } from '@/modules/axios/index';
 
 export class AuthApi<
   SecurityDataType = unknown,
@@ -22,7 +18,7 @@ export class AuthApi<
       path: `/v1/auth/phone`,
       method: 'POST',
       body: data,
-      type: ContentType.TextPlain,
+      type: ContentType.Json,
     });
 
   /**
@@ -89,25 +85,25 @@ export class AuthApi<
     this.request<void, void>({
       path: `/v1/auth/login`,
       method: 'POST',
-      body: data,
+      body: JSON.stringify(data),
       type: ContentType.Json,
     });
-  
+
   /**
    * No description
    *
    * @tags auth-api
-   * @name 
+   * @name
    * @summary 유저 프로필
    * @request GET:/v1/user/my-profile
    * @secure
    */
-  getUserProfile = (params: RequestParams = {})=> {
+  getUserProfile = (params: RequestParams = {}) => {
     return this.request({
       path: `/v1/user/my-profile`,
       method: 'GET',
       query: params,
       type: ContentType.Json,
     });
-  }
+  };
 }
