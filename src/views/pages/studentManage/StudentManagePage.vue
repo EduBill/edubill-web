@@ -9,6 +9,7 @@
           <div class="input-field">
             <input
               id="student-name"
+              v-model="addStudentData.studentName"
               class="name-input"
               type="text"
               placeholder="예) 서울고등학교"
@@ -20,18 +21,21 @@
           <div class="input-field">
             <input
               id="student-phone"
+              v-model="studentPhoneNumber[0]"
               class="phone-input"
               type="text"
               placeholder="000"
             />
             <input
               id="student-phone"
+              v-model="studentPhoneNumber[1]"
               class="phone-input"
               type="text"
               placeholder="0000"
             />
             <input
               id="student-phone"
+              v-model="studentPhoneNumber[2]"
               class="phone-input"
               type="text"
               placeholder="0000"
@@ -46,6 +50,7 @@
           <div class="input-field">
             <input
               id="parents-name"
+              v-model="addStudentData.parentName"
               class="name-input"
               type="text"
               placeholder="예) 서울고등학교"
@@ -57,18 +62,21 @@
           <div class="input-field">
             <input
               id="parents-phone"
+              v-model="parentsPhoneNumber[0]"
               class="phone-input"
               type="text"
               placeholder="000"
             />
             <input
               id="parents-phone"
+              v-model="parentsPhoneNumber[1]"
               class="phone-input"
               type="text"
               placeholder="0000"
             />
             <input
               id="parents-phone"
+              v-model="parentsPhoneNumber[2]"
               class="phone-input"
               type="text"
               placeholder="0000"
@@ -79,28 +87,31 @@
       <ul class="category-container" @click="handleModalClick">
         <div class="subtitle">학적 정보</div>
         <div class="input-container">
-          <div class="input-btn">
-            <div>학교급</div>
-            <svg-icon name="chevronRight"></svg-icon>
+          <div :class="`input-btn ${isSelected ? 'selected' : ''}`">
+            <div>{{ studentInfoData.school }}</div>
+            <svg-icon class="icon-chevronRight" name="chevronRight"></svg-icon>
           </div>
-          <div class="input-btn">
-            <div>학년</div>
-            <svg-icon name="chevronRight"></svg-icon>
+          <div :class="`input-btn ${isSelected ? 'selected' : ''}`">
+            <div>{{ studentInfoData.grade }}</div>
+            <svg-icon class="icon-chevronRight" name="chevronRight"></svg-icon>
           </div>
-          <div class="input-btn">
-            <div>계열</div>
-            <svg-icon name="chevronRight"></svg-icon>
+          <div :class="`input-btn ${isSelected ? 'selected' : ''}`">
+            <div>{{ studentInfoData.field }}</div>
+            <svg-icon class="icon-chevronRight" name="chevronRight"></svg-icon>
           </div>
         </div>
         <div class="input-container">
-          <div class="input-btn">
-            <div>학교 명 입력</div>
+          <div
+            :class="`input-btn school-name ${isSelected ? 'selected' : ''} `"
+          >
+            <div>{{ studentInfoData.schoolName }}</div>
           </div>
         </div>
       </ul>
       <StudentInfoModal
         :use-modal="useModal"
         :handle-modal-click="handleModalClick"
+        @selected-value="handleStudentInfo"
       ></StudentInfoModal>
       <ul class="category-container">
         <div class="subtitle">참여하는 수업</div>
@@ -116,6 +127,7 @@
         <div class="input-container">
           <input
             id="student-name"
+            v-model="addStudentData.memo"
             class="memo-input"
             type="text"
             placeholder="입력해주세요"
@@ -129,32 +141,71 @@
         variants="long"
         color="selected"
         text="작성완료"
-        :onclick="handleSubmit"
+        @click="handleSubmit"
       />
     </div>
   </div>
-  <!-- <div class="container">
-    <div @click="handleModalClick">클릭해봐</div>
-    <StudentInfoModal
-      :use-modal="useModal"
-      :handle-modal-click="handleModalClick"
-    ></StudentInfoModal>
-  </div> -->
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import Modal from '../../../components/modules/modal/Modal.vue';
 import StudentInfoModal from '../../../components/resources/student/StudentInfoModal.vue';
-import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
+import { StudentApi } from '@/api/StudentApi';
 
+const studentApi = new StudentApi();
 const useModal = ref(false);
-
+const studentInfoData = ref({
+  school: '학교급',
+  grade: '학년',
+  field: '계열',
+  schoolName: '학교 명 입력',
+});
+const studentPhoneNumber = ref(['010', '', '']);
+const parentsPhoneNumber = ref(['010', '', '']);
+const addStudentData = ref({
+  studentName: '',
+  studentPhoneNumber: '',
+  parentName: '',
+  parentPhoneNumber: '',
+  groupIds: [2],
+  schoolType: '',
+  gradeLevel: '',
+  departmentType: '',
+  schoolName: '',
+  memo: '',
+});
+const isSelected = ref(false);
 function handleModalClick() {
   useModal.value = !useModal.value;
+}
+
+function handleStudentInfo(value) {
+  if (value) {
+    isSelected.value = true;
+    studentInfoData.value = value;
+  }
+}
+
+function handleSubmit() {
+  addStudentData.value = {
+    ...addStudentData.value,
+    schoolType: studentInfoData.value.school,
+    gradeLevel: studentInfoData.value.grade,
+    departmentType: studentInfoData.value.field,
+    schoolName: studentInfoData.value.schoolName,
+    studentPhoneNumber: `${studentPhoneNumber.value[0]}${studentPhoneNumber.value[1]}${studentPhoneNumber.value[2]}`,
+    parentPhoneNumber: `${parentsPhoneNumber.value[0]}${parentsPhoneNumber.value[1]}${parentsPhoneNumber.value[2]}`,
+  };
+  console.log(JSON.parse(JSON.stringify(addStudentData.value)));
+  const data = JSON.parse(JSON.stringify(addStudentData.value));
+  postStudentInfo(data);
+}
+
+async function postStudentInfo(data) {
+  await studentApi.addStudent(data);
 }
 </script>
 
@@ -173,9 +224,7 @@ function handleModalClick() {
   .btn-container {
     width: 100%;
     padding: 0 unit(20);
-    position: absolute;
-    bottom: unit(0);
-    left: 0;
+    margin-bottom: unit(20);
     .submit-button {
       box-sizing: border-box;
     }
@@ -217,6 +266,17 @@ function handleModalClick() {
       justify-content: space-between;
       color: var(--Gray-Gray-500, #9f9f9f);
       font-weight: 400;
+    }
+
+    .selected {
+      color: black;
+      justify-content: center;
+      .icon-chevronRight {
+        display: none;
+      }
+    }
+    .school-name {
+      justify-content: flex-start;
     }
   }
 }

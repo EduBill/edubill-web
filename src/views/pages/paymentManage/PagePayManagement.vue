@@ -206,12 +206,12 @@ const handleToggle = (value: boolean) => {
 };
 
 //테스트용 원생추거
-async function addStudent() {
-  await paymentApi.addStudents(studentName.value);
-}
-async function addClass() {
-  await paymentApi.addClass();
-}
+// async function addStudent() {
+//   await paymentApi.addStudents(studentName.value);
+// }
+// async function addClass() {
+//   await paymentApi.addClass();
+// }
 </script>
 
 <style lang="scss" scoped>
