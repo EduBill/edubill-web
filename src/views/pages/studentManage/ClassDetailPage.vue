@@ -3,36 +3,36 @@
     :title="'기초반 / 영어 유치원'"
     :back="true"
     :right-items="'삭제'"
+    :on-delete="() => handleModalClick()"
   />
   <ul class="classdetail-container">
     <li>
       <h3>수업명</h3>
-      <h2>기초반</h2>
+      <h2>{{ state.groupName }}</h2>
     </li>
 
     <li>
       <h3>수업 대상</h3>
-      <h2>기타/영어 유치원</h2>
+      <h2>{{ state.schoolType }}/ {{ state.schoolLevel }}</h2>
     </li>
     <li class="classdetail-classtime">
       <h3>수업 시간</h3>
       <ul>
-        <li>
-          <h2>월 <span> | 14:00 ~ 18:00</span></h2>
-        </li>
-
-        <li>
-          <h2>월 <span> | 14:00 ~ 18:00</span></h2>
+        <li v-for="time in state.schoolTime" :key="time.id">
+          <h2>
+            {{ time.dayOfWeek
+            }}<span> | {{ time.startTime }} ~ {{ time.endTime }}</span>
+          </h2>
         </li>
       </ul>
     </li>
     <li>
       <h3>수업료</h3>
-      <h2>170,000 원</h2>
+      <h2>{{ state.tuition }} 원</h2>
     </li>
     <li>
       <h3>메모</h3>
-      <h2>화목 수업</h2>
+      <h2>{{ state.memo }}</h2>
     </li>
   </ul>
   <div class="button-area">
@@ -51,20 +51,60 @@
       :text="'확인'"
     />
   </div>
+  <ClassDeleteModal
+    :use-modal="useModal"
+    :handle-modal-click="handleModalClick"
+    :submit="handleModalClick"
+    :group-id="state.groupId"
+  />
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
 import { GroupApi } from '@/api/GroupApi';
+import { State } from '@/stores/typings/types.addNewClass';
+import ClassDeleteModal from '@/components/resources/class/ClassDeleteModal.vue';
+
+const useModal = ref(false);
+const state = reactive<State>({
+  groupName: '',
+  schoolType: '',
+  schoolLevel: '',
+  schoolTime: [],
+  day: '월',
+  forwardTime: '',
+  backwardTime: '',
+  tuition: '',
+  memo: '',
+  check: false,
+  groupId: 0,
+});
 
 const route = useRoute();
 
+const groupApi = new GroupApi();
+
+function handleModalClick() {
+  useModal.value = !useModal.value;
+  useModal.value
+    ? (document.body.style.overflowY = 'hidden')
+    : (document.body.style.overflowY = 'auto');
+}
+
+async function onCheckGroup(id: number) {
+  const res = await groupApi.getGroupListDetail(id);
+  console.log(res);
+}
+
 onMounted(() => {
-  const groupId = route.query.groupId;
-  console.log('groupId:', groupId);
+  state.groupId = Number(route.query.groupId);
+  console.log('groupId:', state.groupId);
+  // if (groupId) {
+  //   onCheckGroup(groupId);
+  // }
 });
 </script>
 

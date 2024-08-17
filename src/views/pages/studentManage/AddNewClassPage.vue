@@ -341,12 +341,11 @@ async function onSubmit() {
     tuition: Number(newClassInfo.tuition.replace(/[^0-9]/g, '')),
     groupMemo: newClassInfo.memo,
   });
-  console.log(res);
   const groupid = res.data.groupId;
   handleModalClick();
 
   router.push({
-    name: 'newClassInfo',
+    name: 'classDetail',
     query: { groupId: groupid },
   });
 }

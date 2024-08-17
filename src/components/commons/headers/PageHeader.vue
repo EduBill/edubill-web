@@ -66,8 +66,8 @@ const props = defineProps({
     default: '',
   },
   onDelete: {
-    type: () => null,
-    default: false,
+    type: Function,
+    default: () => {},
   },
 });
 
