@@ -54,20 +54,21 @@
   <ClassDeleteModal
     :use-modal="useModal"
     :handle-modal-click="handleModalClick"
-    :submit="handleModalClick"
-    :group-id="state.groupId"
+    :delete="onDelete"
+    :group-id="Number(route.query.groupId)"
   />
 </template>
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
+import ClassDeleteModal from '@/components/resources/class/ClassDeleteModal.vue';
 import { GroupApi } from '@/api/GroupApi';
 import { State } from '@/stores/typings/types.addNewClass';
-import ClassDeleteModal from '@/components/resources/class/ClassDeleteModal.vue';
 
+const router = useRouter();
 const useModal = ref(false);
 const state = reactive<State>({
   groupName: '',
@@ -94,17 +95,40 @@ function handleModalClick() {
     : (document.body.style.overflowY = 'auto');
 }
 
-async function onCheckGroup(id: number) {
-  const res = await groupApi.getGroupListDetail(id);
-  console.log(res);
+async function onDelete(id: number) {
+  try {
+    console.log(id);
+    const res = await groupApi.deleteGroup(id);
+    return res;
+  } catch {
+    console.log('반 삭제 실패');
+  } finally {
+    handleModalClick();
+  }
 }
 
-onMounted(() => {
+async function onCheckGroup(id: number) {
+  try {
+    const res = await groupApi.getGroupListDetail(id);
+    return res;
+  } catch {
+    console.log('반 조회 실패');
+    router.back();
+  }
+}
+
+onMounted(async () => {
   state.groupId = Number(route.query.groupId);
-  console.log('groupId:', state.groupId);
-  // if (groupId) {
-  //   onCheckGroup(groupId);
-  // }
+  const groupData = (await onCheckGroup(state.groupId))?.data;
+
+  if (groupData) {
+    state.groupName = groupData.groupName;
+    state.schoolType = groupData.schoolType;
+    state.schoolLevel = groupData.gradeLevel;
+    state.schoolTime = groupData.classTimeResponseDtos;
+    state.tuition = groupData.tuition;
+    state.memo = groupData.groupMemo;
+  }
 });
 </script>
 

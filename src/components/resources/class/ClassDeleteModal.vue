@@ -12,7 +12,7 @@
           :disabled="false"
           :color="'disabled'"
           :text="'아니요, 유지할게요'"
-          @click="props.submit"
+          @click="props.handleModalClick"
         />
         <Buttons
           class="btn-text"
@@ -20,7 +20,7 @@
           :disabled="false"
           :color="'selected'"
           :text="'네, 삭제할게요'"
-          @click="props.submit"
+          @click="props.delete(props.groupId)"
         />
       </footer>
     </div>
@@ -46,7 +46,7 @@ const props = defineProps({
     type: Function,
     required: true,
   },
-  submit: {
+  delete: {
     type: Function,
     required: true,
   },
@@ -62,7 +62,7 @@ const props = defineProps({
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  padding: unit(17.5) unit(19) unit(40) unit(17.5);
+  padding: unit(28) unit(20) unit(28) unit(20);
 
   .modal-frame-header {
     width: 100%;
@@ -129,6 +129,10 @@ const props = defineProps({
     gap: unit(10);
 
     :deep() {
+      .disabled {
+        color: #9f9f9f;
+        line-height: unit(21);
+      }
       .selected {
         color: #ff4242;
         line-height: unit(21);
