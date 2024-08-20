@@ -67,7 +67,6 @@
             <div class="input-box">
               <ui-text-input
                 id="school-level"
-                v-model:value="newClassInfo.groupName"
                 type="text"
                 inputmode="text"
                 :placeholder="'예) 영어 유치원'"
