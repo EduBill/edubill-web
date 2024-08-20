@@ -27,7 +27,7 @@
         @click="onClickPayManage"
       />
       <RectangleMenuButton
-        title="원생 관리"
+        title="수강 관리"
         content="시간별 납부 내역 확인"
         icon-name="chart"
         back-color="#F3F3FF"

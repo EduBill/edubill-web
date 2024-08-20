@@ -32,6 +32,7 @@
               <div>새로운 반 추가</div>
             </div>
           </div>
+          {{ selectedClass }}
           <div v-for="(classItem, index) in classList" :key="index">
             <div class="class-item-container">
               <div class="ui-checkbox">
@@ -122,7 +123,7 @@ async function getClassInfo() {
     if (res.data.content.length === 0) {
       hasMoreData.value = false;
     } else {
-      //classList.value = [...classList.value, ...res.data.content];
+      classList.value = [...classList.value, ...res.data.content];
       page.value++;
     }
 
@@ -226,6 +227,8 @@ function handleAddClassBtn() {
       width: 100%;
       align-items: center;
       justify-content: space-between;
+      gap: unit(16);
+      padding: unit(8) 0;
 
       .class-detail-btn {
         padding: 6px 12px;

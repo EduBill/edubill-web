@@ -12,7 +12,7 @@
         @click="onClickBack"
       >
         <!-- <img src="/imgs/icon/arrow-back.svg" alt="뒤로 가기" /> -->
-        <svg-icon name="chevronLeft" />
+        <svg-icon name="largeChevronLeft" />
       </button>
     </div>
 
@@ -27,6 +27,14 @@
         class="btn-text"
         @click="onCancel"
       ></button>
+      <button
+        v-if="hasRightButtonItem('삭제')"
+        type="button"
+        class="btn-delete"
+        @click="props.onDelete"
+      >
+        {{ props.rightItems }}
+      </button>
     </div>
   </header>
 </template>
@@ -55,7 +63,11 @@ const props = defineProps({
   },
   deepLinkBackAction: {
     type: String,
-    default: false,
+    default: '',
+  },
+  onDelete: {
+    type: Function,
+    default: () => {},
   },
 });
 
@@ -170,6 +182,13 @@ function onCancel() {
     font-weight: 400;
     color: #e4b0e3;
     flex-shrink: 0;
+  }
+
+  .btn-delete {
+    font-size: unit(15);
+    font-weight: 400;
+    line-height: 21px;
+    color: #737373;
   }
 }
 </style>
