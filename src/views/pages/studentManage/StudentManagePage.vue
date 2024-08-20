@@ -84,7 +84,7 @@
           </div>
         </div>
       </ul>
-      <ul class="category-container" @click="handleModalClick">
+      <ul class="category-container" @click="handleAcademicInfo">
         <div class="subtitle">학적 정보</div>
         <div class="input-container">
           <div :class="`input-btn ${isSelected ? 'selected' : ''}`">
@@ -109,11 +109,11 @@
         </div>
       </ul>
       <StudentInfoModal
-        :use-modal="useModal"
-        :handle-modal-click="handleModalClick"
+        :use-modal="useStudentInfoModal"
+        :handle-modal-click="handleAcademicInfo"
         @selected-value="handleStudentInfo"
       ></StudentInfoModal>
-      <ul class="category-container">
+      <ul class="category-container" @click="handleSelectClass">
         <div class="subtitle">참여하는 수업</div>
         <div class="input-container">
           <div class="input-btn">
@@ -122,6 +122,11 @@
           </div>
         </div>
       </ul>
+      <SelectClassModal
+        :use-modal="useClassInfoModal"
+        :handle-modal-click="handleSelectClass"
+        @selected-class="handleClassInfo"
+      />
       <ul class="category-container">
         <div class="subtitle">메모</div>
         <div class="input-container">
@@ -154,15 +159,18 @@ import Buttons from '@/components/resources/buttons/Buttons.vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
 import { StudentApi } from '@/api/StudentApi';
+import SelectClassModal from '@/components/resources/student/SelectClassModal.vue';
 
 const studentApi = new StudentApi();
-const useModal = ref(false);
+const useStudentInfoModal = ref(false);
+const useClassInfoModal = ref(false);
 const studentInfoData = ref({
   school: '학교급',
   grade: '학년',
   field: '계열',
   schoolName: '학교 명 입력',
 });
+const classInfoData = ref([]);
 const studentPhoneNumber = ref(['010', '', '']);
 const parentsPhoneNumber = ref(['010', '', '']);
 const addStudentData = ref({
@@ -178,8 +186,8 @@ const addStudentData = ref({
   memo: '',
 });
 const isSelected = ref(false);
-function handleModalClick() {
-  useModal.value = !useModal.value;
+function handleAcademicInfo() {
+  useStudentInfoModal.value = !useStudentInfoModal.value;
 }
 
 function handleStudentInfo(value) {
@@ -189,6 +197,15 @@ function handleStudentInfo(value) {
   }
 }
 
+function handleSelectClass() {
+  console.log(useClassInfoModal);
+  useClassInfoModal.value = !useClassInfoModal.value;
+}
+function handleClassInfo(value) {
+  if (value) {
+    classInfoData.value = value;
+  }
+}
 function handleSubmit() {
   addStudentData.value = {
     ...addStudentData.value,

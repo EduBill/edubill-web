@@ -12,6 +12,24 @@ interface addStudentType {
   memo: string;
 }
 
+export interface classData {
+  groupId: number;
+  groupName: string;
+  classTimeResponseDtos: classTimeType[];
+}
+interface classTimeType {
+  classTimeId: number;
+  dayOfWeek: string;
+  startTime: string;
+  endTime: string;
+}
+
+interface classDataApiResponse {
+  data: {
+    content: classData[]; // PaymentData 타입의 배열
+  };
+}
+
 export class StudentApi<
   SecurityDataType = unknown,
 > extends HttpClient<SecurityDataType> {
@@ -35,6 +53,15 @@ export class StudentApi<
         parentName: '부모1',
         parentPhoneNumber: '01011112222',
       },
+    });
+  };
+
+  //반 목록 조회 api
+  getGroupInfo = (page: number, size: number) => {
+    return this.request({
+      path: `/v1/student/allGroups?page=${page}&size=${size}`,
+      method: 'GET',
+      type: ContentType.Json,
     });
   };
 }

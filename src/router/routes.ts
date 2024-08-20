@@ -60,9 +60,16 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/studentManage',
         component: () =>
-          import('@/views/pages/studentManage/StudentManagePage.vue'),
+          import('@/views/pages/studentManage/CourseManagePage.vue'),
         name: 'studentManage',
-        meta: { title: '상세반정보' },
+        meta: { title: '수강관리' },
+      },
+      {
+        path: '/studentManage/addNewStudent',
+        component: () =>
+          import('@/views/pages/studentManage/StudentManagePage.vue'),
+        name: 'addNewStudent',
+        meta: { title: '수강관리' },
       },
       {
         path: '/studentManage/classDetail',
