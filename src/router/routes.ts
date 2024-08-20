@@ -78,13 +78,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'newClass',
         meta: { title: '새로운반추가' },
       },
-      {
-        path: '/studentManage/classInfo',
-        component: () =>
-          import('@/views/pages/studentManage/ClassInfoPage.vue'),
-        name: 'newClassInfo',
-        meta: { title: '새로운반정보' },
-      },
 
       {
         path: '/:catchAll(.*)',

@@ -9,6 +9,7 @@ export interface State {
   memo: string;
   schoolType: string;
   check: boolean;
+  groupId?: number;
 }
 export interface SchoolTime {
   id: number;
