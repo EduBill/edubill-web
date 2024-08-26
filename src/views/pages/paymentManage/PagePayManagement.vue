@@ -109,10 +109,22 @@ const paymentApi = new PaymentApi();
 //토글의 상태값 컨트롤
 const isClickCheckedPaymentList = ref(true);
 onMounted(() => {
+  setFormattedDate();
+  setFirstExcelUploaded();
   getPaymentStatus();
-  console.log('firstExcelUploaded 상태', paymentStatus.firstExcelUploaded);
 });
 
+function setFormattedDate() {
+  state.formattedDate = formatYearMonthDate(
+    paymentDate.year,
+    paymentDate.month
+  );
+}
+function setFirstExcelUploaded() {
+  if (paymentStatus.isExcelUploaded === true) {
+    paymentStatus.setFirstExcelUploaded(true);
+  }
+}
 async function getPaymentStatus() {
   // 현재 날짜 전달하여 납부 현황 가져오기
   if (state.formattedDate !== '') {
@@ -148,15 +160,10 @@ async function deleteExcelData() {
 }
 
 function changeChart({ year, month }) {
-  console.log('chart change 시작', year, month);
-
   //차트의 좌우 버튼을 클릭했을 때 paymentDate 를 변경해준다.
   paymentDate.year = year;
   paymentDate.month = month;
-  state.formattedDate = formatYearMonthDate(
-    paymentDate.year,
-    paymentDate.month
-  );
+  setFormattedDate();
   // 저장된 데이터가 있는지 찾기
   const savedData = savedPaymentStatusData.get(state.formattedDate);
   if (savedData) {
@@ -172,6 +179,7 @@ function changeChart({ year, month }) {
     state.listKey++;
   } else {
     console.log('저장된 차트 데이터 없음');
+    // setFirstExcelUploaded();
     getPaymentStatus();
   }
 }
@@ -188,12 +196,13 @@ function savePaymentStatusData(date: string) {
   });
 }
 watch(
-  () => state.formattedDate,
+  //날짜를 변경한 경우
+  () => paymentStatus.isExcelUploaded,
   newValue => {
-    getPaymentStatus();
-    console.log('날짜 변경됨', newValue);
+    setFirstExcelUploaded();
   }
 );
+
 // async function excelUploaded() {
 //   await excelApi.updateIsExcelUploaded(state.formattedDate);
 //   // isExcelUploaded = true 코드는 getPaymentStatus 내부에 존재
