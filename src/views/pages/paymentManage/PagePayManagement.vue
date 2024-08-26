@@ -103,7 +103,7 @@ const state = reactive({
 });
 
 // API 호출로 얻은 데이터를 저장할 const
-// const savedPaymentStatusData = new Map();
+const savedPaymentStatusData = new Map();
 
 const paymentApi = new PaymentApi();
 //토글의 상태값 컨트롤
@@ -128,7 +128,7 @@ async function getPaymentStatus() {
       state.chartKey += 1;
 
       // // 데이터 저장
-      // savePaymentStatusData(state.formattedDate);
+      savePaymentStatusData(state.formattedDate);
     }
   }
   // list 리렌더링
@@ -158,35 +158,35 @@ function changeChart({ year, month }) {
     paymentDate.month
   );
   // 저장된 데이터가 있는지 찾기
-  // const savedData = savedPaymentStatusData.get(state.formattedDate);
-  // if (savedData) {
-  //   console.log('저장된 차트 데이터 출력');
-  //   paymentStatus.paidCount = savedData.paidCount;
-  //   paymentStatus.unpaidCount = savedData.unpaidCount;
-  //   paymentStatus.totalPaidAmount = savedData.totalPaidAmount;
-  //   paymentStatus.totalUnpaidAmount = savedData.totalUnpaidAmount;
-  //   paymentStatus.isExcelUploaded = savedData.isExcelUploaded;
+  const savedData = savedPaymentStatusData.get(state.formattedDate);
+  if (savedData) {
+    console.log('저장된 차트 데이터 출력');
+    paymentStatus.paidCount = savedData.paidCount;
+    paymentStatus.unpaidCount = savedData.unpaidCount;
+    paymentStatus.totalPaidAmount = savedData.totalPaidAmount;
+    paymentStatus.totalUnpaidAmount = savedData.totalUnpaidAmount;
+    paymentStatus.isExcelUploaded = savedData.isExcelUploaded;
 
-  //   // chart, list 리렌더링
-  //   state.chartKey += 1;
-  //   state.listKey++;
-  // } else {
-  //   console.log('저장된 차트 데이터 없음');
-  //   getPaymentStatus();
-  // }
+    // chart, list 리렌더링
+    state.chartKey += 1;
+    state.listKey++;
+  } else {
+    console.log('저장된 차트 데이터 없음');
+    getPaymentStatus();
+  }
 }
 
-// function savePaymentStatusData(date: string) {
-//   const key = date;
-//   // date를 key로 하여 payment status 데이터 저장
-//   savedPaymentStatusData.set(key, {
-//     paidCount: paymentStatus.paidCount,
-//     unpaidCount: paymentStatus.unpaidCount,
-//     totalPaidAmount: paymentStatus.totalPaidAmount,
-//     totalUnpaidAmount: paymentStatus.totalUnpaidAmount,
-//     isExcelUploaded: paymentStatus.isExcelUploaded,
-//   });
-// }
+function savePaymentStatusData(date: string) {
+  const key = date;
+  // date를 key로 하여 payment status 데이터 저장
+  savedPaymentStatusData.set(key, {
+    paidCount: paymentStatus.paidCount,
+    unpaidCount: paymentStatus.unpaidCount,
+    totalPaidAmount: paymentStatus.totalPaidAmount,
+    totalUnpaidAmount: paymentStatus.totalUnpaidAmount,
+    isExcelUploaded: paymentStatus.isExcelUploaded,
+  });
+}
 watch(
   () => state.formattedDate,
   newValue => {
