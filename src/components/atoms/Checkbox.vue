@@ -19,7 +19,7 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
 
-const refCheckbox = ref(null);
+const refCheckbox = ref<HTMLInputElement | null>(null);
 const props = defineProps({
   modelValue: {
     type: Array,
