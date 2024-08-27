@@ -30,7 +30,11 @@
       </div>
     </header>
 
-    <main></main>
+    <main>
+      <div v-for="studentInfo in studentsInfo" :key="studentInfo.studentId">
+        <StudentInfoItem :student-info="studentInfo" />
+      </div>
+    </main>
 
     <div class="add-student-button" @click="handleClickAddStudent">
       <svg-icon name="plusOutline" class="icon"></svg-icon>
@@ -43,14 +47,24 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 
+import { onMounted, ref } from 'vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
+import StudentInfoItem from '@/components/resources/student/StudentInfoItem.vue';
+import { StudentApi, studentInfoContentType } from '@/api/StudentApi';
 
+const studentApi = new StudentApi();
+const studentsInfo = ref<studentInfoContentType[]>([]);
 const router = useRouter();
-
+onMounted(() => getStudentInfo());
 function handleClickAddStudent() {
   router.push({
     name: 'addNewStudent',
   });
+}
+
+async function getStudentInfo() {
+  const res = await studentApi.getAllStudentInfo(0, 6);
+  studentsInfo.value = res.data.content;
 }
 </script>
 

@@ -29,6 +29,19 @@ interface classDataApiResponse {
     content: classData[]; // PaymentData 타입의 배열
   };
 }
+export interface StudentInfoType {
+  content: studentInfoContentType[];
+  pageable: {};
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
+export interface studentInfoContentType {
+  studentId: number;
+  studentName: string;
+  parentName: string;
+  classNames: string[];
+}
 
 export class StudentApi<
   SecurityDataType = unknown,
@@ -60,6 +73,14 @@ export class StudentApi<
   getGroupInfo = (page: number, size: number) => {
     return this.request({
       path: `/v1/student/allGroups?page=${page}&size=${size}`,
+      method: 'GET',
+      type: ContentType.Json,
+    });
+  };
+
+  getAllStudentInfo = (page: number, size: number) => {
+    return this.request({
+      path: `/v1/student/allStudents?page=${page}&size=${size}`,
       method: 'GET',
       type: ContentType.Json,
     });
