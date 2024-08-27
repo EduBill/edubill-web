@@ -3,7 +3,7 @@
   <div class="page-content has-bottom-tabbar">
     <h2 class="content-title" v-html="title"></h2>
 
-    <ui-form ref="refForm" class="form-passport" @submit="">
+    <ui-form ref="refForm" class="form-passport">
       <div class="text-field">
         <label for="display-name">{{ '이름' }}</label>
         <div class="input-box">

@@ -222,6 +222,7 @@ async function onClickRequestCertified(e) {
 function onSubmit(e) {
   console.log('onSubmit');
 
+  // eslint-disable-next-line require-await
   setTimeout(async () => {
     if (!state.isRequestCertified) {
     } else {

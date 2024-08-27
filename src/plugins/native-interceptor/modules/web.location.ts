@@ -40,6 +40,7 @@ export function getLocationPermission() {
 }
 
 export function getCurrentLocation(options) {
+  // eslint-disable-next-line require-await
   return new Promise(async (resolve, reject) => {
     try {
       if (typeof navigator?.geolocation?.getCurrentPosition !== 'function') {
@@ -73,6 +74,7 @@ export function getCurrentLocation(options) {
 let __LOCATION_WATCH_ID__: number | null = null;
 
 export function watchLocation(options: { handler: Function }) {
+  // eslint-disable-next-line require-await
   return new Promise(async (resolve, reject) => {
     try {
       if (typeof navigator?.geolocation?.watchPosition !== 'function') {
@@ -80,8 +82,9 @@ export function watchLocation(options: { handler: Function }) {
         return;
       }
 
-      let watchId,
-        isSent = false;
+      // eslint-disable-next-line prefer-const
+      let watchId: number;
+      let isSent = false;
 
       if (__LOCATION_WATCH_ID__) {
         navigator?.geolocation?.clearWatch(__LOCATION_WATCH_ID__);
@@ -136,6 +139,7 @@ export function watchLocation(options: { handler: Function }) {
 }
 
 export function clearWatch() {
+  // eslint-disable-next-line require-await
   return new Promise(async (resolve, reject) => {
     try {
       if (typeof navigator?.geolocation?.clearWatch !== 'function') {

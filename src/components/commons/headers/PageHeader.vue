@@ -55,6 +55,7 @@ const props = defineProps({
   },
   deepLinkBackAction: {
     type: String,
+    // eslint-disable-next-line vue/require-valid-default-prop
     default: false,
   },
 });

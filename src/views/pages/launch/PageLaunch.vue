@@ -23,6 +23,7 @@ const emit = defineEmits(['initialize']);
 const route = useRoute();
 const router = useRouter();
 const session = useSessionStore();
+// eslint-disable-next-line vue/no-dupe-keys
 const state = reactive({
   error: '',
   properties: {},
