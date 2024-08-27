@@ -154,6 +154,9 @@ async function deleteExcelData() {
   try {
     await excelApi.deleteExcelData(state.formattedDate);
     paymentStatus.setExcelUploaded(false);
+    // 저장된 데이터 삭제
+    savedPaymentStatusData.delete(state.formattedDate);
+    console.log(`삭제된 데이터: ${state.formattedDate}`);
   } catch (error) {
     console.log(error, '삭제실패');
   }
