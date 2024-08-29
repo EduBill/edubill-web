@@ -86,6 +86,7 @@ export const useSessionStore = defineStore({
     unregister(payload: any) {
       console.log('unregister');
 
+      // eslint-disable-next-line no-async-promise-executor
       return new Promise(async (resolve, reject) => {
         try {
           await storage.set(__SESSION_TOKEN__, '');
