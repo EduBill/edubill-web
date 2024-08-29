@@ -19,7 +19,7 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
 
-const refCheckbox = ref(null);
+const refCheckbox = ref<HTMLInputElement | null>(null);
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -63,6 +63,7 @@ function isSameValues(a, b) {
 
 function updateModelValue() {
   const isChecked = refCheckbox.value?.checked;
+  const newModelValue = [...props.modelValue];
 
   if (props.type === 'all') {
     if (!isChecked) {
@@ -72,17 +73,19 @@ function updateModelValue() {
     } else {
       _.forEach(props.value as any[], item => {
         if (!props.modelValue?.includes(item)) {
-          props.modelValue?.push(item);
+          // props.modelValue?.push(item);
+          newModelValue.push(item);
         }
       });
     }
   } else if (!props.modelValue?.includes(props.value)) {
-    props.modelValue?.push(props.value);
+    // props.modelValue?.push(props.value);
+    newModelValue.push(props.value);
   } else if (!isChecked) {
-    _.remove(props.modelValue, props.value);
+    _.remove(newModelValue, n => n === props.value);
   }
 
-  emit('update:modelValue', props.modelValue);
+  emit('update:modelValue', newModelValue);
 }
 
 function onInput(e) {

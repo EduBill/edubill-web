@@ -92,7 +92,7 @@ const inputProps = computed(() => {
 });
 
 const emit = defineEmits(['focus', 'blur', 'keyup', 'input', 'update:value']);
-const state = reactive({ focused: false });
+const inputState = reactive({ focused: false });
 
 const classNames = computed(() => {
   return [
@@ -102,7 +102,7 @@ const classNames = computed(() => {
     {
       wide: props.wide,
       readonly: props.readonly,
-      focused: state.focused,
+      focused: inputState.focused,
       error: props.error.length > 0,
     },
   ];
@@ -123,13 +123,13 @@ function maxLengthCheck(e) {
 }
 
 function onFocus(e) {
-  state.focused = true;
+  inputState.focused = true;
   // useLayoutStore().keyboardHeight = 1;
   emit('focus', e);
 }
 
 function onBlur(e) {
-  state.focused = false;
+  inputState.focused = false;
   emit('blur', e);
 }
 
