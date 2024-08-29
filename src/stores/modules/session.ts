@@ -38,6 +38,7 @@ export const useSessionStore = defineStore({
     init() {
       console.log('init');
 
+      // eslint-disable-next-line no-async-promise-executor
       return new Promise(async (resolve, reject) => {
         try {
           let token = await storage.get(__SESSION_TOKEN__);
@@ -60,7 +61,7 @@ export const useSessionStore = defineStore({
     verify(payload: any) {
       console.log('verify');
 
-      // eslint-disable-next-line require-await
+      // eslint-disable-next-line require-await, no-async-promise-executor
       return new Promise(async (resolve, reject) => {
         try {
           resolve(this);
@@ -73,7 +74,7 @@ export const useSessionStore = defineStore({
     register(payload: { profile: any; token: any }) {
       console.log('register');
 
-      // eslint-disable-next-line require-await
+      // eslint-disable-next-line require-await, no-async-promise-executor
       return new Promise(async (resolve, reject) => {
         try {
           resolve(this);
@@ -106,7 +107,8 @@ export const useSessionStore = defineStore({
     clearSession() {
       console.log('clearSession');
 
-      // eslint-disable-next-line require-await
+      // no-async-promise-executor
+      // eslint-disable-next-line no-async-promise-executor, require-await
       return new Promise(async (resolve, reject) => {
         try {
           this.unregister({});
