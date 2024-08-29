@@ -36,7 +36,10 @@
                     :text="option.text"
                     @click="() => selectSchoolType(option)"
                   />
-                  <span class="rightTriangle">
+                  <span
+                    v-if="newClassInfo.schoolType.includes(option.text)"
+                    class="rightTriangle"
+                  >
                     <svg-icon name="rightTriangle" />
                   </span>
                 </li>
@@ -67,10 +70,8 @@
             <div class="input-box">
               <ui-text-input
                 id="school-level"
-                v-model:value="newClassInfo.groupName"
                 type="text"
                 inputmode="text"
-                pattern="^\d*$"
                 :placeholder="'예) 영어 유치원'"
               />
             </div>
@@ -152,7 +153,6 @@
               v-model:value="newClassInfo.tuition"
               type="text"
               inputmode="text"
-              pattern="^\d*$"
               :maxlength="11"
               :placeholder="'000,000'"
               @keyup="e => onChangePriceFormat(e)"
@@ -169,7 +169,6 @@
               v-model:value="newClassInfo.memo"
               type="text"
               inputmode="text"
-              pattern="^\d*$"
               :maxlength="20"
               :placeholder="'입력해주세요'"
             />
@@ -341,12 +340,11 @@ async function onSubmit() {
     tuition: Number(newClassInfo.tuition.replace(/[^0-9]/g, '')),
     groupMemo: newClassInfo.memo,
   });
-  console.log(res);
   const groupid = res.data.groupId;
   handleModalClick();
 
   router.push({
-    name: 'newClassInfo',
+    name: 'classDetail',
     query: { groupId: groupid },
   });
 }

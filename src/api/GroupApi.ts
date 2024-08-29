@@ -47,7 +47,7 @@ export class GroupApi<
 
   getGroupListDetail = (id: number) => {
     return this.request({
-      path: `/v1/groups/${id}`,
+      path: `/v1/student/groups/${id}`,
       method: 'GET',
       type: ContentType.Json,
     });
@@ -91,7 +91,7 @@ export class GroupApi<
 
   putGroup = (id: number, props: AddNewGroupProps) => {
     return this.request({
-      path: `/v1/groups/${id}`,
+      path: `/v1/student/groups/${id}`,
       method: 'PUT',
       type: ContentType.Json,
       body: {
@@ -115,9 +115,9 @@ export class GroupApi<
    * @secure
    */
 
-  DeleteGroup = (id: number) => {
+  deleteGroup = (id: number) => {
     return this.request({
-      path: `/v1/groups/${id}`,
+      path: `/v1/student/groups/${id}`,
       method: 'DELETE',
       type: ContentType.Json,
     });
