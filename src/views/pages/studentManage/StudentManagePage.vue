@@ -113,16 +113,31 @@
         :handle-modal-click="handleAcademicInfo"
         @selected-value="handleStudentInfo"
       ></StudentInfoModal>
-      <ul class="category-container" @click="handleSelectClass">
+      <ul class="category-container">
         <div class="subtitle">참여하는 수업</div>
-        <div class="input-container">
+        <div class="input-container" @click="handleSelectClass">
           <div class="input-btn">
             <div>선택해주세요</div>
             <svg-icon name="chevronRight"></svg-icon>
           </div>
         </div>
+        <div v-for="classInfo in classInfoData" :key="classInfo.id">
+          <div class="selected-class-item">
+            <span>{{ classInfo.className }}</span>
+            <!-- 시간 표시 어떻게 할건지 정해야함 -->
+            <span
+              >{{ classInfo.classTime[0].startTime }}~{{
+                classInfo.classTime[0].endTime
+              }}</span
+            >
+            <svg-icon
+              name="purpleClose"
+              @click="deleteSelectedClass(classInfo.id)"
+            />
+          </div>
+        </div>
       </ul>
-      <SelectClassModal
+      <SelectParticipatingClass
         :use-modal="useClassInfoModal"
         :handle-modal-click="handleSelectClass"
         @selected-class="handleClassInfo"
@@ -154,13 +169,15 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import StudentInfoModal from '../../../components/resources/student/StudentInfoModal.vue';
 import Buttons from '@/components/resources/buttons/Buttons.vue';
 import PageHeader from '@/components/commons/headers/PageHeader.vue';
 import UiForm from '@/components/molecules/forms/Form.vue';
-import { StudentApi } from '@/api/StudentApi';
-import SelectClassModal from '@/components/resources/student/SelectClassModal.vue';
+import { classInfoDataType, StudentApi } from '@/api/StudentApi';
+import SelectParticipatingClass from '@/components/resources/student/SelectParticipatingClass.vue';
 
+const router = useRouter();
 const studentApi = new StudentApi();
 const useStudentInfoModal = ref(false);
 const useClassInfoModal = ref(false);
@@ -170,7 +187,7 @@ const studentInfoData = ref({
   field: '계열',
   schoolName: '학교 명 입력',
 });
-const classInfoData = ref([]);
+const classInfoData = ref<classInfoDataType[]>([]);
 const studentPhoneNumber = ref(['010', '', '']);
 const parentsPhoneNumber = ref(['010', '', '']);
 const addStudentData = ref({
@@ -178,7 +195,7 @@ const addStudentData = ref({
   studentPhoneNumber: '',
   parentName: '',
   parentPhoneNumber: '',
-  groupIds: [2],
+  groupIds: [] as number[],
   schoolType: '',
   gradeLevel: '',
   departmentType: '',
@@ -205,10 +222,13 @@ function handleClassInfo(value) {
   if (value) {
     classInfoData.value = value;
   }
+  // console.log('classinfo data', classInfoData.value);
 }
 function handleSubmit() {
+  const groupIdArray = classInfoData.value.map(item => item.id);
   addStudentData.value = {
     ...addStudentData.value,
+    groupIds: groupIdArray,
     schoolType: studentInfoData.value.school,
     gradeLevel: studentInfoData.value.grade,
     departmentType: studentInfoData.value.field,
@@ -221,8 +241,15 @@ function handleSubmit() {
   postStudentInfo(data);
 }
 
+function deleteSelectedClass(id: number) {
+  const index = classInfoData.value.findIndex(element => element.id === id);
+  if (index !== -1) {
+    classInfoData.value.splice(index, 1);
+  }
+}
+
 async function postStudentInfo(data) {
-  await studentApi.addStudent(data);
+  await studentApi.addStudent(data).then(() => router.push('/studentManage'));
 }
 </script>
 
@@ -296,5 +323,17 @@ async function postStudentInfo(data) {
       justify-content: flex-start;
     }
   }
+}
+.selected-class-item {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: unit(10) unit(20);
+  border-radius: unit(8);
+  border: unit(1) solid $color-primary;
+  background: #fbf9ff;
+  font-size: 15px;
+  color: $color-primary;
+  font-weight: 600;
 }
 </style>

@@ -3,10 +3,10 @@
     <div class="modal_frame_container">
       <div class="modal_content_container">
         <header class="modal-header">
-          <div class="title">반 선택</div>
-          <button class="add-class-btn" @click="handleClickAddClass">
-            반 추가
-          </button>
+          <div class="title">참여하는 수업 선택</div>
+          <div class="subtitle">
+            입력하신 학적 정보와 일치하는 반 정보만 노출됩니다
+          </div>
         </header>
         <main class="modal-main">
           <div v-if="classList.length === 0" class="no-data">
@@ -27,6 +27,10 @@
               </svg>
             </div>
             <div>생성된 반 정보가 없습니다</div>
+            <div class="add-class-button" @class="handleAddClassBtn">
+              <svg-icon name="plusOutline" class="icon"></svg-icon>
+              <div>새로운 반 추가</div>
+            </div>
           </div>
           <div v-for="(classItem, index) in classList" :key="index">
             <div class="class-item-container">
@@ -45,35 +49,23 @@
                   <div>{{ classItem.groupName }}</div>
                 </label>
               </div>
-              <div>
-                <button
-                  class="class-detail-btn"
-                  @click="handleDetailBtnClick(classItem.groupId)"
-                >
-                  상세보기
-                </button>
-                <svg-icon name="DotsThreeVertical" class="detail-menu-icon" />
-              </div>
+              <button
+                class="class-detail-btn"
+                @click="handleDetailBtnClick(classItem.groupId)"
+              >
+                상세보기
+              </button>
             </div>
           </div>
           <div id="target" className="targetRef"></div>
         </main>
-        <div class="button-container">
-          <Buttons
-            class="init_button"
-            variants="long"
-            color="disabled"
-            text="초기화"
-            :onclick="handleSubmit"
-          />
-          <Buttons
-            class="submit_button"
-            variants="long"
-            color="selected"
-            text="적용하기"
-            :onclick="handleSubmit"
-          />
-        </div>
+        <Buttons
+          class="submit_button"
+          variants="long"
+          color="selected"
+          text="선택"
+          :onclick="handleSubmit"
+        />
       </div>
     </div>
   </Modal>
@@ -142,10 +134,7 @@ async function getClassInfo() {
     }
   }
 }
-function handleClickAddClass() {
-  //반추가 페이지로 넘어간다.
-  router.push('/studentManage/newClass');
-}
+
 function setupObserver() {
   if (observer.value) {
     observer.value.disconnect();
@@ -201,7 +190,7 @@ function handleAddClassBtn() {
   bottom: 0;
   left: 0;
   height: 60%;
-  padding: unit(20) unit(20);
+  padding: unit(40) unit(20);
   overflow: hidden;
 }
 .modal_content_container {
@@ -213,23 +202,16 @@ function handleAddClassBtn() {
 
   .modal-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     gap: unit(4);
-    border-bottom: unit(1) solid $color-gray-200;
-    padding: unit(16) unit(0);
     .title {
       font-size: 18px;
       font-weight: 600;
     }
-    .add-class-btn {
-      //width: 59px;
-      padding: 4px 12px;
-      border-radius: 4px;
-      border: 1px solid $color-gray-300;
+    .subtitle {
       font-size: 12px;
-    }
-    .detail-menu-icon {
-      cursor: pointer;
+      font-weight: 400;
+      color: $color-gray-500;
     }
   }
 
@@ -250,6 +232,22 @@ function handleAddClassBtn() {
         width: unit(80);
         height: unit(80);
       }
+
+      .add-class-button {
+        display: inline-flex;
+        height: unit(48);
+        padding: 0px 20px 0px 16px;
+        align-items: center;
+        gap: unit(12);
+        border-radius: unit(24);
+        background: #f3edff;
+        color: $color-primary;
+        cursor: pointer;
+
+        .icon {
+          color: white;
+        }
+      }
     }
     .class-item-container {
       display: flex;
@@ -263,7 +261,6 @@ function handleAddClassBtn() {
         padding: 6px 12px;
         border-radius: 8px;
         background: $color-gray-200;
-        margin-right: unit(8);
       }
     }
   }
@@ -274,13 +271,6 @@ function handleAddClassBtn() {
   width: 100%;
 }
 .submit_button {
-  width: 60%;
-}
-.init_button {
-  width: 40%;
-}
-.button-container {
-  display: flex;
-  gap: unit(12);
+  margin-top: unit(36);
 }
 </style>

@@ -1,18 +1,24 @@
 <template>
-  <div class="student-info-container">
-    <div
-      v-for="(className, index) in props.studentInfo.classNames"
-      :key="index"
-      class="group-container"
-    >
-      <div class="group-item">{{ className }}</div>
+  <div class="content-box">
+    <div class="student-info-container">
+      <div class="group-container">
+        <div
+          v-for="(className, index) in props.studentInfo.classNames"
+          :key="index"
+        >
+          <div class="group-item">{{ className }}</div>
+        </div>
+      </div>
+      <div class="student-container">
+        <span class="student-name">
+          {{ props.studentInfo.studentName }}
+        </span>
+        <span class="parents-name">
+          ( {{ props.studentInfo.parentName }} )
+        </span>
+      </div>
     </div>
-    <div class="student-container">
-      <span class="student-name">
-        {{ props.studentInfo.studentName }}
-      </span>
-      <span class="parents-name"> ( {{ props.studentInfo.parentName }} ) </span>
-    </div>
+    <svg-icon name="DotsThreeVertical" class="menu-icon"></svg-icon>
   </div>
 </template>
 
@@ -31,15 +37,22 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
+.content-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 unit(20);
+}
 .student-info-container {
   display: flex;
   flex-direction: column;
   gap: unit(8);
-  padding: unit(16) unit(20);
+  padding: unit(16) 0;
   border-bottom: unit(1) solid $color-gray-200;
   width: 100%;
   .group-container {
     display: flex;
+    flex-direction: row;
     gap: unit(8);
     .group-item {
       padding: unit(4) unit(12);
@@ -56,6 +69,10 @@ const props = defineProps({
     .parents-name {
       color: $color-gray-500;
     }
+  }
+
+  .menu-icon {
+    cursor: pointer;
   }
 }
 </style>

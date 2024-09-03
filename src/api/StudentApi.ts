@@ -23,7 +23,11 @@ interface classTimeType {
   startTime: string;
   endTime: string;
 }
-
+export interface classInfoDataType {
+  id: number;
+  className: string;
+  classTime: classTimeType[];
+}
 interface classDataApiResponse {
   data: {
     content: classData[]; // PaymentData 타입의 배열
