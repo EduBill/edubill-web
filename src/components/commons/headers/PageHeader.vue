@@ -157,7 +157,12 @@ function onCancel() {
     height: 40px;
 
     .svg-icon {
-      font-size: unit(32);
+      font-size: unit(40);
+      width: unit(24);
+      height: unit(24);
+      z-index: 10;
+      position: relative;
+      cursor: pointer;
     }
   }
 

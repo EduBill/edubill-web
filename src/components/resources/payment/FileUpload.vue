@@ -46,7 +46,7 @@ const excelApi = new ExcelApi();
 const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
 
 const handleFileUpload = async (event: any) => {
-  console.log('handle file upload를 실행합니다');
+  //console.log('handle file upload를 실행합니다');
   const file = event.target.files[0];
   if (!file) {
     return;
@@ -55,10 +55,10 @@ const handleFileUpload = async (event: any) => {
   ExcelUploadFormData.append('file', file);
   ExcelUploadFormData.append('bankCode', '004');
   try {
-    console.log('date 출력:', date);
+    //console.log('date 출력:', date);
 
     const res = await excelApi.postExcelData(ExcelUploadFormData, date);
-    console.log('postExcelData 응답:', res);
+    //console.log('postExcelData 응답:', res);
 
     // 응답 상태 코드나 데이터를 체크
     if (res.status === 200) {
