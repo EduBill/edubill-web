@@ -281,6 +281,7 @@ class WNResponse {
   }
 
   toString() {
+    // eslint-disable-next-line no-useless-escape
     return `WNInterface.responder.pool[\'${this.group}\'][\'${this.event}\'][\'${this.key}\'].execute`;
   }
 }
@@ -406,7 +407,9 @@ class WNResponder {
         const response = this._pool[group][event][k];
         response.expire();
       }
-    } else if (this._pool[group]) {
+    }
+    //key 값 undefinded 검사 추가
+    else if (this._pool[group] && key) {
       for (const e in this._pool[group]) {
         for (const k in this._pool[group][e]) {
           const response = this._pool[group][e][key];

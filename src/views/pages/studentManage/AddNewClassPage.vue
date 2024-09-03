@@ -36,7 +36,10 @@
                     :text="option.text"
                     @click="() => selectSchoolType(option)"
                   />
-                  <span class="rightTriangle">
+                  <span
+                    v-if="newClassInfo.schoolType.includes(option.text)"
+                    class="rightTriangle"
+                  >
                     <svg-icon name="rightTriangle" />
                   </span>
                 </li>
@@ -150,7 +153,6 @@
               v-model:value="newClassInfo.tuition"
               type="text"
               inputmode="text"
-              pattern="^\d*$"
               :maxlength="11"
               :placeholder="'000,000'"
               @keyup="e => onChangePriceFormat(e)"

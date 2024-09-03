@@ -15,6 +15,7 @@ const router = createRouter({
   },
 });
 
+// eslint-disable-next-line require-await
 router.beforeEach(async (to, from, next) => {
   if (to.hash) {
     if (from && from.name === to.name && from.path === to.path) {

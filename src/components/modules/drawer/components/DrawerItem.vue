@@ -61,11 +61,13 @@ import {
   onBeforeMount,
   onBeforeUnmount,
   onMounted,
+  // eslint-disable-next-line import/named
   PropType,
   reactive,
   ref,
   watch,
 } from 'vue';
+
 import { useDrawerModule } from '..';
 import {
   DrawerCloseButtonPosition,
@@ -178,6 +180,7 @@ async function onMouseDown(e) {
   }
 }
 
+// eslint-disable-next-line require-await
 async function onClickClose(e) {
   setTimeout(() => {
     closeDrawer();

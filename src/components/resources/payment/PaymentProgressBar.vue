@@ -16,7 +16,7 @@ const props = defineProps({
   },
 });
 
-const percent = ref(0);
+const Percent = ref(0);
 
 onMounted(() => {
   console.log(props.percent);
@@ -34,7 +34,7 @@ const animateProgressBar = () => {
     const elapsedTime = Date.now() - startTime; // 흐른 시간
     const progress = Math.min(1, elapsedTime / duration);
     currentPercent = progress * goalPercent;
-    percent.value = currentPercent;
+    Percent.value = currentPercent;
 
     // 진행률이 1보다 작은 동안 애니메이션 반복
     if (progress < 1) {

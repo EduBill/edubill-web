@@ -1,4 +1,5 @@
 import { readFileSync, readdirSync } from 'fs';
+// eslint-disable-next-line import/named
 import { Plugin } from 'vite';
 
 let idPerfix = '';
