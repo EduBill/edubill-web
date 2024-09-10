@@ -34,7 +34,7 @@ export class ExcelApi<
   postExcelData = (data: FormData, date: String) => {
     return this.request({
       path: `/v1/excel/upload?yearMonth=${date}`,
-      method: 'post',
+      method: 'PUT',
       body: data,
     });
   };
