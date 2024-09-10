@@ -11,7 +11,7 @@
         id="excelData"
         type="file"
         class="input_file"
-        @change="handleFileUpload"
+        @change="fileUpload"
       />
       <label for="excelData" class="label_file">
         <svg-icon class="plus" name="plusOutline" />
@@ -33,6 +33,7 @@ import BottomTooltip from '@/components/molecules/BottomTooltip.vue';
 import { ExcelApi } from '@/api/ExcelApi';
 
 import { usePaymentStatusStore } from '@/stores/modules/payment';
+import { handleFileUpload } from '@/utils/handleFileUpload';
 const paymentStatusStore = usePaymentStatusStore();
 
 const props = defineProps({
@@ -57,7 +58,7 @@ const props = defineProps({
 const showTooltip = ref(false);
 
 const hideTooltip = () => {
-  paymentStatusStore.firstExcelUploaded = false;
+  // paymentStatusStore.firstExcelUploaded = false;
   showTooltip.value = false;
 };
 
@@ -83,25 +84,28 @@ onUnmounted(() => {
   window.removeEventListener('mousedown', hideTooltip);
 });
 
-const handleFileUpload = (event: any) => {
-  const file = event.target.files[0];
-  if (!file) {
-    return;
-  }
-  const ExcelUploadFormData = new FormData();
-  ExcelUploadFormData.append('file', file);
-  ExcelUploadFormData.append('bankCode', '004');
-  console.log('파일업로드합니다');
-  try {
-    excelUploadApi.postExcelData(ExcelUploadFormData, props.yearMonth);
-    paymentStatusStore.setExcelUploaded(true);
-    excelUploadApi.updateIsExcelUploaded(props.yearMonth);
+function fileUpload(e: Event) {
+  handleFileUpload(e, props.yearMonth);
+}
+// const handleFileUpload = (event: any) => {
+//   const file = event.target.files[0];
+//   if (!file) {
+//     return;
+//   }
+//   const ExcelUploadFormData = new FormData();
+//   ExcelUploadFormData.append('file', file);
+//   ExcelUploadFormData.append('bankCode', '004');
+//   console.log('파일업로드합니다');
+//   try {
+//     excelUploadApi.postExcelData(ExcelUploadFormData, props.yearMonth);
+//     paymentStatusStore.setExcelUploaded(true);
+//     excelUploadApi.updateIsExcelUploaded(props.yearMonth);
 
-    emit('update:excelUploaded');
-  } catch (error) {
-    console.log(error);
-  }
-};
+//     emit('update:excelUploaded');
+//   } catch (error) {
+//     console.log(error);
+//   }
+// };
 </script>
 
 <style lang="scss" scoped>
