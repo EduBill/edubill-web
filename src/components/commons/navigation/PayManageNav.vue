@@ -1,10 +1,8 @@
 <template>
   <div class="payManageNav">
-    <svg-icon
-      class="chevronLeft"
-      name="largeChevronLeft"
-      @click="clickBackBtn ? router.push(props.clickBackBtn) : router.go(-1)"
-    />
+    <button class="back-btn" @click="handleClickBackBtn">
+      <svg-icon class="chevronLeft" name="largeChevronLeft" />
+    </button>
     <p>{{ title }}</p>
     <div v-if="plusBtn" class="tooltip_container">
       <input
@@ -106,6 +104,13 @@ function fileUpload(e: Event) {
 //     console.log(error);
 //   }
 // };
+
+function handleClickBackBtn() {
+  console.log(props.clickBackBtn);
+  props.clickBackBtn
+    ? router.push({ name: props.clickBackBtn })
+    : router.back();
+}
 </script>
 
 <style lang="scss" scoped>
@@ -134,7 +139,7 @@ function fileUpload(e: Event) {
 .chevronLeft {
   width: unit(32);
   height: unit(32);
-  z-index: 10;
+  z-index: -10;
 }
 
 .tooltip_container {
@@ -157,5 +162,9 @@ function fileUpload(e: Event) {
 
 .input_file {
   display: none;
+}
+.back-btn {
+  cursor: pointer;
+  z-index: 1000;
 }
 </style>

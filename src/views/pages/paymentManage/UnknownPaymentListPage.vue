@@ -3,7 +3,7 @@
     <PayManageNav
       :title="'미확인입금내역'"
       :plus-btn="false"
-      :click-back-btn="'/payManage'"
+      :click-back-btn="'PayManage'"
     />
     <div class="payment_list_container">
       <div class="payment_detail_container">

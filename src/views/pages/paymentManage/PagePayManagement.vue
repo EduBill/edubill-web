@@ -5,7 +5,7 @@
       :key="state.navKey"
       :plus-btn="true"
       :year-month="formatYearMonthDate(paymentDate.year, paymentDate.month)"
-      :click-back-btn="'/home'"
+      :click-back-btn="'Home'"
     />
     <!-- payManage_calendarChart class를 기본 적용,
     isExcelUploaded false이면 blur 추가 적용 -->
@@ -15,7 +15,6 @@
         blur: !paymentStatus.firstExcelUploaded,
       }"
     >
-      {{ paymentStatus.firstExcelUploaded }}
       <div class="payManage_calendarHeader">
         <PaymentCalendarHeader
           v-if="paymentDate.year != 0"
@@ -37,17 +36,17 @@
           {{ paymentDate.year }}년 {{ paymentDate.month }}월
         </div>
         <div class="payManage_listContainer">
-          <div class="testList">
+          <!--<div class="testList">
             <div>테스트 리스트</div>
             <div class="btn" @click="deleteExcelData">엑셀 삭제하기</div>
-            <!-- <div class="addClass">
+             <div class="addClass">
               <input v-model="studentName" placeholder="이름을 입력하세요" />
               <div class="btn" @click="addStudent">학생추가</div>
-            </div> -->
+            </div> 
             <div>엑셀 업로드 상태 : {{ paymentStatus.isExcelUploaded }}</div>
             <div>엑셀 업로드 상태 : {{ paymentStatus.firstExcelUploaded }}</div>
-            <!-- <div class="btn" @click="addClass">반추가</div> -->
-          </div>
+            <div class="btn" @click="addClass">반추가</div> 
+          </div>-->
           <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
