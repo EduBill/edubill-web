@@ -7,8 +7,7 @@
       :year-month="formatYearMonthDate(paymentDate.year, paymentDate.month)"
       :click-back-btn="'Home'"
     />
-    <!-- payManage_calendarChart class를 기본 적용,
-    isExcelUploaded false이면 blur 추가 적용 -->
+
     <div
       :class="{
         payManage_calendarChart: true,
