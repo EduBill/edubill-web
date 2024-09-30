@@ -1,6 +1,7 @@
 <template>
   <div class="chart">
     <canvas ref="chartCanvas" class="chart_canvas"></canvas>
+
     <div class="chart_Label">
       <PaymentChartLabel
         ellipse-name="purpleEllipse"
@@ -25,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Chart from 'chart.js/auto';
 import PaymentChartLabel from './PaymentChartLabel.vue';
 

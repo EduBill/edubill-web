@@ -77,7 +77,7 @@ import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
 import { formatDate } from '@/utils/formatDate';
-import PaymentItem from '@/components/resources/payment/PaymentItem.vue';
+import PaymentItem from '@/components/resources/payment/paymentContent/PaymentItem.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { intersectionObserver } from '@/utils/intersectionObserver';
 import { hasDateChanged } from '@/utils/hasDateChanged';
