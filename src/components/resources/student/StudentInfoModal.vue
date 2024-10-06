@@ -207,7 +207,10 @@ function handleSubmit() {
   selectedValue.schoolName =
     schoolName.value === '' ? '해당사항없음' : schoolName.value;
   for (const key in selectedValue) {
-    if (selectedValue.hasOwnProperty(key) && selectedValue[key] === '') {
+    if (
+      Object.prototype.hasOwnProperty.call(selectedValue, 'key') &&
+      selectedValue[key] === ''
+    ) {
       alert(`입력을 완료해주세요`);
       return;
     }
