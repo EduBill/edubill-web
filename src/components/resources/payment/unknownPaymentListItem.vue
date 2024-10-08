@@ -7,11 +7,14 @@
     >
       <div class="list_content_box" @click="handleToggle(index)">
         <div>{{ paymentListData.studentName }}</div>
-        <svg-icon class="chevron" name="chevronRight" />
+        <svg-icon
+          :class="isToggleOpen[index] ? 'icon-down' : 'icon'"
+          name="chevronRight"
+        />
       </div>
       <div v-if="isToggleOpen[index]" class="list_toggle_box">
         <div class="button" @click="handleModalClick">완납 처리</div>
-        <div class="button" @click="handleModalClick">청구서 재발송</div>
+        <div class="button resend" @click="handleModalClick">청구서 재발송</div>
         <unknownPaymentModal
           :id="paymentListData.studentId"
           :use-modal="useModal"
@@ -94,14 +97,11 @@ function handleModalClick() {
   font-weight: 600;
   cursor: pointer;
 }
-.list_item_container:hover {
-  border-radius: 6px;
-  background: var(--Gray-Gray-200, #f1f1f1);
-}
 
 .list_content_box {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 .list_toggle_box {
   display: flex;
@@ -112,14 +112,27 @@ function handleModalClick() {
   padding-top: unit(16);
 }
 .button {
-  width: unit(130);
-  height: unit(32);
+  width: 100%;
+  padding: unit(5) unit(30);
+  //height: unit(32);
+  font-size: unit(15);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%;
   border-radius: unit(6);
-  background: var(--Primary-Primary, #7535ff);
+  background: #2f2f2f;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
   font-weight: 500;
+  border-radius: unit(10);
+}
+.resend {
+  background-color: #737373;
+}
+
+.icon-down {
+  transform: rotate(90deg);
 }
 </style>

@@ -60,9 +60,16 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/studentManage',
         component: () =>
-          import('@/views/pages/studentManage/StudentManagePage.vue'),
+          import('@/views/pages/studentManage/CourseManagePage.vue'),
         name: 'studentManage',
-        meta: { title: '상세반정보' },
+        meta: { title: '수강관리' },
+      },
+      {
+        path: '/studentManage/addNewStudent',
+        component: () =>
+          import('@/views/pages/studentManage/StudentManagePage.vue'),
+        name: 'addNewStudent',
+        meta: { title: '원생추가' },
       },
       {
         path: '/studentManage/classDetail',
@@ -77,13 +84,6 @@ const routes: Array<RouteRecordRaw> = [
           import('@/views/pages/studentManage/AddNewClassPage.vue'),
         name: 'newClass',
         meta: { title: '새로운반추가' },
-      },
-      {
-        path: '/studentManage/classInfo',
-        component: () =>
-          import('@/views/pages/studentManage/ClassInfoPage.vue'),
-        name: 'newClassInfo',
-        meta: { title: '새로운반정보' },
       },
 
       {

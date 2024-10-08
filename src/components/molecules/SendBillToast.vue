@@ -9,6 +9,7 @@
 import router from '@/router';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 
+// eslint-disable-next-line require-await
 async function onClickSendBill() {
   router.push({
     name: 'Home',

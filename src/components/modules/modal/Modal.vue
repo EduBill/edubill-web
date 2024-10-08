@@ -18,7 +18,7 @@ const props = defineProps({
 const emits = defineEmits(['close']);
 function closeModal() {
   setTimeout(() => {
-    emits('close');
+    emits('close', true);
   }, 10);
 }
 </script>

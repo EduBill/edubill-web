@@ -69,6 +69,7 @@ const isTouchEffect = ref(props.touchEffect);
 
 const refBtn = ref(null);
 
+// eslint-disable-next-line vue/no-dupe-keys
 const ripple = reactive({
   animation: false,
   x: 0,
@@ -77,6 +78,7 @@ const ripple = reactive({
   height: 0,
 });
 
+// eslint-disable-next-line vue/no-dupe-keys
 const touchEffect = reactive({
   animation: false,
 });

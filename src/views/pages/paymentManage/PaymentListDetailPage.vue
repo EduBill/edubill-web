@@ -3,7 +3,7 @@
     <PayManageNav
       :title="paymentDetailData?.depositorName"
       :plus-btn="false"
-      :click-back-btn="'/payManage'"
+      :click-back-btn="'PayManage'"
     />
     <div class="payment_detail_container">
       <input

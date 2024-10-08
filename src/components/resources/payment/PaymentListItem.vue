@@ -45,7 +45,7 @@ import router from '@/router';
 import { intersectionObserver } from '@/utils/intersectionObserver';
 import { usePaymentDateStore } from '@/stores/modules/payment';
 import { hasDateChanged } from '@/utils/hasDateChanged';
-const emit = defineEmits(['update:excelUploaded']);
+// const emit = defineEmits(['update:excelUploaded']);
 const paymentDate = usePaymentDateStore();
 const paymentListApi = new PaymentApi();
 const paymentData = ref<PaymentData[]>([]);

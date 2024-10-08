@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-unused-vars -->
 <template>
   <teleport to="#teleport-area">
     <div v-if="useModal" class="drawer-bg" @click="closeDrawer"></div>

@@ -5,7 +5,7 @@ import { ToastItem, ToastType, ToastMargin, ToastState } from './types';
 
 export * from './types';
 
-export interface ToastState {
+export interface ToastStates extends ToastState {
   items: ToastItem[];
   hasActions: boolean;
   hasActionBox: boolean;
@@ -13,13 +13,13 @@ export interface ToastState {
 
 export const useToastModule = defineStore({
   id: 'toast',
-  state: (): ToastState => ({
+  state: (): ToastStates => ({
     items: [],
     margin: {
-      top: null,
-      right: null,
-      bottom: null,
-      left: null,
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
     },
     hasActionBox: false,
     hasActions: false,

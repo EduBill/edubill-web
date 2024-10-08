@@ -9,7 +9,9 @@ export enum LOCATION_PERMISSION {
   RESTRICTED = 'restricted',
 }
 
+// Before
 export function getLocationPermission() {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     try {
       const result = await navigator.permissions.query({ name: 'geolocation' });
@@ -40,6 +42,7 @@ export function getLocationPermission() {
 }
 
 export function getCurrentLocation(options) {
+  // eslint-disable-next-line require-await, no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     try {
       if (typeof navigator?.geolocation?.getCurrentPosition !== 'function') {
@@ -52,6 +55,7 @@ export function getCurrentLocation(options) {
           return;
         }
 
+        // eslint-disable-next-line no-unsafe-optional-chaining
         const { latitude, longitude } = result?.coords;
         resolve({
           latitude,
@@ -73,6 +77,7 @@ export function getCurrentLocation(options) {
 let __LOCATION_WATCH_ID__: number | null = null;
 
 export function watchLocation(options: { handler: Function }) {
+  // eslint-disable-next-line require-await, no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     try {
       if (typeof navigator?.geolocation?.watchPosition !== 'function') {
@@ -80,8 +85,9 @@ export function watchLocation(options: { handler: Function }) {
         return;
       }
 
-      let watchId,
-        isSent = false;
+      // eslint-disable-next-line prefer-const
+      let watchId: number;
+      let isSent = false;
 
       if (__LOCATION_WATCH_ID__) {
         navigator?.geolocation?.clearWatch(__LOCATION_WATCH_ID__);
@@ -89,12 +95,12 @@ export function watchLocation(options: { handler: Function }) {
       }
 
       const success = result => {
-        if (!result?.coords) {
+        if (!result || !result?.coords) {
           reject(new Error('Not Found Coords(coords)'));
           return;
         }
 
-        const { latitude, longitude } = result?.coords;
+        const { latitude, longitude } = result.coords;
 
         if (options.handler) {
           options.handler({
@@ -136,6 +142,7 @@ export function watchLocation(options: { handler: Function }) {
 }
 
 export function clearWatch() {
+  // eslint-disable-next-line require-await, no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     try {
       if (typeof navigator?.geolocation?.clearWatch !== 'function') {

@@ -5,14 +5,14 @@
       :key="state.navKey"
       :plus-btn="true"
       :year-month="formatYearMonthDate(paymentDate.year, paymentDate.month)"
-      :click-back-btn="'/home'"
+      :click-back-btn="'Home'"
     />
     <!-- payManage_calendarChart class를 기본 적용,
     isExcelUploaded false이면 blur 추가 적용 -->
     <div
       :class="{
         payManage_calendarChart: true,
-        blur: !paymentStatus.isExcelUploaded,
+        blur: !paymentStatus.firstExcelUploaded,
       }"
     >
       <div class="payManage_calendarHeader">
@@ -36,16 +36,17 @@
           {{ paymentDate.year }}년 {{ paymentDate.month }}월
         </div>
         <div class="payManage_listContainer">
-          <!-- <div class="testList">
+          <!--<div class="testList">
             <div>테스트 리스트</div>
             <div class="btn" @click="deleteExcelData">엑셀 삭제하기</div>
-            <div class="addClass">
+             <div class="addClass">
               <input v-model="studentName" placeholder="이름을 입력하세요" />
               <div class="btn" @click="addStudent">학생추가</div>
-            </div>
+            </div> 
             <div>엑셀 업로드 상태 : {{ paymentStatus.isExcelUploaded }}</div>
-            <div class="btn" @click="addClass">반추가</div>
-          </div> -->
+            <div>엑셀 업로드 상태 : {{ paymentStatus.firstExcelUploaded }}</div>
+            <div class="btn" @click="addClass">반추가</div> 
+          </div>-->
           <div v-if="!paymentStatus.isExcelUploaded">
             <FileUpload
               :date="formatYearMonthDate(paymentDate.year, paymentDate.month)"
@@ -58,8 +59,8 @@
                   :key="state.listKey"
                   :year="paymentDate.year"
                   :month="paymentDate.month"
-                  :is-excel-uploaded="paymentStatus.isExcelUploaded"
                 />
+                <!-- :is-excel-uploaded="paymentStatus.isExcelUploaded" -->
               </div>
               <div v-else>
                 <UnknownPaymentListItem :click="isClickCheckedPaymentList" />
@@ -107,9 +108,22 @@ const paymentApi = new PaymentApi();
 //토글의 상태값 컨트롤
 const isClickCheckedPaymentList = ref(true);
 onMounted(() => {
+  setFormattedDate();
+  setFirstExcelUploaded();
   getPaymentStatus();
 });
 
+function setFormattedDate() {
+  state.formattedDate = formatYearMonthDate(
+    paymentDate.year,
+    paymentDate.month
+  );
+}
+function setFirstExcelUploaded() {
+  if (paymentStatus.isExcelUploaded === true) {
+    paymentStatus.setFirstExcelUploaded(true);
+  }
+}
 async function getPaymentStatus() {
   // 현재 날짜 전달하여 납부 현황 가져오기
   if (state.formattedDate !== '') {
@@ -138,21 +152,20 @@ const excelApi = new ExcelApi();
 async function deleteExcelData() {
   try {
     await excelApi.deleteExcelData(state.formattedDate);
+    paymentStatus.setExcelUploaded(false);
+    // 저장된 데이터 삭제
+    savedPaymentStatusData.delete(state.formattedDate);
+    console.log(`삭제된 데이터: ${state.formattedDate}`);
   } catch (error) {
     console.log(error, '삭제실패');
   }
 }
 
 function changeChart({ year, month }) {
-  console.log('chart change 시작', year, month);
-
   //차트의 좌우 버튼을 클릭했을 때 paymentDate 를 변경해준다.
   paymentDate.year = year;
   paymentDate.month = month;
-  state.formattedDate = formatYearMonthDate(
-    paymentDate.year,
-    paymentDate.month
-  );
+  setFormattedDate();
   // 저장된 데이터가 있는지 찾기
   const savedData = savedPaymentStatusData.get(state.formattedDate);
   if (savedData) {
@@ -168,6 +181,7 @@ function changeChart({ year, month }) {
     state.listKey++;
   } else {
     console.log('저장된 차트 데이터 없음');
+    // setFirstExcelUploaded();
     getPaymentStatus();
   }
 }
@@ -183,6 +197,13 @@ function savePaymentStatusData(date: string) {
     isExcelUploaded: paymentStatus.isExcelUploaded,
   });
 }
+watch(
+  //날짜를 변경한 경우
+  () => paymentStatus.isExcelUploaded,
+  newValue => {
+    setFirstExcelUploaded();
+  }
+);
 
 // async function excelUploaded() {
 //   await excelApi.updateIsExcelUploaded(state.formattedDate);
@@ -206,12 +227,12 @@ const handleToggle = (value: boolean) => {
 };
 
 //테스트용 원생추거
-async function addStudent() {
-  await paymentApi.addStudents(studentName.value);
-}
-async function addClass() {
-  await paymentApi.addClass();
-}
+// async function addStudent() {
+//   await paymentApi.addStudents(studentName.value);
+// }
+// async function addClass() {
+//   await paymentApi.addClass();
+// }
 </script>
 
 <style lang="scss" scoped>
