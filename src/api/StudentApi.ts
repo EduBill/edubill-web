@@ -82,9 +82,33 @@ export class StudentApi<
     });
   };
 
-  getAllStudentInfo = (page: number, size: number) => {
+  getAllStudentInfo = (
+    page: number,
+    size: number,
+    isUnpaid: boolean,
+    sort: string
+  ) => {
+    //isUnpaid=true&sort=studentName&page=0&size=10
     return this.request({
-      path: `/v1/student/allStudents?page=${page}&size=${size}`,
+      path: `/v1/student/allStudents?isUnpaid=${isUnpaid}&sort=${sort}&page=${page}&size=${size}`,
+      method: 'GET',
+      type: ContentType.Json,
+    });
+  };
+
+  getFilteredStudents = (
+    page: number,
+    size: number,
+    isUnpaid: boolean,
+    groupId: number,
+    nameOrPhoneNum: string,
+    sort: string
+  ) => {
+    //isUnpaid=true&groupId=1&nameOrPhoneNum=-&page=0&size=10&sort=studentName
+    return this.request({
+      path: `/v1/student/filter/students?isUnpaid=${isUnpaid}${groupId !== 0 ? `&groupId=${groupId}` : ''}${
+        nameOrPhoneNum !== '' ? `&nameOrPhoneNum=${nameOrPhoneNum}` : ''
+      }&page=${page}&size=${size}&sort=${sort}`,
       method: 'GET',
       type: ContentType.Json,
     });

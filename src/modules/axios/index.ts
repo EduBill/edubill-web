@@ -1,7 +1,8 @@
 import axios from 'axios';
 // import config from '@/config';
 
-axios.defaults.baseURL = 'https://api.edu-bill.co.kr';
+// axios.defaults.baseURL = 'https://api.edu-bill.co.kr';
+axios.defaults.baseURL = 'https://dev-api.edu-bill.co.kr';
 axios.interceptors.request.use(
   function (config) {
     const { pathname = '', search = '' } = window.location;

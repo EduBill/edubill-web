@@ -65,7 +65,7 @@ const isClickCheckedPaymentList = ref(true);
 onMounted(() => {
   setFormattedDate();
   getPaymentStatus();
-  //checkFirstUploadedState();
+  checkFirstUploadedState();
 });
 
 function setFormattedDate() {
@@ -74,14 +74,13 @@ function setFormattedDate() {
     paymentDate.month
   );
 }
-function setFirstExcelUploaded() {
-  if (paymentStatus.isExcelUploaded === true) {
-    paymentStatus.setFirstExcelUploaded(true);
-  }
+function setFirstExcelUploaded(state) {
+  paymentStatus.setFirstExcelUploaded(state);
 }
 async function checkFirstUploadedState() {
   const firstUploadedState = await excelApi.getFirstExcelUploadedState();
-  console.log(firstUploadedState);
+  console.log('first', firstUploadedState);
+  setFirstExcelUploaded(firstUploadedState);
   //firstUploadedState값을 받아서 paymentStatus.setFirstExcelUploaded(firstUploadedState);
 }
 async function getPaymentStatus() {

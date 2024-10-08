@@ -115,7 +115,6 @@ function resetState() {
 }
 
 function handleSubmit() {
-  console.log(selectedClass.value);
   emit('selectedClass', selectedClass.value);
   // selectedClass.value.push();
   props.handleModalClick();
