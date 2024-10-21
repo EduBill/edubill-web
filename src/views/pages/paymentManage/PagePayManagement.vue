@@ -92,6 +92,7 @@ async function getPaymentStatus() {
     paymentStatus.unpaidCount = res.data.unpaidCount;
     paymentStatus.totalPaidAmount = res.data.totalPaidAmount;
     paymentStatus.totalUnpaidAmount = res.data.totalUnpaidAmount;
+    paymentStatus.totalUnCheckedAmount = res.data.totalUnCheckedAmount;
     // chart 리렌더링
     state.chartKey += 1;
   }

@@ -19,7 +19,7 @@
         ellipse-name="pinkEllipse"
         title="청구서 미확인"
         :data-num="10"
-        :amount="111111"
+        :amount="paymentStatusStore.totalUnCheckedAmount"
       />
     </div>
   </div>

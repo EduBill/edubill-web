@@ -100,17 +100,25 @@ export class StudentApi<
     page: number,
     size: number,
     isUnpaid: boolean,
-    groupId: number,
+    groupId: Set<number>,
     nameOrPhoneNum: string,
     sort: string
   ) => {
     //isUnpaid=true&groupId=1&nameOrPhoneNum=-&page=0&size=10&sort=studentName
     return this.request({
-      path: `/v1/student/filter/students?isUnpaid=${isUnpaid}${groupId !== 0 ? `&groupId=${groupId}` : ''}${
-        nameOrPhoneNum !== '' ? `&nameOrPhoneNum=${nameOrPhoneNum}` : ''
-      }&page=${page}&size=${size}&sort=${sort}`,
+      // path: `/v1/student/filter/students?isUnpaid=${isUnpaid}${groupId.size !== 0 ? `&groupId=${groupId}` : ''}${
+      //   nameOrPhoneNum !== '' ? `&nameOrPhoneNum=${nameOrPhoneNum}` : ''
+      // }&page=${page}&size=${size}&sort=${sort}`,
+      path: `/v1/student/filter/students?page=${page}&size=${size}`,
       method: 'GET',
       type: ContentType.Json,
+      body: {
+        groupIds: groupId,
+        isUnpaid,
+        // studentName: nameOrPhoneNum,
+        studentPhoneNumber: nameOrPhoneNum,
+        sort,
+      },
     });
   };
 }

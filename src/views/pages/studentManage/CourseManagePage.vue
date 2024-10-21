@@ -9,6 +9,7 @@
         <div v-if="classInfoData.length !== 0" class="selected-class">
           <div v-for="(classItem, i) in classInfoData" :key="i">
             {{ classItem.className }}
+            <div v-if="i !== classInfoData.length - 1">,</div>
           </div>
         </div>
 
@@ -47,7 +48,10 @@
     <main class="content-container">
       <div v-if="studentsInfo.length === 0">검색결과없음</div>
       <div v-for="studentInfo in studentsInfo" :key="studentInfo.studentId">
-        <StudentInfoItem :student-info="studentInfo" />
+        <StudentInfoItem
+          :student-info="studentInfo"
+          :selected-class="searchClassName"
+        />
       </div>
       <div id="target" class="targetRef"></div>
     </main>
@@ -82,7 +86,8 @@ const classInfoData = ref<classInfoDataType[]>([]);
 const isOnlyShowUnpaid = ref(false);
 const studentSortState = ref('id');
 const searchInputText = ref('');
-const searchClassId = ref(0);
+const searchClassId = ref<Set<number>>(new Set());
+const searchClassName = ref<string[]>([]);
 onMounted(async () => {
   resetState();
   await getStudentInfo();
@@ -103,7 +108,9 @@ function handleClassInfo(value) {
   if (value) {
     classInfoData.value = value;
   }
-  searchClassId.value = classInfoData.value[0].id;
+  searchClassId.value = new Set(classInfoData.value.map(item => item.id));
+  searchClassName.value = classInfoData.value.map(item => item.className);
+
   getSearchData();
 }
 function handleSearchWithText() {
@@ -116,7 +123,6 @@ async function getSearchData() {
     page.value,
     6,
     isOnlyShowUnpaid.value,
-    // 여러개의 반 선택하는 경우 고려해서 수정
     searchClassId.value,
     searchInputText.value,
     studentSortState.value

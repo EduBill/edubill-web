@@ -6,7 +6,11 @@
           v-for="(className, index) in props.studentInfo.classNames"
           :key="index"
         >
-          <div class="group-item">{{ className }}</div>
+          <div
+            :class="`group-item ${props.selectedClass.includes(className) ? 'selected-class' : ''}`"
+          >
+            {{ className }}
+          </div>
         </div>
       </div>
       <div class="student-container">
@@ -33,6 +37,10 @@ const props = defineProps({
     },
     default: () => ({}),
   },
+  selectedClass: {
+    type: Array as () => string[], // Make sure to specify it's an array of strings
+    default: () => [],
+  },
 });
 </script>
 
@@ -58,6 +66,10 @@ const props = defineProps({
       padding: unit(4) unit(12);
       border-radius: unit(12);
       border: unit(1) solid $color-gray-300;
+    }
+    .selected-class {
+      border: 1px solid $color-primary;
+      color: $color-primary;
     }
   }
   .student-container {

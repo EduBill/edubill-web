@@ -35,6 +35,13 @@ export interface completedPaymentType {
   paymentHistoryId: number;
   yearMonth: string;
 }
+
+export interface postCompletedTypes {
+  code: string;
+  errors: [];
+  message: string;
+  status: number;
+}
 export class PaymentApi<
   SecurityDataType = unknown,
 > extends HttpClient<SecurityDataType> {
@@ -137,6 +144,6 @@ export class PaymentApi<
       path: `/v1/payment/manualProcessing`,
       method: 'POST',
       body: data,
-    });
+    }).then(response => response.data);
   };
 }
