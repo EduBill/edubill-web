@@ -8,22 +8,42 @@
     <div class="payment_detail_container">
       <div class="payment_info_container">
         <div class="row_container">
+          <div class="category">거래일시</div>
+          <div class="content">
+            <div>{{ FullDate }}</div>
+          </div>
+        </div>
+        <div class="row_container">
           <div class="category">거래유형</div>
           <div class="content">
-            <input
+            <select
               v-model="manualInputData.paymentTypeString"
-              class="input_box"
-              placeholder="메모입력(최대 20글자)"
-            />
+              class="select_box"
+            >
+              <option value="현금결제">현금결제</option>
+              <option value="카드결제">카드결제</option>
+              <option value="지역상품권">지역상품권</option>
+              <option value="카톡송금">카톡송금</option>
+              <option value="기타">기타</option>
+            </select>
+            <svg-icon name="chevronLeft" class="select_box__icon"></svg-icon>
           </div>
         </div>
         <div class="row_container">
           <div class="category">거래금액</div>
           <div class="content paid_amount">
+            <div v-if="!isAmountClick" @click="isAmountClick = true">
+              <div v-if="manualInputData.paidAmount" class="paid_amount_text">
+                {{ manualInputData.paidAmount }}원
+              </div>
+              <div v-else>금액 작성하기</div>
+            </div>
             <input
+              v-else
               v-model="manualInputData.paidAmount"
               class="input_box"
-              placeholder="메모입력(최대 20글자)"
+              placeholder="금액을 입력하세요"
+              @blur="isAmountClick = false"
             />
           </div>
         </div>
@@ -32,10 +52,11 @@
           <div class="content paid_amount">
             <input
               id="supportingDocuments"
-              class="input_box"
+              class="input_box input_box_file"
               type="file"
               @change="handleFileUpload"
             />
+            <label for="supportingDocuments">파일업로드 </label>
           </div>
         </div>
         <div class="row_container">
@@ -44,7 +65,8 @@
             <input
               v-model="manualInputData.memo"
               class="input_box"
-              placeholder="메모입력(최대 20글자)"
+              placeholder="메모입력"
+              maxlength="20"
             />
           </div>
         </div>
@@ -77,17 +99,19 @@ const paymentListApi = new PaymentApi();
 const paymentDate = usePaymentDateStore();
 const paymentStatus = usePaymentStatusStore();
 const date = formatYearMonthDate(paymentDate.year, paymentDate.month);
+const FullDate = formatFullDate(new Date());
+
 const id = router.currentRoute.value.query.studentId as string;
 //수납 내역 데이터를 저장하는 변수
 const manualInputData = ref({
   paidAmount: '',
-  paymentTypeString: '',
+  paymentTypeString: '현금결제',
   memo: '',
   studentId: id,
   yearMonth: date,
 });
 const manualInputFormData = new FormData();
-
+const isAmountClick = ref(false);
 const handleFileUpload = (event: any) => {
   const file = event.target.files[0];
   if (!file) {
@@ -136,9 +160,8 @@ const handleSubmit = () => {
 .payment_info_container {
   display: flex;
   flex-direction: column;
-  gap: unit(8);
-  border-top: unit(1) solid #f1f1f1;
-  border-bottom: unit(1) solid #f1f1f1;
+  gap: unit(20);
+
   padding: unit(16) 0;
   font-size: 15px;
   font-weight: 400;
@@ -154,11 +177,20 @@ const handleSubmit = () => {
     font-weight: 600;
   }
 }
+.select_box {
+  border: none;
+
+  &__icon {
+    transform: rotate(-90deg); // -90도 회전
+  }
+}
 .row_container {
   display: flex;
   justify-content: space-between;
 }
-
+.paid_amount_text {
+  color: #000;
+}
 .search_container {
   display: flex;
   justify-content: space-between;
@@ -189,5 +221,8 @@ const handleSubmit = () => {
   textarea {
     width: 100%;
   }
+}
+.input_box_file {
+  display: none;
 }
 </style>

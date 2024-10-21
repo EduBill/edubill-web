@@ -45,4 +45,11 @@ export class ExcelApi<
       method: 'delete',
     });
   };
+
+  getFirstExcelUploadedState = () => {
+    return this.request({
+      path: `https://dev-api.edu-bill.co.kr/v1/excel/first-upload`,
+      method: 'get',
+    });
+  };
 }

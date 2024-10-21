@@ -115,7 +115,6 @@ function resetState() {
 }
 
 function handleSubmit() {
-  console.log(selectedClass.value);
   emit('selectedClass', selectedClass.value);
   // selectedClass.value.push();
   props.handleModalClick();
@@ -128,7 +127,11 @@ function handleClose(value) {
 }
 
 function handleDetailBtnClick(id: number) {
-  router.push(`/classDetail?id=${id}`);
+  router.push({
+    name: 'classDetail',
+    query: { groupId: id },
+  });
+  // router.push(`/classDetail?id=${id}`);
 }
 
 async function getClassInfo() {
