@@ -100,7 +100,7 @@ export class StudentApi<
     page: number,
     size: number,
     isUnpaid: boolean,
-    groupId: Set<number>,
+    groupId: number[] | null,
     nameOrPhoneNum: string,
     sort: string
   ) => {
@@ -110,13 +110,12 @@ export class StudentApi<
       //   nameOrPhoneNum !== '' ? `&nameOrPhoneNum=${nameOrPhoneNum}` : ''
       // }&page=${page}&size=${size}&sort=${sort}`,
       path: `/v1/student/filter/students?page=${page}&size=${size}`,
-      method: 'GET',
+      method: 'POST',
       type: ContentType.Json,
       body: {
-        groupIds: groupId,
+        groupIds: groupId ? groupId : null,
         isUnpaid,
-        // studentName: nameOrPhoneNum,
-        studentPhoneNumber: nameOrPhoneNum,
+        studentNameORPhoneNum: nameOrPhoneNum ? nameOrPhoneNum : '',
         sort,
       },
     });

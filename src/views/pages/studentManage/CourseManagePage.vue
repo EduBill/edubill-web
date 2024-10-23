@@ -7,7 +7,11 @@
         @click="handleSelectClass"
       >
         <div v-if="classInfoData.length !== 0" class="selected-class">
-          <div v-for="(classItem, i) in classInfoData" :key="i">
+          <div
+            v-for="(classItem, i) in classInfoData"
+            :key="i"
+            class="selected-class__container"
+          >
             {{ classItem.className }}
             <div v-if="i !== classInfoData.length - 1">,</div>
           </div>
@@ -86,7 +90,7 @@ const classInfoData = ref<classInfoDataType[]>([]);
 const isOnlyShowUnpaid = ref(false);
 const studentSortState = ref('id');
 const searchInputText = ref('');
-const searchClassId = ref<Set<number>>(new Set());
+const searchClassId = ref<number[] | null>(null);
 const searchClassName = ref<string[]>([]);
 onMounted(async () => {
   resetState();
@@ -107,10 +111,11 @@ function handleClassInfo(value) {
   //선택된 반 data를 받아온 후 저장
   if (value) {
     classInfoData.value = value;
+    console.log(value);
   }
-  searchClassId.value = new Set(classInfoData.value.map(item => item.id));
+  // searchClassId.value = new Set(classInfoData.value.map(item => item.id));
+  searchClassId.value = classInfoData.value.map(item => item.id);
   searchClassName.value = classInfoData.value.map(item => item.className);
-
   getSearchData();
 }
 function handleSearchWithText() {
@@ -119,6 +124,7 @@ function handleSearchWithText() {
 async function getSearchData() {
   page.value = 0;
   console.log(searchInputText);
+  console.log('선택된 반', searchClassId.value);
   const res = await studentApi.getFilteredStudents(
     page.value,
     6,
@@ -242,6 +248,13 @@ watch([isOnlyShowUnpaid, studentSortState], (newValue, oldValue) => {
     }
     .selected-class {
       color: $color-primary;
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      &__container {
+        display: flex;
+        flex-direction: row;
+      }
     }
     .select-active {
       border-color: $color-primary;

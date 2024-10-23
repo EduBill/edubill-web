@@ -126,8 +126,8 @@ function onChangeSelect(e) {
         opacity: 0.5;
       }
 
-      /* background-color: $color-gray-16; */
       border-color: $color-gray-120;
+      /* background-color: $color-gray-16; */
     }
   }
 
