@@ -98,9 +98,13 @@ const props = defineProps({
     required: true,
   },
 });
-
+type SelectedClassType = {
+  id: number;
+  className: string;
+  classTime: object;
+};
 const studentApi = new StudentApi();
-const selectedClass = ref<String[]>([]);
+const selectedClass = ref<SelectedClassType[]>([]);
 const page = ref(0);
 const hasMoreData = ref(true);
 const classList = ref<classData[]>([]);
@@ -116,7 +120,7 @@ function resetState() {
 
 function handleSubmit() {
   emit('selectedClass', selectedClass.value);
-  // selectedClass.value.push();
+
   props.handleModalClick();
 }
 
