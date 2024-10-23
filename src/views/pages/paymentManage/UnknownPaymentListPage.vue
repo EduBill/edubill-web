@@ -77,11 +77,12 @@ import { PaymentApi, PaymentData } from '@/api/PaymentApi';
 import PayManageNav from '@/components/commons/navigation/PayManageNav.vue';
 import RectangleTextButton from '@/components/resources/buttons/RectangleTextButton.vue';
 import { formatDate } from '@/utils/formatDate';
-import PaymentItem from '@/components/resources/payment/PaymentItem.vue';
+import PaymentItem from '@/components/resources/payment/paymentContent/PaymentItem.vue';
 import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { intersectionObserver } from '@/utils/intersectionObserver';
 import { hasDateChanged } from '@/utils/hasDateChanged';
 import { usePaymentStatusStore } from '@/stores/modules/payment';
+import { useToastModule } from '@/components/modules/toast';
 
 const paymentList = ref<PaymentData[]>([]);
 const checkedItemId = ref(-1);
@@ -91,7 +92,8 @@ const page = ref(0);
 const hasMoreData = ref(true);
 const paymentListApi = new PaymentApi();
 const paymentStatus = usePaymentStatusStore();
-
+const toast = useToastModule();
+const errorMessage = ref('');
 //미확인내역 데이터 불러오기
 const fetchData = async () => {
   try {
@@ -130,7 +132,7 @@ onUnmounted(() => {
 async function handleCompletePaymentMerge() {
   console.log(checkedItemId);
   if (paymentStatus.currentUserInfo.id === 0) {
-    alert('이전 페이지로 돌아가 학생을 다시 선택해주세요');
+    toast.alert({ message: '이전 페이지로 돌아가 학생을 다시 선택해주세요.' });
   }
   const completePaymentData = {
     studentId: paymentStatus.currentUserInfo.id,
@@ -138,15 +140,29 @@ async function handleCompletePaymentMerge() {
     yearMonth: date,
   };
 
+  const res = await paymentListApi.postCompletedPayments(completePaymentData);
+  console.log('해당 데이터로 완납연결을 시도합니다', completePaymentData, res);
   try {
-    const res = await paymentListApi.postCompletedPayments(completePaymentData);
-    console.log('해당 데이터로 완납연결을 시도합니다', completePaymentData);
     if (res.status === 200) {
-      alert('정상적으로 처리되었습니다');
+      toast.alert({ message: '정상적으로 처리되었습니다' });
       router.push(`/payManage`);
+    } else {
+      toast.alert({
+        message: '처리 중 문제가 발생했습니다. 다시 시도해주세요',
+      });
     }
-  } catch {
-    console.log('완납연결 실패');
+  } catch (error) {
+    console.log('에러출력', error);
+    if (res.status) {
+      console.log(res.message);
+      toast.alert({
+        message: res.message,
+      });
+    } else {
+      toast.alert({
+        message: '서버 연결에 실패했습니다.',
+      });
+    }
   }
 }
 function handleCheckboxChange(paymentHistoryId: number) {

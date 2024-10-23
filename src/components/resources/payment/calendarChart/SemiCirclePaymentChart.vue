@@ -1,6 +1,7 @@
 <template>
   <div class="chart">
     <canvas ref="chartCanvas" class="chart_canvas"></canvas>
+
     <div class="chart_Label">
       <PaymentChartLabel
         ellipse-name="purpleEllipse"
@@ -18,14 +19,14 @@
         ellipse-name="pinkEllipse"
         title="청구서 미확인"
         :data-num="10"
-        :amount="111111"
+        :amount="paymentStatusStore.totalUnCheckedAmount"
       />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Chart from 'chart.js/auto';
 import PaymentChartLabel from './PaymentChartLabel.vue';
 

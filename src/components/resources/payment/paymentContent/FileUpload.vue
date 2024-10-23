@@ -33,14 +33,10 @@
 
 <script setup lang="ts">
 import { ExcelApi } from '@/api/ExcelApi';
-import {
-  usePaymentDateStore,
-  usePaymentStatusStore,
-} from '@/stores/modules/payment';
+import { usePaymentDateStore } from '@/stores/modules/payment';
 import { formatYearMonthDate } from '@/utils/formatDate';
 import { handleFileUpload } from '@/utils/handleFileUpload';
 const paymentDate = usePaymentDateStore();
-const paymentStatusStore = usePaymentStatusStore();
 const emit = defineEmits(['update:excelUploaded']);
 
 const excelApi = new ExcelApi();

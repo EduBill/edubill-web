@@ -98,9 +98,13 @@ const props = defineProps({
     required: true,
   },
 });
-
+type SelectedClassType = {
+  id: number;
+  className: string;
+  classTime: object;
+};
 const studentApi = new StudentApi();
-const selectedClass = ref<String[]>([]);
+const selectedClass = ref<SelectedClassType[]>([]);
 const page = ref(0);
 const hasMoreData = ref(true);
 const classList = ref<classData[]>([]);
@@ -115,9 +119,8 @@ function resetState() {
 }
 
 function handleSubmit() {
-  console.log(selectedClass.value);
   emit('selectedClass', selectedClass.value);
-  // selectedClass.value.push();
+
   props.handleModalClick();
 }
 
@@ -128,7 +131,11 @@ function handleClose(value) {
 }
 
 function handleDetailBtnClick(id: number) {
-  router.push(`/classDetail?id=${id}`);
+  router.push({
+    name: 'classDetail',
+    query: { groupId: id },
+  });
+  // router.push(`/classDetail?id=${id}`);
 }
 
 async function getClassInfo() {
