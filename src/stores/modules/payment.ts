@@ -21,7 +21,7 @@ export const usePaymentStatusStore = defineStore('paymentStatus', () => {
   const paidData = reactive({
     paidCount: 0,
     unpaidCount: 0,
-    unknownCount: 0,
+    uncheckedCount: 0,
     totalPaidAmount: 0,
     totalUnpaidAmount: 0,
     totalUnCheckedAmount: 0,

@@ -18,7 +18,7 @@
       <PaymentChartLabel
         ellipse-name="pinkEllipse"
         title="청구서 미확인"
-        :data-num="10"
+        :data-num="paymentStatusStore.uncheckedCount"
         :amount="paymentStatusStore.totalUnCheckedAmount"
       />
     </div>
@@ -33,13 +33,6 @@ import PaymentChartLabel from './PaymentChartLabel.vue';
 import { usePaymentStatusStore } from '@/stores/modules/payment';
 const paymentStatusStore = usePaymentStatusStore();
 
-const props = defineProps({
-  unConfirmed: {
-    type: Number,
-    default: 10,
-  },
-});
-
 const chartCanvas = ref<HTMLCanvasElement | null>(null);
 const chartData = ref({
   datasets: [
@@ -49,7 +42,7 @@ const chartData = ref({
       data: [
         paymentStatusStore.paidCount,
         paymentStatusStore.unpaidCount,
-        props.unConfirmed,
+        paymentStatusStore.uncheckedCount,
       ],
       backgroundColor: ['#7535FF', '#FFBA33', '#ff7581'],
       borderWidth: 1,

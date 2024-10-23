@@ -49,6 +49,7 @@
       :disabled="false"
       :color="'selected'"
       :text="'확인'"
+      :click="handleButtonClick"
     />
   </div>
   <ClassDeleteModal
@@ -130,6 +131,10 @@ onMounted(async () => {
     state.memo = groupData.groupMemo;
   }
 });
+
+function handleButtonClick() {
+  router.push('/studentManage');
+}
 </script>
 
 <style lang="scss" scoped>

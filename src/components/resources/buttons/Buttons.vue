@@ -8,7 +8,7 @@
   <button
     :class="`button ${props.variants} ${props.color}`"
     :disabled="props.disabled"
-    @click="props.onClick"
+    @click="props.click"
   >
     {{ props.text }}
   </button>
@@ -22,7 +22,7 @@ const props = defineProps<{
   text: string;
   color: 'selected' | 'disabled';
   disabled?: boolean;
-  onClick?: () => void;
+  click?: () => void | Function;
 }>();
 </script>
 
