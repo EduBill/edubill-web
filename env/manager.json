@@ -30,7 +30,7 @@
       "distributionId": "",
       "env": {
         "VUE_APP_MODE": "staging",
-        "VUE_APP_API_SERVER": "https://staging.api.edu-bill.co.kr/"
+        "VUE_APP_API_SERVER": "https://dev-api.edu-bill.co.kr/"
       }
     },
     "production": {

@@ -3,7 +3,7 @@
     :title="'기초반 / 영어 유치원'"
     :back="true"
     :right-items="'삭제'"
-    :on-delete="() => handleModalClick()"
+    :on-delete="onDelete"
   />
   <ul class="classdetail-container">
     <li>
@@ -96,17 +96,31 @@ function handleModalClick() {
     : (document.body.style.overflowY = 'auto');
 }
 
-async function onDelete(id: number) {
+async function onDelete() {
+  console.log('함수 실행');
   try {
-    console.log(id);
-    const res = await groupApi.deleteGroup(id);
-    return res;
+    if (state.groupId) {
+      const res = await groupApi.deleteGroup(state.groupId);
+      return res;
+    }
   } catch {
     console.log('반 삭제 실패');
   } finally {
     handleModalClick();
   }
 }
+
+// async function onDelete(id: number) {
+//   try {
+//     console.log(id);
+//     const res = await groupApi.deleteGroup(id);
+//     return res;
+//   } catch {
+//     console.log('반 삭제 실패');
+//   } finally {
+//     handleModalClick();
+//   }
+// }
 
 async function onCheckGroup(id: number) {
   try {
@@ -192,6 +206,7 @@ function handleButtonClick() {
 }
 .button-area {
   width: 100%;
+
   display: flex;
   flex-direction: column;
   align-items: center;

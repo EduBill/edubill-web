@@ -82,7 +82,7 @@ import SvgIcon from '@/plugins/svg-icon/lib/SvgIcon.vue';
 import { intersectionObserver } from '@/utils/intersectionObserver';
 import { hasDateChanged } from '@/utils/hasDateChanged';
 import { usePaymentStatusStore } from '@/stores/modules/payment';
-import { useToastModule } from '@/components/modules/toast';
+import { ToastType, useToastModule } from '@/components/modules/toast';
 
 const paymentList = ref<PaymentData[]>([]);
 const checkedItemId = ref(-1);
@@ -152,17 +152,9 @@ async function handleCompletePaymentMerge() {
       });
     }
   } catch (error) {
-    console.log('에러출력', error);
-    if (res.status) {
-      console.log(res.message);
-      toast.alert({
-        message: res.message,
-      });
-    } else {
-      toast.alert({
-        message: '서버 연결에 실패했습니다.',
-      });
-    }
+    toast.error({
+      error,
+    });
   }
 }
 function handleCheckboxChange(paymentHistoryId: number) {
