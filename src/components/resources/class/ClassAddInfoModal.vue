@@ -2,7 +2,7 @@
   <Modal :use-modal="props.useModal">
     <div class="modal_frame_container">
       <header class="modal-frame-header">
-        <div class="close-btn" @click="props.handleModalClick">
+        <div class="close-btn" @click="emitClick">
           <svg-icon name="purpleClose" />
         </div>
         <div class="header-text">이렇게 입력하시겠어요?</div>
@@ -45,7 +45,7 @@
           :disabled="false"
           :color="'selected'"
           :text="'정확해요'"
-          @click="props.submit"
+          @click="handleSubmit"
         />
       </footer>
     </div>
@@ -76,6 +76,12 @@ const props = defineProps({
     required: true,
   },
 });
+const emitClick = (event: MouseEvent) => {
+  props.handleModalClick(event); // MouseEvent를 인자로 전달
+};
+function handleSubmit() {
+  props.submit();
+}
 </script>
 
 <style lang="scss" scoped>

@@ -31,7 +31,7 @@
         v-if="hasRightButtonItem('삭제')"
         type="button"
         class="btn-delete"
-        @click="props.onDelete"
+        @click="handleClickDelete"
       >
         {{ props.rightItems }}
       </button>
@@ -71,7 +71,10 @@ const props = defineProps({
     default: () => {},
   },
 });
-
+function handleClickDelete() {
+  console.log('handleclickdelete');
+  props.onDelete();
+}
 // console.log('@@@ 받았니 : ', props.deepLinkBackAction);
 
 const router = useRouter();
@@ -141,7 +144,7 @@ function onCancel() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px 0 10px;
+  padding: 20px 20px 0 10px;
   height: 56px;
 
   background-color: #fefefe;
@@ -171,10 +174,10 @@ function onCancel() {
     left: 50%;
     transform: translateX(-50%);
 
-    font-size: unit(16);
+    font-size: unit(18);
     line-height: unit(24);
     letter-spacing: unit(-0.4);
-    font-weight: 500;
+    font-weight: 700;
     color: $color-gray-16;
   }
 

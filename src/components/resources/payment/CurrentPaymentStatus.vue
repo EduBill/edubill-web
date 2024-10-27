@@ -25,6 +25,7 @@ const paymentDate = usePaymentDateStore();
 const state = reactive({
   paidCount: 0,
   unpaidCount: 0,
+  uncheckedCount: 0,
   paymentPercent: 0,
 });
 
@@ -49,6 +50,7 @@ async function getPaymentStatus() {
   const res = await paymentApi.getPaymentStatus(formatDate);
   state.paidCount = res.data.paidCount;
   state.unpaidCount = res.data.unpaidCount;
+  state.uncheckedCount = res.data.uncheckedCount;
   //console.log('납입완료: ' + state.paidCount);
   //console.log('미납입: ' + state.unpaidCount);
 

@@ -83,6 +83,7 @@ onUnmounted(() => {
 });
 
 function fileUpload(e: Event) {
+  console.log('file upload 실행');
   handleFileUpload(e, props.yearMonth);
 }
 // const handleFileUpload = (event: any) => {

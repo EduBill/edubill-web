@@ -105,7 +105,7 @@ function handleModalClick() {
 }
 .button {
   width: 100%;
-  padding: unit(5) unit(30);
+  padding: unit(5) unit(20);
   //height: unit(32);
   font-size: unit(15);
   font-style: normal;

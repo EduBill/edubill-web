@@ -90,11 +90,13 @@ async function getPaymentStatus() {
     paymentStatus.isExcelUploaded = res.data.isExcelUploaded;
     paymentStatus.paidCount = res.data.paidCount;
     paymentStatus.unpaidCount = res.data.unpaidCount;
+    paymentStatus.uncheckedCount = res.data.unCheckedCount;
     paymentStatus.totalPaidAmount = res.data.totalPaidAmount;
     paymentStatus.totalUnpaidAmount = res.data.totalUnpaidAmount;
     paymentStatus.totalUnCheckedAmount = res.data.totalUnCheckedAmount;
     // chart 리렌더링
     state.chartKey += 1;
+    console.log(paymentStatus.uncheckedCount, res.data);
   }
   // list 리렌더링
   state.listKey++;
